@@ -5,7 +5,7 @@ import {useCounterStore} from '@/stores/counter'
 import {onMounted} from "vue";
 
 const counter = useCounterStore()
-let selectedItem = ref<string>();
+
 const search_value = ref<string>('');
 const get_rec_data = () => {
   const url = "/api/chat/get_rec_data"
@@ -18,8 +18,11 @@ const get_rec_data = () => {
         counter.recording.unshift(i)
       }
       if (counter.recording.length > 0) {
-        selectedItem.value = counter.recording[0][0];
+        counter.selected_item = counter.recording[0][0];
       }
+    }
+    if (counter.recording.length === 0) {
+      counter.selected_item = "";
     }
   })
 
@@ -49,7 +52,7 @@ const search_record = () => {
         counter.recording.unshift(i)
       }
       if (counter.recording.length > 0) {
-        selectedItem.value = counter.recording[0][0];
+        counter.selected_item = counter.recording[0][0];
       }
     }
   })
@@ -74,12 +77,16 @@ const delete_record = (id: string) => {
   }).then(() => {
     get_rec_data()
   })
+  if (counter.recording.length === 0) {
+    counter.selected_item = "";
+  }
+
 };
 // ---------------end---------------
 
 // ---------------选择对话---------------
 const selectItem = (id: string) => {
-  selectedItem.value = id;
+  counter.selected_item = id;
 };
 // ---------------end---------------
 
@@ -128,7 +135,7 @@ const add_record = () => {
           v-for="(item) in counter.recording" :key="item[0]"
           v-if="counter.recording.length!==0"
       >
-        <div class="ant-div" :class="{ 'selected': item[0] === selectedItem }" @click="selectItem(item[0])">
+        <div class="ant-div" :class="{ 'selected': item[0] === counter.selected_item }" @click="selectItem(item[0])">
           <span class="ant-title">{{ item[1] }}</span>
           <span class="ant-time">{{ item[2] }}</span>
           <DeleteOutlined class="ant-delete" @click="delete_record(item[0])"/>
