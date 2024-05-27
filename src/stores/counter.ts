@@ -4,11 +4,6 @@ import {defineStore} from 'pinia'
 export const useCounterStore = defineStore('counter', () => {
     const selectedKeys = ref<string[]>(['1']); // 左侧导航栏选择
     const recording = ref([
-        ["1", "对话记录1", "2024-05-13 05:38"],
-        ["2", "对话记录2", "2024-05-13 05:38"],
-        ["3", "对话记录3", "2024-05-13 05:38"],
-        ["4", "对话记录4", "2024-05-13 05:38"],
-
     ]); // 对话记录
     const search_recording = ref([]); // 搜索对话记录
     const contents = ref([]) // 内容记录
@@ -17,8 +12,8 @@ export const useCounterStore = defineStore('counter', () => {
     const user_id = ref("") // 用户id
     const user_name = ref("") // 用户名称
     const img_head = ref("") // 用户头像地址
-    const txt_mode_name = ref("") // 当前选择对话模型名称
-    const txt_mode_ver = ref("") // 当前选择对话模型版本
+    const chat_mode_name = ref("") // 当前选择对话模型名称
+    const chat_mode_ver = ref("") // 当前选择对话模型版本
 
 
     return {
@@ -31,7 +26,7 @@ export const useCounterStore = defineStore('counter', () => {
         user_id,
         user_name,
         img_head,
-        txt_mode_name,
-        txt_mode_ver
+        chat_mode_name,
+        chat_mode_ver
     }
 })

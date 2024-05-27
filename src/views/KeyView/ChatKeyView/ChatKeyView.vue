@@ -1,21 +1,21 @@
 <script setup lang="ts">
 
 import {ref} from "vue";
-import XunfeiView from "@/views/KeyView/TxtKeyView/XunfeiView.vue";
-import TongyiView from "@/views/KeyView/TxtKeyView/TongyiView.vue";
+import XunfeiView from "@/views/KeyView/ChatKeyView/XunfeiView.vue";
+import TongyiView from "@/views/KeyView/ChatKeyView/TongyiView.vue";
 import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
 const activeKey = ref("1");
 const get_about_data = () => {
-  const url = "/api/key/txt"
+  const url = "/api/key/chat"
   fetch(url).then((res) => {
     return res.json()
   }).then((data) => {
     if (data["code"] == 1) {
-      counter.txt_mode_name = data["data"]["txt_mode_name"]
-      counter.txt_mode_ver = data["data"]["txt_mode_ver"]
+      counter.chat_mode_name = data["data"]["chat_mode_name"]
+      counter.chat_mode_ver = data["data"]["chat_mode_ver"]
     }
   })
 }
@@ -24,7 +24,7 @@ onMounted(get_about_data)
 
 <template>
   <h1>对话key</h1>
-  <h4>当前选择： {{ counter.txt_mode_name }}-{{ counter.txt_mode_ver }}</h4>
+  <h4>当前选择： {{ counter.chat_mode_name }}-{{ counter.chat_mode_ver }}</h4>
   <a-tabs v-model:activeKey="activeKey" style="height: 100%">
 
     <a-tab-pane key="1">

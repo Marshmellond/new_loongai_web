@@ -5,8 +5,8 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            name: 'txt',
-            component: () => import('../views/TxtView/LayoutView.vue')
+            name: 'chat',
+            component: () => import('@/views/ChatView/LayoutView.vue')
         },
         {
             path: '/app',
@@ -14,9 +14,9 @@ const router = createRouter({
             component: () => import('../views/AppView/LayoutView.vue')
         },
         {
-            path: '/img',
-            name: 'img',
-            component: () => import('../views/ImgView/LayoutView.vue')
+            path: '/darw',
+            name: 'darw',
+            component: () => import('@/views/DarwView/LayoutView.vue')
         },
         {
             path: '/gallery',

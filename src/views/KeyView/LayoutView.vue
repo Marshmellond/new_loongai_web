@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import TxtKeyView from "@/views/KeyView/TxtKeyView/TxtKeyView.vue";
+import
+  ChatKeyView from "@/views/KeyView/ChatKeyView/ChatKeyView.vue";
 import {ref} from 'vue';
 
 const activeKey = ref("1");
@@ -15,7 +16,7 @@ const activeKey = ref("1");
           对话key
         </span>
         </template>
-        <TxtKeyView></TxtKeyView>
+        <ChatKeyView></ChatKeyView>
       </a-tab-pane>
 
       <a-tab-pane key="2">

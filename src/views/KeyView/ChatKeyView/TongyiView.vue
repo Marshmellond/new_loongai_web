@@ -6,23 +6,21 @@ import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-const xunfei_api = ref(["", "", "", [], "", false])
+const tongyi_api = ref(["", [], "", false])
 
 const get_about_data = () => {
-  const url = "/api/key/xunfei"
+  const url = "/api/key/tongyi"
   fetch(url).then((res) => {
     return res.json()
   }).then((data) => {
     if (data["code"] == 1) {
-      xunfei_api.value[0] = data["data"]["appid"]
-      xunfei_api.value[1] = data["data"]["api_secret"]
-      xunfei_api.value[2] = data["data"]["api_key"]
-      xunfei_api.value[3] = data["data"]["api_ver"]
-      xunfei_api.value[4] = data["data"]["api_select"]
-      xunfei_api.value[5] = data["data"]["api_default"]
-      if (xunfei_api.value[5]){
-        counter.txt_mode_name = "讯飞星火"
-        counter.txt_mode_ver = xunfei_api.value[3][xunfei_api.value[4]]
+      tongyi_api.value[0] = data["data"]["api_key"]
+      tongyi_api.value[1] = data["data"]["api_ver"]
+      tongyi_api.value[2] = data["data"]["api_select"]
+      tongyi_api.value[3] = data["data"]["api_default"]
+      if (tongyi_api.value[3]) {
+        counter.chat_mode_name = "通义千问"
+        counter.chat_mode_ver = tongyi_api.value[1][tongyi_api.value[2]]
       }
     }
   })
@@ -52,15 +50,12 @@ const failed_alter_default = (placement: NotificationPlacement) => {
     placement,
   });
 };
-
 const onFinish = () => {
-  const url = "/api/key/alter/xunfei"
+  const url = "/api/key/alter/tongyi"
   let body = {
-    appid: xunfei_api.value[0],
-    api_secret: xunfei_api.value[1],
-    api_key: xunfei_api.value[2],
-    api_select: xunfei_api.value[4],
-    api_default: xunfei_api.value[5],
+    api_key: tongyi_api.value[0],
+    api_select: tongyi_api.value[2],
+    api_default: tongyi_api.value[3],
   }
   fetch(url, {
     method: "POST",
@@ -94,21 +89,9 @@ const onFinish = () => {
       class="ant-form"
   >
     <a-form-item
-        label="appid"
-    >
-      <a-input v-model:value="xunfei_api[0]"/>
-    </a-form-item>
-
-    <a-form-item
-        label="api_secret"
-    >
-      <a-input v-model:value="xunfei_api[1]"/>
-    </a-form-item>
-
-    <a-form-item
         label="api_key"
     >
-      <a-input v-model:value="xunfei_api[2]"/>
+      <a-input v-model:value="tongyi_api[0]"/>
     </a-form-item>
 
     <a-form-item
@@ -116,12 +99,12 @@ const onFinish = () => {
     >
       <a-select
           ref="select"
-          v-model:value="xunfei_api[4]"
+          v-model:value="tongyi_api[2]"
           style="width: 400px"
           :maxTagTextLength=1
       >
         <a-select-option
-            v-for="(ver, index) in xunfei_api[3]"
+            v-for="(ver, index) in tongyi_api[1]"
             :key="index"
             :value="index.toString()"
         >
@@ -133,7 +116,7 @@ const onFinish = () => {
     <a-form-item
         label="设为默认"
     >
-      <a-checkbox v-model:checked="xunfei_api[5]"></a-checkbox>
+      <a-checkbox v-model:checked="tongyi_api[3]"></a-checkbox>
     </a-form-item>
 
     <a-form-item :wrapper-col="{ offset: 7, span: 16 }">

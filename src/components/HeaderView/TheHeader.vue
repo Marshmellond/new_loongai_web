@@ -4,7 +4,6 @@ import {useCounterStore} from '@/stores/counter'
 
 
 const counter = useCounterStore()
-
 const toTxtView = () => {
   counter.selectedKeys = ['1']
 };

@@ -1,32 +1,83 @@
 <script setup lang="ts">
 import {ref} from 'vue';
-import type {SizeType} from 'ant-design-vue/es/config-provider';
-import {PlusOutlined, DeleteOutlined} from '@ant-design/icons-vue';
+import {PlusOutlined, DeleteOutlined, CoffeeOutlined} from '@ant-design/icons-vue';
 import {useCounterStore} from '@/stores/counter'
+import {onMounted} from "vue";
 
 const counter = useCounterStore()
-const size = ref<SizeType>('large');
+let selectedItem = ref<string>();
+const search_value = ref<string>('');
+const get_rec_data = () => {
+  const url = "/api/chat/get_rec_data"
+  fetch(url).then((res) => {
+    return res.json()
+  }).then((data) => {
+    counter.recording = []
+    if (data["code"] == 1) {
+      for (let i of data["data"]) {
+        counter.recording.unshift(i)
+      }
+      if (counter.recording.length > 0) {
+        selectedItem.value = counter.recording[0][0];
+      }
+    }
+  })
+
+}
+onMounted(get_rec_data)
+
 
 // ---------------搜索历史---------------
-const search_value = ref<string>('');
-let show_recording = counter.recording.reverse();
 const search_record = () => {
-  for (let i = 0; i < show_recording.length; i++) {
-    if (show_recording[i][1].indexOf(search_value.value) === -1) {
-      show_recording.splice(i, 1)
-      i--
-    }
+  const url = "/api/chat/search_rec_data"
+  let body = {
+    search_value: search_value.value
   }
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    counter.recording = []
+    if (data["code"] == 1) {
+      for (let i of data["data"]) {
+        counter.recording.unshift(i)
+      }
+      if (counter.recording.length > 0) {
+        selectedItem.value = counter.recording[0][0];
+      }
+    }
+  })
 };
 // ---------------end---------------
 
-// ---------------对话记录---------------
-const delete_record = (list_index) => {
-  counter.recording.splice(list_index, 1);
+// ---------------删除对话---------------
+const delete_record = (id: string) => {
+  const url = "/api/chat/del_rec_data"
+  let body = {
+    chat_rec_id: id
+  }
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then(() => {
+    get_rec_data()
+  })
 };
-const one_record = counter.recording[0][0];
+// ---------------end---------------
 
-const selectedItem = ref<string>(one_record);
+// ---------------选择对话---------------
 const selectItem = (id: string) => {
   selectedItem.value = id;
 };
@@ -34,26 +85,24 @@ const selectItem = (id: string) => {
 
 // ---------------新建对话---------------
 const add_record = () => {
-  let max_id = counter.recording[0][0]
-  let add_id = parseInt(max_id) + 1
-  let date = new Date()
-  let format_date = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()} ${date.getHours()}:${date.getDate()}`
-  counter.recording.unshift([add_id.toString(), `对话记录${add_id}`, format_date])
-  selectedItem.value = add_id.toString()
+  const url = "/api/chat/add_rec_data"
+  fetch(url).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then(() => {
+    get_rec_data()
+  })
 }
 // ---------------end---------------
-
-
 </script>
 
 <template>
-  <a-layout-sider
-      class="ant-sidebar1"
-      width="250px"
+  <div
+      class="div1"
   >
-    <a-layout-sider
-        class="ant-sidebar2"
-        width="250px"
+    <div
+        class="div2"
     >
       <a-space direction="vertical" class="ant-space">
         <a-input-search
@@ -65,44 +114,42 @@ const add_record = () => {
             :allowClear="true"
         />
       </a-space>
-    </a-layout-sider>
+    </div>
 
-    <a-layout-sider
-        class="ant-sidebar3"
-        width="250px"
+    <div
+        class="div3"
     >
-      <div v-if="show_recording.length===0">
-        暂无对话
+      <div v-if="counter.recording.length===0" class="no-chat">
+        <CoffeeOutlined class="no-ico"/>
+        <span class="no-txt">暂无对话</span>
       </div>
-      <a-layout-sider
-          class="ant-sidebar5"
-          width="245px"
-          v-for="(item, index) in show_recording" :key="item[0]"
-          v-if="show_recording.length!==0"
+      <div
+          class="div5"
+          v-for="(item) in counter.recording" :key="item[0]"
+          v-if="counter.recording.length!==0"
       >
         <div class="ant-div" :class="{ 'selected': item[0] === selectedItem }" @click="selectItem(item[0])">
           <span class="ant-title">{{ item[1] }}</span>
           <span class="ant-time">{{ item[2] }}</span>
-          <DeleteOutlined class="ant-delete" @click="delete_record(index)"/>
+          <DeleteOutlined class="ant-delete" @click="delete_record(item[0])"/>
         </div>
-      </a-layout-sider>
-    </a-layout-sider>
+      </div>
+    </div>
 
-    <a-layout-sider
-        class="ant-sidebar4"
-        width="250px"
+    <div
+        class="div4"
     >
       <a-space direction="vertical" class="ant-space">
-        <a-button type="primary" :size="size" class="ant-button" @click="add_record">
+        <a-button type="primary" size="large" class="ant-button" @click="add_record">
           <template #icon>
             <PlusOutlined style="color: black"/>
           </template>
           <span style="color: black">新建对话</span>
         </a-button>
       </a-space>
-    </a-layout-sider>
+    </div>
 
-  </a-layout-sider>
+  </div>
 
 
 </template>
@@ -120,25 +167,49 @@ const add_record = () => {
 }
 
 
-.ant-sidebar1 {
+.div1 {
   height: 95.5vh;
+  width: 250px;
   border-left: 1px solid @theme-border-color;
   background-color: @theme-background-color;
 
-  .ant-sidebar2 {
+  .div2 {
     height: 50px;
+    width: 250px;
     border-bottom: 1px solid @theme-border-color;
     background-color: @theme-background-color;
   }
 
-  .ant-sidebar3 {
+  .div3 {
     height: 82vh;
+    width: 250px;
     border-left: 1px solid @theme-border-color;
     background-color: @theme-background-color;
     overflow: auto; /* 添加这一行 */
 
-    .ant-sidebar5 {
+    .no-chat {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      gap: 1vh;
+      margin-top: 10%;
+
+
+      .no-ico {
+        color: #c1c1c1;
+        font-size: 200%;
+      }
+
+      .no-txt {
+        color: #c1c1c1;
+        font-size: 130%;
+      }
+    }
+
+    .div5 {
       height: 70px;
+      width: 232px;
       position: relative;
       top: 1%;
       left: 1%;
@@ -200,7 +271,8 @@ const add_record = () => {
     }
   }
 
-  .ant-sidebar4 {
+  .div4 {
+    width: 250px;
     border-top: 1px solid @theme-border-color;
     background-color: @theme-background-color;
   }
@@ -222,7 +294,6 @@ const add_record = () => {
     }
 
     .ant-search {
-      width: 100%;
       position: relative;
       top: 1vh;
     }

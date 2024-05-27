@@ -1,8 +1,4 @@
 <script lang="ts" setup>
-import {RouterLink, RouterView} from 'vue-router'
-import TheHeader from "@/components/HeaderView/TheHeader.vue";
-import TheLogin from "@/components/LoginView/TheLogin.vue";
-import {useCounterStore} from '@/stores/counter'
 import {
   UserOutlined,
   ShopOutlined,
@@ -11,6 +7,11 @@ import {
   PictureOutlined,
   KeyOutlined,
 } from '@ant-design/icons-vue';
+
+import {RouterLink, RouterView} from 'vue-router'
+import TheHeader from "@/components/HeaderView/TheHeader.vue";
+import TheLogin from "@/components/LoginView/TheLogin.vue";
+import {useCounterStore} from '@/stores/counter'
 import {onMounted, watch} from "vue";
 
 const counter = useCounterStore()
@@ -72,7 +73,7 @@ onMounted(checkLoginStatus)
           </a-menu-item>
           <a-menu-item key="3">
             <HighlightOutlined/>
-            <span class="nav-text"><RouterLink to="/img">绘画</RouterLink></span>
+            <span class="nav-text"><RouterLink to="/darw">绘画</RouterLink></span>
           </a-menu-item>
           <a-menu-item key="4">
             <PictureOutlined/>
@@ -136,6 +137,7 @@ onMounted(checkLoginStatus)
   align-items: center;
   border-bottom: 1px solid @theme-border-color;
   background-color: @theme-background-color;
+  overflow: hidden;
 }
 
 
@@ -144,10 +146,12 @@ onMounted(checkLoginStatus)
   .ant-sidebar {
     height: 95.5vh;
     background-color: @theme-background-color;
+    overflow: hidden;
   }
 
   .ant-content {
     height: 95.5vh;
+    overflow: hidden;
   }
 }
 </style>
