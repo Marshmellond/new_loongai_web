@@ -1,12 +1,72 @@
 <script setup lang="ts">
-import {ref, onUpdated} from 'vue';
+import {ref, onUpdated, watch} from 'vue';
 import {CloseOutlined} from '@ant-design/icons-vue';
 import {useCounterStore} from '@/stores/counter'
+import {marked} from 'marked';
+import hljs from 'highlight.js'
+import 'highlight.js/styles/foundation.css'
+const messageBuffer = ref(''); // 添加一个用于存储消息片段的缓冲区
+
+const render = new marked.Renderer()
+marked.setOptions({
+  renderer: render, // 这是必填项
+  gfm: true,	// 启动类似于Github样式的Markdown语法
+  pedantic: false, // 只解析符合Markdwon定义的，不修正Markdown的错误
+  sanitize: false, // 原始输出，忽略HTML标签（关闭后，可直接渲染HTML标签）
+
+  // 高亮的语法规范
+  highlight: (code, lang) => hljs.highlight(code, {language: lang}).value,
+})
 
 const counter = useCounterStore()
-const show_contents = counter.contents
-
 const textarea_input = ref<string>('');
+watch(() => counter.selected_item, () => {
+  get_data()
+})
+let chat_api = ref("")
+let chat_rec_id = ref("")
+const get_data = () => {
+  counter.contents = []
+  if (counter.selected_item) {
+    let rec_data = counter.recording.filter(item => item[0] == counter.selected_item)[0]
+    chat_api.value = rec_data[3]
+    chat_rec_id.value = rec_data[0]
+
+    const url1 = "/api/chat/get_api_ver"
+    fetch(url1).then((res) => {
+      return res.json()
+    }).then((data) => {
+      if (data["code"] == 1) {
+        chat_api.value += "-"
+        chat_api.value += data["api_ver"]
+      }
+    })
+    const url2 = "/api/chat/get_con_chat"
+    let body = {
+      chat_rec_id: chat_rec_id.value,
+    }
+    fetch(url2, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body),
+      credentials: "include"
+    }).then((res) => {
+      if (res.ok) {
+        return res.json()
+      }
+    }).then((data) => {
+      if (data["code"] == 1) {
+        for (let i of data["data"]) {
+          counter.contents.push([i[0], marked(i[1]), i[2], i[3]])
+        }
+      }
+    })
+
+  }
+}
+get_data()
+
+
 const scrollContainer = ref(null);
 onUpdated(() => {
   const container = scrollContainer.value;
@@ -24,63 +84,81 @@ const push_message = (event) => {
   }
 }
 const seed_message = () => {
-  let url = "http://127.0.0.1:8000/run_txt";
-  let push_id;
-  if (show_contents.length === 0) {
-    push_id = 0
-  } else {
-    push_id = parseInt(show_contents[show_contents.length - 1][0]) + 1
+  const url1 = "/api/chat/add_con_data"
+  const chat_con_user = textarea_input.value
+  let body = {
+    chat_rec_id: chat_rec_id.value,
+    textarea_input: chat_con_user
   }
-  show_contents.push([push_id.toString(), textarea_input.value, "2024-05-13 05:38", "https://skv.cool/upload/skv.png"])
-  show_contents.push([(push_id + 1).toString(), "", "2024-05-13 05:38", "https://cdn.d5v.cc/blog/1711297272589.png"])
-  fetch(url, {
+  fetch(url1, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({msg: textarea_input.value})
-  })
-      .then((res) => {
-        if (res.status === 200) {
-          return res.body;
-        }
-      })
-      .then((rb) => {
-        const reader = rb?.getReader();
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      for (let i of data["data"]) {
+        counter.contents.push([i[0], marked(i[1]), i[2], i[3]])
+      }
 
-        function process({done, value}) {
-          if (done) {
-            return;
-          }
-          const message = new TextDecoder("utf-8").decode(value);
-          let messages = message.split("data: ")
-          let messagesFiltered = []
-          for (const msg of messages) {
-            if (msg !== "") {
-              let jsonData = JSON.parse(msg)
-              messagesFiltered.push(jsonData)
+      const url2 = "/api/chat/add_con_chat"
+      let body2 = {
+        chat_rec_id: chat_rec_id.value,
+        textarea_input: chat_con_user
+      }
+      fetch(url2, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(body2)
+      })
+          .then((res) => {
+            if (res.status === 200) {
+              return res.body;
             }
-          }
-          for (const iterator of messagesFiltered) {
-            show_contents[show_contents.length - 1][1] += iterator.msg
-          }
-          reader?.read().then(process);
-        }
+          })
+          .then((rb) => {
+            const reader = rb?.getReader();
 
-        reader?.read().then(process);
-      })
+            function process({done, value}) {
+              if (done) {
+                return;
+              }
+              const message = new TextDecoder("utf-8").decode(value);
+              let messages = message.split("data: ")
+              let messagesFiltered = []
+              for (const msg of messages) {
+                if (msg !== "") {
+                  let jsonData = JSON.parse(msg)
+                  messagesFiltered.push(jsonData)
+                }
+              }
+              for (const iterator of messagesFiltered) {
+                counter.contents[counter.contents.length - 1][1] += iterator.msg
+              }
+              reader?.read().then(process);
+            }
+
+            reader?.read().then(process);
+          })
+    }
+  })
 }
 </script>
-v-for="(item, index) in show_recording" :key="item[0]"
 <template>
   <div class="div1">
     <div class="div2">
-      <span class="div2-title">星火大模型3.5</span>
+      <span class="div2-title">{{ chat_api }}</span>
       <div class=div2-close>
         <CloseOutlined/>
       </div>
     </div>
     <div class="div3" ref="scrollContainer">
       <div style=" display: flex;  justify-content: flex-start; margin-bottom: 10px"
-           v-for="(item) in show_contents" :key="item[0]">
+           v-for="(item) in counter.contents" :key="item[0]">
         <a-dropdown style="border-radius: 10px">
           <a-avatar shape="square" class="ant-head">
             <template #icon>
@@ -89,8 +167,7 @@ v-for="(item, index) in show_recording" :key="item[0]"
           </a-avatar>
         </a-dropdown>
         <div class="div-content">
-        <span class="div3-title">
-          {{ item[1] }}
+        <span class="div3-title" v-html="item[1]">
         </span><br>
         </div>
       </div>

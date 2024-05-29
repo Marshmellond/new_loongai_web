@@ -17,3 +17,4 @@
 - npm install ant-design-vue@4.x --save
 - npm install unplugin-vue-components -D
 - npm install less -D
+- npm install markdown-it -D
