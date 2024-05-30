@@ -5,7 +5,7 @@ import {useCounterStore} from '@/stores/counter'
 import {marked} from 'marked';
 import hljs from 'highlight.js'
 import 'highlight.js/styles/foundation.css'
-const messageBuffer = ref(''); // 添加一个用于存储消息片段的缓冲区
+
 
 const render = new marked.Renderer()
 marked.setOptions({
@@ -23,32 +23,40 @@ const textarea_input = ref<string>('');
 watch(() => counter.selected_item, () => {
   get_data()
 })
-let chat_api = ref("")
 let chat_rec_id = ref("")
 const get_data = () => {
   counter.contents = []
   if (counter.selected_item) {
     let rec_data = counter.recording.filter(item => item[0] == counter.selected_item)[0]
-    chat_api.value = rec_data[3]
     chat_rec_id.value = rec_data[0]
-
+    let body1 = {
+      chat_rec_id: chat_rec_id.value,
+    }
     const url1 = "/api/chat/get_api_ver"
-    fetch(url1).then((res) => {
-      return res.json()
+    fetch(url1, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body1),
+      credentials: "include"
+    }).then((res) => {
+      if (res.ok) {
+        return res.json()
+      }
     }).then((data) => {
       if (data["code"] == 1) {
-        chat_api.value += "-"
-        chat_api.value += data["api_ver"]
+        counter.chat_api = ""
+        counter.chat_api += `${data["api_name"]}-${data["api_ver"]}`
+        counter.chat_img_head = data["chat_img_head"]
       }
     })
     const url2 = "/api/chat/get_con_chat"
-    let body = {
+    let body2 = {
       chat_rec_id: chat_rec_id.value,
     }
     fetch(url2, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(body),
+      body: JSON.stringify(body2),
       credentials: "include"
     }).then((res) => {
       if (res.ok) {
@@ -62,6 +70,8 @@ const get_data = () => {
       }
     })
 
+  } else {
+    counter.chat_img_head = "http://127.0.0.1:8000/img/head?path=api&name=blank.png"
   }
 }
 get_data()
@@ -138,6 +148,7 @@ const seed_message = () => {
               }
               for (const iterator of messagesFiltered) {
                 counter.contents[counter.contents.length - 1][1] += iterator.msg
+                // counter.contents[counter.contents.length - 1][1] = marked(counter.contents[counter.contents.length - 1][1])
               }
               reader?.read().then(process);
             }
@@ -151,7 +162,12 @@ const seed_message = () => {
 <template>
   <div class="div1">
     <div class="div2">
-      <span class="div2-title">{{ chat_api }}</span>
+      <a-avatar shape="square" class="ant-head1">
+        <template #icon>
+          <img :src="counter.chat_img_head" alt="">
+        </template>
+      </a-avatar>
+      <span class="div2-title">{{ counter.chat_api }}</span>
       <div class=div2-close>
         <CloseOutlined/>
       </div>
@@ -160,7 +176,7 @@ const seed_message = () => {
       <div style=" display: flex;  justify-content: flex-start; margin-bottom: 10px"
            v-for="(item) in counter.contents" :key="item[0]">
         <a-dropdown style="border-radius: 10px">
-          <a-avatar shape="square" class="ant-head">
+          <a-avatar shape="square" class="ant-head2">
             <template #icon>
               <img :src="item[3]" alt="">
             </template>
@@ -193,7 +209,12 @@ const seed_message = () => {
 @import "src/assets/css/frame.less";
 @import "src/assets/css/theme.less";
 
-.ant-head {
+.ant-head1 {
+  position: relative;
+  left: 0.5%;
+}
+
+.ant-head2 {
   position: relative;
   left: 9.5%;
   top: 10px;
@@ -218,7 +239,7 @@ const seed_message = () => {
 
   .div2-title {
     position: relative;
-    left: 5px;
+    left: 0.7%;
     line-height: normal;
   }
 

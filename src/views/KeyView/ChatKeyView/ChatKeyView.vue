@@ -3,6 +3,7 @@
 import {ref} from "vue";
 import XunfeiView from "@/views/KeyView/ChatKeyView/XunfeiView.vue";
 import TongyiView from "@/views/KeyView/ChatKeyView/TongyiView.vue";
+import OpenaiView from "@/views/KeyView/ChatKeyView/OpenaiView.vue";
 import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
 
@@ -23,8 +24,7 @@ onMounted(get_about_data)
 </script>
 
 <template>
-  <h1>对话key</h1>
-  <h4>当前选择： {{ counter.chat_mode_name }}-{{ counter.chat_mode_ver }}</h4>
+  <h3 class="span-title">当前选择： {{ counter.chat_mode_name }}-{{ counter.chat_mode_ver }}</h3>
   <a-tabs v-model:activeKey="activeKey" style="height: 100%">
 
     <a-tab-pane key="1">
@@ -45,9 +45,22 @@ onMounted(get_about_data)
       <TongyiView></TongyiView>
     </a-tab-pane>
 
+    <a-tab-pane key="3">
+      <template #tab>
+        <span>
+          openai
+        </span>
+      </template>
+      <OpenaiView></OpenaiView>
+    </a-tab-pane>
+
   </a-tabs>
 </template>
 
 <style scoped lang="less">
 @import "src/assets/css/theme.less";
+
+.span-title {
+  color: #6a6b6b;
+}
 </style>

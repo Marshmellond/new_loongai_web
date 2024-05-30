@@ -13,7 +13,9 @@ export const useCounterStore = defineStore('counter', () => {
     const img_head = ref("") // 用户头像地址
     const chat_mode_name = ref("") // 当前选择对话模型名称
     const chat_mode_ver = ref("") // 当前选择对话模型版本
-    const selected_item = ref("") //当前选择对话
+    const selected_item = ref("") // 当前选择对话
+    const chat_api = ref("") // 内容区选择模型
+    const chat_img_head = ref("") // 内容区选择模型头像
 
     return {
         selectedKeys,
@@ -27,6 +29,8 @@ export const useCounterStore = defineStore('counter', () => {
         img_head,
         chat_mode_name,
         chat_mode_ver,
-        selected_item
+        selected_item,
+        chat_api,
+        chat_img_head,
     }
 })
