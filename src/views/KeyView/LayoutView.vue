@@ -7,6 +7,8 @@ const activeKey = ref("1");
 </script>
 
 <template>
+  <div class="div-beijing">
+
   <div class="div-page">
     <a-tabs v-model:activeKey="activeKey" tabPosition="left" style="height: 100%">
 
@@ -39,11 +41,17 @@ const activeKey = ref("1");
 
     </a-tabs>
   </div>
+  </div>
+
 </template>
 
 <style scoped lang="less">
 @import "src/assets/css/theme.less";
-
+.div-beijing{
+  background-color: #eff3f7;
+  height: 100%;
+  width: 100%;
+}
 .div-page {
   position: relative;
   top: 1%;

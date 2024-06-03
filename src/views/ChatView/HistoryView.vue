@@ -76,7 +76,8 @@ const delete_record = (id: string) => {
     }
   }).then(() => {
     counter.chat_api = ""
-    counter.chat_img_head = "http://127.0.0.1:8000/img/head?path=api&name=blank.png"
+    counter.chat_img_head = ""
+    counter.chat_mod_img_head = ""
     get_rec_data()
   })
   if (counter.recording.length === 0) {

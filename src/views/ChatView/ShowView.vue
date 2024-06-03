@@ -47,6 +47,8 @@ const get_data = () => {
         counter.chat_api = ""
         counter.chat_api += `${data["api_name"]}-${data["api_ver"]}`
         counter.chat_img_head = data["chat_img_head"]
+        counter.chat_mod_img_head = data["chat_mod_img_head"]
+        counter.chat_mod_name = data["chat_mod_name"]
       }
     })
     const url2 = "/api/chat/get_con_chat"
@@ -70,8 +72,6 @@ const get_data = () => {
       }
     })
 
-  } else {
-    counter.chat_img_head = "http://127.0.0.1:8000/img/head?path=api&name=blank.png"
   }
 }
 get_data()
@@ -162,12 +162,25 @@ const seed_message = () => {
 <template>
   <div class="div1">
     <div class="div2">
-      <a-avatar shape="square" class="ant-head1">
-        <template #icon>
-          <img :src="counter.chat_img_head" alt="">
-        </template>
-      </a-avatar>
-      <span class="div2-title">{{ counter.chat_api }}</span>
+
+      <div v-if="counter.chat_img_head" style="margin-left: 5px">
+        <a-avatar shape="square" class="ant-head1">
+          <template #icon>
+            <img :src="counter.chat_img_head" alt="">
+          </template>
+        </a-avatar>
+        <span class="div2-title">{{ counter.chat_api }}</span>
+      </div>
+
+      <div v-if="counter.chat_mod_img_head" style="margin-left: 30px">
+        <a-avatar shape="square" class="ant-head1">
+          <template #icon>
+            <img :src="counter.chat_mod_img_head" alt="">
+          </template>
+        </a-avatar>
+        <span class="div2-title">{{ counter.chat_mod_name }}</span>
+      </div>
+
       <div class=div2-close>
         <CloseOutlined/>
       </div>
@@ -212,12 +225,14 @@ const seed_message = () => {
 .ant-head1 {
   position: relative;
   left: 0.5%;
+  background-color: #e8e4e4;
 }
 
 .ant-head2 {
   position: relative;
   left: 9.5%;
   top: 10px;
+  background-color: #e8e4e4;
 }
 
 
@@ -241,6 +256,7 @@ const seed_message = () => {
     position: relative;
     left: 0.7%;
     line-height: normal;
+    margin-left: 3px;
   }
 
   .div2-close {
