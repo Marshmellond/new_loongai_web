@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import {CheckOutlined, CloseOutlined} from "@ant-design/icons-vue";
 
-import {h, reactive} from 'vue';
-import {notification, type NotificationPlacement} from "ant-design-vue";
+import {reactive} from 'vue';
 import {useCounterStore} from '@/stores/counter'
+import {message} from 'ant-design-vue';
 
 const counter = useCounterStore()
 
@@ -17,31 +16,6 @@ const formState = reactive<FormState>({
   password: '',
 });
 
-
-const successful_login = (placement: NotificationPlacement) => {
-  notification.open({
-    message: `登录成功！`,
-    duration: 3,
-    icon: () => h(CheckOutlined, {style: 'color: #00FF00'}),
-    placement,
-  });
-};
-const failed_login = (placement: NotificationPlacement) => {
-  notification.open({
-    message: `登录失败！密码错误`,
-    duration: 3,
-    icon: () => h(CloseOutlined, {style: 'color: #FF0000'}),
-    placement,
-  });
-};
-const failed_login2 = (placement: NotificationPlacement) => {
-  notification.open({
-    message: `登录失败！用户名不存在`,
-    duration: 3,
-    icon: () => h(CloseOutlined, {style: 'color: #FF0000'}),
-    placement,
-  });
-};
 const onFinish = (values: any) => {
   const url = "/api/login"
   let body = {
@@ -61,13 +35,13 @@ const onFinish = (values: any) => {
   }).then((data) => {
     if (parseInt(data["code"]) === 1) {
       counter.login_status = true
-      successful_login("top")
+      message.success('登录成功', 3);
       formState.username = '';
       formState.password = '';
     } else if (parseInt(data["code"]) === 0) {
-      failed_login("top")
+      message.error("登录失败！密码错误")
     } else {
-      failed_login2("top")
+      message.error("登录失败！用户名不存在")
     }
   })
 }

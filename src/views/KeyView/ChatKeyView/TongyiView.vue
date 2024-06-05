@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import {h, ref} from 'vue';
-import {notification, type NotificationPlacement} from "ant-design-vue";
-import {CheckOutlined, CloseOutlined} from "@ant-design/icons-vue";
+import {ref} from 'vue';
 import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
+import {message} from 'ant-design-vue';
 
 const counter = useCounterStore()
 const tongyi_api = ref(["", [], "", false])
@@ -26,30 +25,6 @@ const get_about_data = () => {
   })
 }
 onMounted(get_about_data)
-const successful_alter = (placement: NotificationPlacement) => {
-  notification.open({
-    message: `修改成功！`,
-    duration: 3,
-    icon: () => h(CheckOutlined, {style: 'color: #00FF00'}),
-    placement,
-  });
-};
-const failed_alter = (placement: NotificationPlacement) => {
-  notification.open({
-    message: `修改失败！`,
-    duration: 3,
-    icon: () => h(CloseOutlined, {style: 'color: #FF0000'}),
-    placement,
-  });
-};
-const failed_alter_default = (placement: NotificationPlacement) => {
-  notification.open({
-    message: `必须设置一个默认`,
-    duration: 3,
-    icon: () => h(CloseOutlined, {style: 'color: #FF0000'}),
-    placement,
-  });
-};
 const onFinish = () => {
   const url = "/api/key/alter/tongyi"
   let body = {
@@ -67,14 +42,14 @@ const onFinish = () => {
       return res.json()
     }
   }).then((data) => {
-    if (parseInt(data["code"]) === 1) {
-      successful_alter("top")
-      if (parseInt(data["alter_default_code"]) === 2) {
-        failed_alter_default("top")
-      }
+    if (parseInt(data["alter_default_code"]) === 2) {
+      message.error("必须设置一个默认")
+      get_about_data()
+    } else if (parseInt(data["code"]) === 1) {
+      message.success("修改成功")
       get_about_data()
     } else {
-      failed_alter("top")
+      message.error("修改失败")
     }
   })
 }

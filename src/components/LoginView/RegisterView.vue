@@ -1,22 +1,13 @@
 <script lang="ts" setup>
-import {CheckOutlined, CloseOutlined, LoadingOutlined} from '@ant-design/icons-vue';
-
-import {reactive, h, ref} from 'vue';
-import {notification} from 'ant-design-vue';
-import type {NotificationPlacement} from 'ant-design-vue';
+import {reactive, ref} from 'vue';
 import {useCounterStore} from '@/stores/counter'
+import {message} from 'ant-design-vue';
 
 let on_load = ref(false)
 let on_status = ref(false)
 let on_text = ref("发送")
 let countdown = ref(0);
 
-const indicator = h(LoadingOutlined, {
-  style: {
-    fontSize: '24px',
-  },
-  spin: true,
-});
 const counter = useCounterStore()
 
 interface FormState {
@@ -70,22 +61,6 @@ const password_the_same = {
     return Promise.resolve();
   }
 };
-const successful_register = (placement: NotificationPlacement) => {
-  notification.open({
-    message: `注册成功！请登录`,
-    duration: 3,
-    icon: () => h(CheckOutlined, {style: 'color: #00FF00'}),
-    placement,
-  });
-};
-const failed_register = (placement: NotificationPlacement, msg: string) => {
-  notification.open({
-    message: msg,
-    duration: 3,
-    icon: () => h(CloseOutlined, {style: 'color: #FF0000'}),
-    placement,
-  });
-};
 const onFinish = (values: any) => {
   const url = "/api/register"
   let body = {
@@ -94,7 +69,6 @@ const onFinish = (values: any) => {
     mail_name: values.mail_name,
     mail_code: values.mail_code
   }
-  console.log(body)
   fetch(url, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
@@ -106,18 +80,18 @@ const onFinish = (values: any) => {
   }).then((data) => {
     if (parseInt(data["code"]) === 1) {
       counter.login_page = '1'
-      successful_register("top")
+      message.success("注册成功！请登录")
       formState.username = '';
       formState.mail_name = '';
       formState.mail_code = '';
       formState.password = '';
       formState.confirmPassword = '';
     } else if (parseInt(data["code"]) === -1) {
-      failed_register("top", "注册失败！验证码错误")
+      message.error("注册失败！验证码错误")
     } else if (parseInt(data["code"]) === -2) {
-      failed_register("top", "注册失败！邮箱已被注册")
+      message.error("注册失败！邮箱已被注册")
     } else {
-      failed_register("top", "注册失败！用户名已存在")
+      message.error("注册失败！用户名已存在")
     }
   })
 }

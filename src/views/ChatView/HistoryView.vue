@@ -167,6 +167,27 @@ const add_record = () => {
 <style lang="less" scoped>
 @import "src/assets/css/theme.less";
 
+.no-chat {
+  position: relative;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .no-ico {
+    color: #c1c1c1;
+    font-size: 200%;
+  }
+
+  .no-txt {
+    margin-top: 10px;
+    color: #c1c1c1;
+    font-size: 130%;
+  }
+}
+
+
 .selected {
   border-left: 2px solid #3086fd;
   background: #f0f0f0;
@@ -197,25 +218,6 @@ const add_record = () => {
     background-color: @theme-background-color;
     overflow: auto; /* 添加这一行 */
 
-    .no-chat {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      text-align: center;
-      gap: 1vh;
-      margin-top: 10%;
-
-
-      .no-ico {
-        color: #c1c1c1;
-        font-size: 200%;
-      }
-
-      .no-txt {
-        color: #c1c1c1;
-        font-size: 130%;
-      }
-    }
 
     .div5 {
       height: 70px;

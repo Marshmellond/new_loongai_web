@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import {h, reactive} from 'vue';
+import {reactive} from 'vue';
 import {useCounterStore} from '@/stores/counter'
-import {notification, type NotificationPlacement} from "ant-design-vue";
-import {CheckOutlined, CloseOutlined} from "@ant-design/icons-vue";
+import {message} from 'ant-design-vue';
 
 const counter = useCounterStore()
 
@@ -15,23 +14,6 @@ const formState = reactive<FormState>({
   user_id: counter.user_id,
   user_name: counter.user_name,
 });
-
-const successful_alter = (placement: NotificationPlacement) => {
-  notification.open({
-    message: `修改成功！`,
-    duration: 3,
-    icon: () => h(CheckOutlined, {style: 'color: #00FF00'}),
-    placement,
-  });
-};
-const failed_alter = (placement: NotificationPlacement) => {
-  notification.open({
-    message: `修改失败！该用户名已被使用`,
-    duration: 3,
-    icon: () => h(CloseOutlined, {style: 'color: #FF0000'}),
-    placement,
-  });
-};
 const onFinish = () => {
   const url = "/api/alter_info"
   let body = {
@@ -48,9 +30,9 @@ const onFinish = () => {
     }
   }).then((data) => {
     if (parseInt(data["code"]) === 1) {
-      successful_alter("top")
+      message.success("修改成功")
     } else {
-      failed_alter("top")
+      message.error("修改失败！该用户名已被使用")
     }
   })
 }

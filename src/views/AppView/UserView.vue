@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {CommentOutlined, ThunderboltOutlined} from '@ant-design/icons-vue';
+import {CommentOutlined, DeleteOutlined, ThunderboltOutlined} from '@ant-design/icons-vue';
 import {useCounterStore} from '@/stores/counter'
 import {onMounted} from "vue";
 import {useRouter} from 'vue-router';
@@ -48,6 +48,29 @@ const add_chat = (value) => {
   })
 
 }
+
+const del_user_mod = (value) => {
+  const url = "/api/app/del_user_mod"
+  let body = {
+    chat_mod_id: value
+  }
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      get_data()
+    }
+  })
+
+};
+
 const get_data = () => {
   const url = "/api/app/get_app_data"
   fetch(url).then((res) => {
@@ -75,7 +98,6 @@ onMounted(get_data)
           class="div2"
           v-for="(item) in counter.app_user_data" :key="item[0]"
       >
-
         <div class="div-default">
           <a-avatar shape="square" class="app-head2" :draggable="true" :size="50">
             <template #icon>
@@ -95,9 +117,12 @@ onMounted(get_data)
           <CommentOutlined/>
           添至对话
         </div>
+        <div class="app-title5" @click="del_user_mod(item[0])">
+          <DeleteOutlined/>
+        </div>
 
         <div class="div-default">
-          <div class="app-title5">{{ item[5] }}</div>
+          <div class="app-title6">{{ item[4] }}</div>
         </div>
       </div>
     </div>
@@ -184,12 +209,25 @@ onMounted(get_data)
         background-color: #d8dce0;
       }
 
-
       .app-title5 {
+        border-radius: 5px;
+        position: relative;
+        left: 260px;
+        top: -110px;
+        font-size: 15px;
+        padding: 4px;
+      }
+
+      .app-title5:hover {
+        color: red;
+      }
+
+
+      .app-title6 {
         position: relative;
         padding: 10px;
         margin-right: 10px;
-        top: -18px;
+        top: -50px;
         font-size: 12px;
         display: -webkit-box;
         -webkit-line-clamp: 3;

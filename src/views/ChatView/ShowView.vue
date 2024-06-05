@@ -4,18 +4,23 @@ import {CloseOutlined} from '@ant-design/icons-vue';
 import {useCounterStore} from '@/stores/counter'
 import {marked} from 'marked';
 import hljs from 'highlight.js'
-import 'highlight.js/styles/foundation.css'
+import 'highlight.js/styles/github-dark.css'; // 或其他样式
+import {onMounted} from "vue";
 
-
-const render = new marked.Renderer()
 marked.setOptions({
-  renderer: render, // 这是必填项
-  gfm: true,	// 启动类似于Github样式的Markdown语法
-  pedantic: false, // 只解析符合Markdwon定义的，不修正Markdown的错误
-  sanitize: false, // 原始输出，忽略HTML标签（关闭后，可直接渲染HTML标签）
-
-  // 高亮的语法规范
-  highlight: (code, lang) => hljs.highlight(code, {language: lang}).value,
+  highlight: function (code, lang) {
+    try {
+      if (lang) {
+        return hljs.highlight(code, {language: lang}).value
+      } else {
+        return hljs.highlightAuto(code).value
+      }
+    } catch (error) {
+      return code
+    }
+  },
+  gfmtrue: true,
+  breaks: true
 })
 
 const counter = useCounterStore()
@@ -66,6 +71,7 @@ const get_data = () => {
       }
     }).then((data) => {
       if (data["code"] == 1) {
+        counter.contents = []
         for (let i of data["data"]) {
           counter.contents.push([i[0], marked(i[1]), i[2], i[3]])
         }
@@ -74,7 +80,7 @@ const get_data = () => {
 
   }
 }
-get_data()
+onMounted(get_data)
 
 
 const scrollContainer = ref(null);
@@ -93,6 +99,7 @@ const push_message = (event) => {
     textarea_input.value += '\n';
   }
 }
+let temp_make_content = ref("")
 const seed_message = () => {
   const url1 = "/api/chat/add_con_data"
   const chat_con_user = textarea_input.value
@@ -127,6 +134,7 @@ const seed_message = () => {
       })
           .then((res) => {
             if (res.status === 200) {
+              temp_make_content.value = ""
               return res.body;
             }
           })
@@ -147,8 +155,8 @@ const seed_message = () => {
                 }
               }
               for (const iterator of messagesFiltered) {
-                counter.contents[counter.contents.length - 1][1] += iterator.msg
-                // counter.contents[counter.contents.length - 1][1] = marked(counter.contents[counter.contents.length - 1][1])
+                temp_make_content.value += iterator.msg
+                counter.contents[counter.contents.length - 1][1] = marked(temp_make_content.value)
               }
               reader?.read().then(process);
             }
@@ -160,6 +168,7 @@ const seed_message = () => {
 }
 </script>
 <template>
+
   <div class="div1">
     <div class="div2">
 
@@ -186,8 +195,9 @@ const seed_message = () => {
       </div>
     </div>
     <div class="div3" ref="scrollContainer">
-      <div style=" display: flex;  justify-content: flex-start; margin-bottom: 10px"
-           v-for="(item) in counter.contents" :key="item[0]">
+      <div
+          class="div-div"
+          v-for="(item) in counter.contents" :key="item[0]">
         <a-dropdown style="border-radius: 10px">
           <a-avatar shape="square" class="ant-head2">
             <template #icon>
@@ -282,21 +292,26 @@ const seed_message = () => {
   background-color: @theme-background-color;
   overflow: auto;
 
+  .div-div {
+    display: flex;
+    justify-content: flex-start;
 
-  .div-content {
-    position: relative;
-    left: 10%;
-    top: 10px;
-    max-width: 40vw; // 指定最大宽度，超过这个宽度内容会自动换行
-    min-height: 10%; // 设置最小高度
-    border: 1px solid @theme-border-color;
-    border-radius: 5px;
-    overflow: auto; // 设置溢出为自动
-    word-wrap: break-word; // 设置文字换行
-    overflow-wrap: break-word; // 设置文字换行
 
-    .div3-title {
+    .div-content {
       position: relative;
+      left: 10%;
+      //top: 10px;
+      max-width: 60vw; // 指定最大宽度，超过这个宽度内容会自动换行
+      min-height: 10%; // 设置最小高度
+      //border: 1px solid @theme-border-color;
+      border-radius: 5px;
+      overflow: auto; // 设置溢出为自动
+      word-wrap: break-word; // 设置文字换行
+      overflow-wrap: break-word; // 设置文字换行
+
+      .div3-title {
+        position: relative;
+      }
     }
   }
 }

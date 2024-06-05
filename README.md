@@ -15,6 +15,7 @@
 ## 依赖
 
 - npm install ant-design-vue@4.x --save
-- npm install unplugin-vue-components -D
-- npm install less -D
-- npm install markdown-it -D
+- npm install unplugin-vue-components --save
+- npm install less --save
+- npm install marked --save
+- npm install highlight.js --save
