@@ -27,6 +27,7 @@ const on4 = () => {
 const on_generate = () => {
   if (counter.draw_inp.length > 0) {
     if (counter.draw_mod_select === "1") {
+      counter.draw_img_load1 = true
       console.log(counter.draw_inp, counter.draw_dell3_select_size, counter.draw_dell3_select_picture)
       const url = "/api/draw/generate/dell3"
       let body = {
@@ -45,13 +46,61 @@ const on_generate = () => {
         }
       }).then((data) => {
         if (data["code"] == 1) {
+          counter.draw_img_load1 = false
           counter.draw_img1 = data["draw_img1"]
         } else {
           message.error("生成出现错误")
         }
-      })
+      }).catch(() => {
+            counter.draw_img_load1 = false
+            message.error("生成出现错误")
+          }
+      )
     } else if (counter.draw_mod_select === "2") {
-      console.log()
+      counter.draw_img_load1 = true
+      console.log(counter.draw_inp, counter.draw_dell3_select_size, counter.draw_dell3_select_picture)
+      console.log("nmsl", counter.draw_num_select)
+      const url = "/api/draw/generate/dell2"
+      let body = {
+        draw_inp: counter.draw_inp,
+        draw_dell3_select_picture: counter.draw_dell3_select_picture,
+        draw_num_select: counter.draw_num_select
+      }
+      fetch(url, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(body),
+        credentials: "include"
+      }).then((res) => {
+        if (res.ok) {
+          return res.json()
+        }
+      }).then((data) => {
+        if (data["code"] == 1) {
+          counter.draw_img_load1 = false
+          if (counter.draw_num_select === "1") {
+            counter.draw_img1 = data["draw_img1"]
+          } else if (counter.draw_num_select === "2") {
+            counter.draw_img1 = data["draw_img1"]
+            counter.draw_img2 = data["draw_img2"]
+          } else if (counter.draw_num_select === "3") {
+            counter.draw_img1 = data["draw_img1"]
+            counter.draw_img2 = data["draw_img2"]
+            counter.draw_img3 = data["draw_img3"]
+          } else if (counter.draw_num_select === "4") {
+            counter.draw_img1 = data["draw_img1"]
+            counter.draw_img2 = data["draw_img2"]
+            counter.draw_img3 = data["draw_img3"]
+            counter.draw_img4 = data["draw_img4"]
+          }
+        } else {
+          message.error("生成出现错误")
+        }
+      }).catch(() => {
+            counter.draw_img_load1 = false
+            message.error("生成出现错误")
+          }
+      )
     } else if (counter.draw_mod_select === "3") {
       console.log()
     } else if (counter.draw_mod_select === "4") {

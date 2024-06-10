@@ -22,11 +22,20 @@ export const useCounterStore = defineStore('counter', () => {
     const chat_mod_name = ref("") // 内容区选择角色名字
     const app_default_data = ref([]) // 应用预设数据
     const app_user_data = ref([]) // 应用自定义数据
-    const draw_mod_select = ref("1") // 绘画模型选择
+    const draw_mod_select = ref("2") // 绘画模型选择
     const draw_inp = ref("") // 绘画图像描述输入
-    const draw_dell3_select_size = ref("1024x1024") // 绘画dell3尺寸选择
-    const draw_dell3_select_picture = ref("普通")// 绘画dell3画质选择
+    const draw_dell3_select_size = ref("方图") // 绘画dell3尺寸选择
+    const draw_dell3_select_picture = ref("高清")// 绘画dell3画质选择
+    const draw_num_select = ref("1") //绘画生成数量选择
+    const draw_size_select = ref(false) //绘画生成布局变化
     const draw_img1 = ref("") // 绘画结果url1
+    const draw_img2 = ref("") // 绘画结果url2
+    const draw_img3 = ref("") // 绘画结果url3
+    const draw_img4 = ref("") // 绘画结果url4
+    const draw_img_load1 = ref(false) // 绘画结果加载中1
+    const draw_img_load2 = ref(false) // 绘画结果加载中2
+    const draw_img_load3 = ref(false) // 绘画结果加载中3
+    const draw_img_load4 = ref(false) // 绘画结果加载中4
     return {
         selectedKeys,
         recording,
@@ -52,6 +61,15 @@ export const useCounterStore = defineStore('counter', () => {
         draw_inp,
         draw_dell3_select_size,
         draw_dell3_select_picture,
+        draw_num_select,
+        draw_size_select,
         draw_img1,
+        draw_img2,
+        draw_img3,
+        draw_img4,
+        draw_img_load1,
+        draw_img_load2,
+        draw_img_load3,
+        draw_img_load4,
     }
 })

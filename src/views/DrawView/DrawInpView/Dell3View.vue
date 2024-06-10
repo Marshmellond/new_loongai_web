@@ -2,23 +2,23 @@
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-
+counter.draw_num_select = '1'
 
 const on1 = () => {
-  counter.draw_dell3_select_size = "1024x1024"
+  counter.draw_dell3_select_size = "方图"
 }
 const on2 = () => {
-  counter.draw_dell3_select_size = "1024x1792"
+  counter.draw_dell3_select_size = "横图"
 }
 const on3 = () => {
-  counter.draw_dell3_select_size = "1792x1024"
+  counter.draw_dell3_select_size = "竖图"
 }
 const onn1 = () => {
-  counter.draw_dell3_select_picture = "普通"
+  counter.draw_dell3_select_picture = "高清"
 
 }
 const onn2 = () => {
-  counter.draw_dell3_select_picture = "高清"
+  counter.draw_dell3_select_picture = "细节增强"
 }
 
 </script>
@@ -26,22 +26,22 @@ const onn2 = () => {
 <template>
   <div class="div-title1">尺寸</div>
   <div class="div-mod-div">
-    <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_dell3_select_size==='1024x1024'}" @click="on1">
-      <div class="div-mod-title">1024x1024</div>
+    <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_dell3_select_size==='方图'}" @click="on1">
+      <div class="div-mod-title">方图</div>
     </div>
-    <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_dell3_select_size==='1024x1792'}" @click="on2"
+    <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_dell3_select_size==='横图'}" @click="on2"
          style="margin-left: 10px">
-      <div class="div-mod-title">1024x1792</div>
+      <div class="div-mod-title">横图</div>
     </div>
-    <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_dell3_select_size==='1792x1024'}" @click="on3"
+    <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_dell3_select_size==='竖图'}" @click="on3"
          style="margin-left: 10px">
-      <div class="div-mod-title">1792x1024</div>
+      <div class="div-mod-title">竖图</div>
     </div>
   </div>
   <div class="div-title1">画质</div>
   <a-radio-group v-model:value="counter.draw_dell3_select_picture" class="div-title2">
-    <a-radio-button value="普通" @click="onn1">普通</a-radio-button>
-    <a-radio-button value="高清" @click="onn2">高清</a-radio-button>
+    <a-radio-button value="高清" @click="onn1">高清</a-radio-button>
+    <a-radio-button value="细节增强" @click="onn2">细节增强</a-radio-button>
   </a-radio-group>
 
 </template>
