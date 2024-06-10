@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
 import {ref} from "vue";
-import XunfeiView from "@/views/KeyView/ChatKeyView/XunfeiView.vue";
-import TongyiView from "@/views/KeyView/ChatKeyView/TongyiView.vue";
-import OpenaiView from "@/views/KeyView/ChatKeyView/OpenaiView.vue";
+import ChatXunfeiView from "@/views/KeyView/ChatKeyView/ChatXunfeiView.vue";
+import ChatTongyiView from "@/views/KeyView/ChatKeyView/ChatTongyiView.vue";
+import ChatOpenaiView from "@/views/KeyView/ChatKeyView/ChatOpenaiView.vue";
 import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
 
@@ -24,7 +24,7 @@ onMounted(get_about_data)
 </script>
 
 <template>
-  <h3 class="span-title">当前选择： {{ counter.chat_mode_name }}-{{ counter.chat_mode_ver }}</h3>
+  <h3 class="span-title">当前选择： {{ counter.chat_mode_name }} | {{ counter.chat_mode_ver }}</h3>
   <a-tabs v-model:activeKey="activeKey" style="height: 100%">
 
     <a-tab-pane key="1">
@@ -33,7 +33,7 @@ onMounted(get_about_data)
           讯飞星火
         </span>
       </template>
-      <XunfeiView></XunfeiView>
+      <ChatXunfeiView></ChatXunfeiView>
     </a-tab-pane>
 
     <a-tab-pane key="2">
@@ -42,7 +42,7 @@ onMounted(get_about_data)
           通义千问
         </span>
       </template>
-      <TongyiView></TongyiView>
+      <ChatTongyiView></ChatTongyiView>
     </a-tab-pane>
 
     <a-tab-pane key="3">
@@ -51,7 +51,7 @@ onMounted(get_about_data)
           openai
         </span>
       </template>
-      <OpenaiView></OpenaiView>
+      <ChatOpenaiView></ChatOpenaiView>
     </a-tab-pane>
 
   </a-tabs>

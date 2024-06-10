@@ -236,7 +236,6 @@ const add_record = () => {
         height: 100%;
 
         &:hover {
-          border-left: 2px solid #3086fd;
           background: #f0f0f0;
         }
 

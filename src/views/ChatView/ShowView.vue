@@ -24,6 +24,7 @@ marked.setOptions({
 })
 
 const counter = useCounterStore()
+const chat_show_load = ref(false)
 const textarea_input = ref<string>('');
 watch(() => counter.selected_item, () => {
   get_data()
@@ -121,7 +122,7 @@ const seed_message = () => {
       for (let i of data["data"]) {
         counter.contents.push([i[0], marked(i[1]), i[2], i[3]])
       }
-
+      chat_show_load.value = true
       const url2 = "/api/chat/add_con_chat"
       let body2 = {
         chat_rec_id: chat_rec_id.value,
@@ -135,6 +136,7 @@ const seed_message = () => {
           .then((res) => {
             if (res.status === 200) {
               temp_make_content.value = ""
+              chat_show_load.value = false
               return res.body;
             }
           })
@@ -197,17 +199,15 @@ const seed_message = () => {
     <div class="div3" ref="scrollContainer">
       <div
           class="div-div"
-          v-for="(item) in counter.contents" :key="item[0]">
-        <a-dropdown style="border-radius: 10px">
-          <a-avatar shape="square" class="ant-head2">
-            <template #icon>
-              <img :src="item[3]" alt="">
-            </template>
-          </a-avatar>
-        </a-dropdown>
+          v-for="(item, index) in counter.contents" :key="item[0]">
+        <a-avatar shape="square" class="ant-head2">
+          <template #icon>
+            <img :src="item[3]" alt="">
+          </template>
+        </a-avatar>
         <div class="div-content">
-        <span class="div3-title" v-html="item[1]">
-        </span><br>
+          <a-spin class="chat-show-load" v-if="chat_show_load && index === counter.contents.length - 1"/>
+          <span class="div3-title" v-html="item[1]"></span><br>
         </div>
       </div>
 
@@ -232,6 +232,11 @@ const seed_message = () => {
 @import "src/assets/css/frame.less";
 @import "src/assets/css/theme.less";
 
+.chat-show-load {
+  width: 30px;
+  margin-top: 17px;
+}
+
 .ant-head1 {
   position: relative;
   left: 0.5%;
@@ -240,7 +245,7 @@ const seed_message = () => {
 
 .ant-head2 {
   position: relative;
-  left: 9.5%;
+  left: 14.5%;
   top: 10px;
   background-color: #e8e4e4;
 }
@@ -296,11 +301,9 @@ const seed_message = () => {
     display: flex;
     justify-content: flex-start;
 
-
     .div-content {
       position: relative;
-      left: 10%;
-      //top: 10px;
+      left: 15%;
       max-width: 60vw; // 指定最大宽度，超过这个宽度内容会自动换行
       min-height: 10%; // 设置最小高度
       //border: 1px solid @theme-border-color;

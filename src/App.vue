@@ -73,7 +73,7 @@ onMounted(checkLoginStatus)
           </a-menu-item>
           <a-menu-item key="3">
             <HighlightOutlined/>
-            <span class="nav-text"><RouterLink to="/darw">绘画</RouterLink></span>
+            <span class="nav-text"><RouterLink to="/draw">绘画</RouterLink></span>
           </a-menu-item>
           <a-menu-item key="4">
             <PictureOutlined/>

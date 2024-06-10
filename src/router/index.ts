@@ -14,9 +14,9 @@ const router = createRouter({
             component: () => import('../views/AppView/LayoutView.vue')
         },
         {
-            path: '/darw',
-            name: 'darw',
-            component: () => import('@/views/DarwView/LayoutView.vue')
+            path: '/draw',
+            name: 'draw',
+            component: () => import('@/views/DrawView/LayoutView.vue')
         },
         {
             path: '/gallery',
