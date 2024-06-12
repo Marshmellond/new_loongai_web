@@ -36,6 +36,17 @@ export const useCounterStore = defineStore('counter', () => {
     const draw_img_load2 = ref(false) // 绘画结果加载中2
     const draw_img_load3 = ref(false) // 绘画结果加载中3
     const draw_img_load4 = ref(false) // 绘画结果加载中4
+    const gallery_img_list = ref([
+        ["1", "http://127.0.0.1:8000/img/draw?path=user&name=1.png"],
+        ["2", "http://127.0.0.1:8000/img/draw?path=user&name=2.png"],
+        ["3", "http://127.0.0.1:8000/img/draw?path=user&name=3.png"],
+        ["4", "http://127.0.0.1:8000/img/draw?path=user&name=1.png"],
+        ["5", "http://127.0.0.1:8000/img/draw?path=user&name=2.png"],
+        ["6", "http://127.0.0.1:8000/img/draw?path=user&name=3.png"],
+        ["7", "http://127.0.0.1:8000/img/draw?path=user&name=1.png"],
+        ["8", "http://127.0.0.1:8000/img/draw?path=user&name=2.png"],
+        ["9", "http://127.0.0.1:8000/img/draw?path=user&name=3.png"],
+    ]) // 画廊所有图片url
     return {
         selectedKeys,
         recording,
@@ -71,5 +82,6 @@ export const useCounterStore = defineStore('counter', () => {
         draw_img_load2,
         draw_img_load3,
         draw_img_load4,
+        gallery_img_list,
     }
 })
