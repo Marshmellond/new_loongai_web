@@ -1,8 +1,29 @@
 <script setup lang="ts">
 import {ref} from 'vue';
+import {message} from "ant-design-vue";
+import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
+
+const get_data = () => {
+  const url = "/api/gallery/get_img"
+  fetch(url).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    counter.gallery_img_list = []
+    if (data["code"] == 1) {
+      for (let i of data["img_list"]) {
+        counter.gallery_img_list.push(i)
+      }
+    }
+  }).catch(() => {
+    message.error("获取失败")
+  })
+}
+onMounted(get_data)
 </script>
 
 <template>
@@ -28,7 +49,7 @@ const counter = useCounterStore()
     margin: 5px;
     border-radius: 7px;
     overflow: hidden;
-    border: 1px solid red;
+    //border: 1px solid red;
   }
 }
 

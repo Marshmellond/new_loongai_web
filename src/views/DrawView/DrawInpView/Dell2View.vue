@@ -4,6 +4,7 @@ import {useCounterStore} from '@/stores/counter'
 const counter = useCounterStore()
 
 counter.draw_dell3_select_size = "方图"
+counter.draw_num_select = '1'
 const on1 = () => {
   counter.draw_dell3_select_size = "方图"
 }

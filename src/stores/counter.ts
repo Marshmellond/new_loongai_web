@@ -22,7 +22,7 @@ export const useCounterStore = defineStore('counter', () => {
     const chat_mod_name = ref("") // 内容区选择角色名字
     const app_default_data = ref([]) // 应用预设数据
     const app_user_data = ref([]) // 应用自定义数据
-    const draw_mod_select = ref("2") // 绘画模型选择
+    const draw_mod_select = ref("1") // 绘画模型选择
     const draw_inp = ref("") // 绘画图像描述输入
     const draw_dell3_select_size = ref("方图") // 绘画dell3尺寸选择
     const draw_dell3_select_picture = ref("高清")// 绘画dell3画质选择
@@ -36,17 +36,7 @@ export const useCounterStore = defineStore('counter', () => {
     const draw_img_load2 = ref(false) // 绘画结果加载中2
     const draw_img_load3 = ref(false) // 绘画结果加载中3
     const draw_img_load4 = ref(false) // 绘画结果加载中4
-    const gallery_img_list = ref([
-        ["1", "http://127.0.0.1:8000/img/draw?path=user&name=1.png"],
-        ["2", "http://127.0.0.1:8000/img/draw?path=user&name=2.png"],
-        ["3", "http://127.0.0.1:8000/img/draw?path=user&name=3.png"],
-        ["4", "http://127.0.0.1:8000/img/draw?path=user&name=1.png"],
-        ["5", "http://127.0.0.1:8000/img/draw?path=user&name=2.png"],
-        ["6", "http://127.0.0.1:8000/img/draw?path=user&name=3.png"],
-        ["7", "http://127.0.0.1:8000/img/draw?path=user&name=1.png"],
-        ["8", "http://127.0.0.1:8000/img/draw?path=user&name=2.png"],
-        ["9", "http://127.0.0.1:8000/img/draw?path=user&name=3.png"],
-    ]) // 画廊所有图片url
+    const gallery_img_list = ref([]) // 画廊所有图片url
     return {
         selectedKeys,
         recording,

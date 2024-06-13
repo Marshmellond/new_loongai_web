@@ -2,6 +2,7 @@
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
+counter.draw_dell3_select_size = "方图"
 counter.draw_num_select = '1'
 
 const on1 = () => {
@@ -20,6 +21,18 @@ const onn1 = () => {
 const onn2 = () => {
   counter.draw_dell3_select_picture = "细节增强"
 }
+const on_num1 = () => {
+  counter.draw_num_select = '1'
+}
+const on_num2 = () => {
+  counter.draw_num_select = '2'
+}
+const on_num3 = () => {
+  counter.draw_num_select = '3'
+}
+const on_num4 = () => {
+  counter.draw_num_select = '4'
+}
 
 </script>
 
@@ -36,6 +49,24 @@ const onn2 = () => {
     <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_dell3_select_size==='竖图'}" @click="on3"
          style="margin-left: 10px">
       <div class="div-mod-title">竖图</div>
+    </div>
+  </div>
+  <div class="div-title1">生成数量</div>
+  <div class="div-mod-div">
+    <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_num_select==='1'}" @click="on_num1">
+      <div class="div-mod-title">1</div>
+    </div>
+    <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_num_select==='2'}" @click="on_num2"
+         style="margin-left: 10px">
+      <div class="div-mod-title">2</div>
+    </div>
+    <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_num_select==='3'}" @click="on_num3"
+         style="margin-left: 10px">
+      <div class="div-mod-title">3</div>
+    </div>
+    <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_num_select==='4'}" @click="on_num4"
+         style="margin-left: 10px">
+      <div class="div-mod-title">4</div>
     </div>
   </div>
   <div class="div-title1">画质</div>
