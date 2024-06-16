@@ -29,10 +29,12 @@ const onFinish = () => {
       return res.json()
     }
   }).then((data) => {
-    if (parseInt(data["code"]) === 1) {
+    if (data["code"] == 1) {
       message.success("修改成功")
-    } else {
+    } else if (data["code"] == 0) {
       message.error("修改失败！该用户名已被使用")
+    } else {
+      message.error("修改失败")
     }
   })
 }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import DrawInpView from "@/views/DrawView/DrawInpView.vue";
 import DrawShowView from "@/views/DrawView/DrawShowView.vue";
+localStorage.setItem('selectedKey', "3");
 </script>
 
 <template>

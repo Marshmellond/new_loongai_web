@@ -108,12 +108,8 @@ const add_record = () => {
 </script>
 
 <template>
-  <div
-      class="div1"
-  >
-    <div
-        class="div2"
-    >
+  <div class="div1">
+    <div class="div2">
       <a-space direction="vertical" class="ant-space">
         <a-input-search
             v-model:value="search_value"
@@ -200,13 +196,11 @@ const add_record = () => {
 
 .div1 {
   height: 95.5vh;
-  width: 250px;
   border-left: 1px solid @theme-border-color;
   background-color: @theme-background-color;
 
   .div2 {
-    height: 50px;
-    width: 250px;
+    height: 5.5vh;
     border-bottom: 1px solid @theme-border-color;
     background-color: @theme-background-color;
   }

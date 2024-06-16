@@ -299,7 +299,7 @@ const on_generate = () => {
   height: 7vh;
   border-top: 1px solid @theme-border-color;
   overflow: auto;
-  padding: 10px;
+  padding: 9px;
 
   .ant-space {
     display: flex;

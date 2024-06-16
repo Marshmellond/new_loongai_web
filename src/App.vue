@@ -15,6 +15,7 @@ import {useCounterStore} from '@/stores/counter'
 import {onMounted, watch} from "vue";
 
 const counter = useCounterStore()
+counter.selectedKeys = [localStorage.getItem("selectedKey")]
 const checkLoginStatus = () => {
   const tokenCookie = document.cookie
       .split('; ')
@@ -60,7 +61,7 @@ onMounted(checkLoginStatus)
 
       <a-layout-sider
           class="ant-sidebar"
-          width="100px"
+          width="5.7vw"
       >
         <a-menu v-model:selectedKeys="counter.selectedKeys" theme="light" mode="inline" style="width: 100px;border: 0">
           <a-menu-item key="1">
@@ -103,55 +104,27 @@ onMounted(checkLoginStatus)
 <style lang="less" scoped>
 @import "src/assets/css/theme.less";
 
-#components-layout-demo-fixed-sider .logo {
-  height: 32px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px;
-}
-
-.site-layout .site-layout-background {
-  background: @theme-background-color;
-}
-
-[data-theme='dark'] .site-layout .site-layout-background {
-  background: #141414;
-}
-
-#components-layout-demo-top-side-2 .logo {
-  float: left;
-  width: 120px;
-  height: 31px;
-  margin: 16px 24px 16px 0;
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.ant-row-rtl #components-layout-demo-top-side-2 .logo {
-  float: right;
-  margin: 16px 0 16px 24px;
-}
-
-
 .ant-header {
   display: flex;
-  height: 4.5vh;
   align-items: center;
   border-bottom: 1px solid @theme-border-color;
   background-color: @theme-background-color;
+  width: 100vw;
+  height: 4.5vh;
   overflow: hidden;
 }
 
 
 .ant-div {
-
   .ant-sidebar {
-    height: 95.5vh;
     background-color: @theme-background-color;
+    height: 95.5vh;
     overflow: hidden;
   }
 
   .ant-content {
     height: 95.5vh;
-    overflow: auto;
+    overflow: hidden;
   }
 }
 </style>

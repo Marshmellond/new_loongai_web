@@ -253,6 +253,8 @@ const seed_message = () => {
 
 .div1 {
   width: 100%;
+  height: 95.5vh;
+  overflow: hidden;
 }
 
 .div2 {

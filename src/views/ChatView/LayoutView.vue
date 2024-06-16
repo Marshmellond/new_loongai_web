@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import HistoryView from "@/views/ChatView/HistoryView.vue";
 import ShowView from "@/views/ChatView/ShowView.vue";
-
+localStorage.setItem('selectedKey', "1");
 </script>
 
 <template>

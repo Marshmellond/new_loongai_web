@@ -18,6 +18,7 @@ const get_about_data = () => {
   })
 }
 onMounted(get_about_data)
+localStorage.setItem('selectedKey', "5");
 </script>
 
 <template>
@@ -67,6 +68,7 @@ onMounted(get_about_data)
   background-color: #fdfdfd;
   border: 1px solid #e3e3e3;
   border-radius: 5px;
+  overflow: hidden;
 
   .ant-title {
     position: relative;
