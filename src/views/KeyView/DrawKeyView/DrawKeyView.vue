@@ -2,11 +2,13 @@
 
 import {ref} from "vue";
 import DrawOpenaiView from "@/views/KeyView/DrawKeyView/DrawOpenaiView.vue";
+import DrawXunfeiView from "@/views/KeyView/DrawKeyView/DrawXunfeiView.vue";
+import DrawTongyiView from "@/views/KeyView/DrawKeyView/DrawTongyiView.vue";
 import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-const activeKey = ref("3");
+const activeKey = ref("1");
 const get_about_data = () => {
   const url = "/api/key/draw"
   fetch(url).then((res) => {
@@ -24,6 +26,24 @@ onMounted(get_about_data)
 <template>
   <h3 class="span-title">当前选择： {{ counter.draw_mode_name }} | {{ counter.draw_mode_ver }}</h3>
   <a-tabs v-model:activeKey="activeKey" style="height: 100%">
+    <a-tab-pane key="1">
+      <template #tab>
+        <span>
+          讯飞星火
+        </span>
+      </template>
+      <DrawXunfeiView></DrawXunfeiView>
+    </a-tab-pane>
+
+    <a-tab-pane key="2">
+      <template #tab>
+        <span>
+          通义千问
+        </span>
+      </template>
+      <DrawTongyiView></DrawTongyiView>
+    </a-tab-pane>
+
     <a-tab-pane key="3">
       <template #tab>
         <span>
@@ -32,6 +52,7 @@ onMounted(get_about_data)
       </template>
       <DrawOpenaiView></DrawOpenaiView>
     </a-tab-pane>
+
 
   </a-tabs>
 </template>

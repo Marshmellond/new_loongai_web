@@ -6,6 +6,7 @@ import {
   CommentOutlined,
   PictureOutlined,
   KeyOutlined,
+  FilePptOutlined,
 } from '@ant-design/icons-vue';
 
 import {RouterLink, RouterView} from 'vue-router'
@@ -81,10 +82,14 @@ onMounted(checkLoginStatus)
             <span class="nav-text"><RouterLink to="/gallery">画廊</RouterLink></span>
           </a-menu-item>
           <a-menu-item key="5">
+            <FilePptOutlined/>
+            <span class="nav-text"><RouterLink to="/ppt">PPT</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="6">
             <user-outlined/>
             <span class="nav-text"><RouterLink to="/about">我的</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="6">
+          <a-menu-item key="7">
             <KeyOutlined/>
             <span class="nav-text"><RouterLink to="/key">key</RouterLink></span>
           </a-menu-item>

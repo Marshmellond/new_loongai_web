@@ -142,9 +142,7 @@ const add_record = () => {
       </div>
     </div>
 
-    <div
-        class="div4"
-    >
+    <div class="div4">
       <a-space direction="vertical" class="ant-space">
         <a-button type="primary" size="large" class="ant-button" @click="add_record">
           <template #icon>

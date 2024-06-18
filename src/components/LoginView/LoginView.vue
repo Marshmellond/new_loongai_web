@@ -6,6 +6,7 @@ import {message} from 'ant-design-vue';
 
 const counter = useCounterStore()
 
+
 interface FormState {
   username: string;
   password: string;
@@ -72,7 +73,6 @@ const onFinish = (values: any) => {
     >
       <a-input-password v-model:value="formState.password"/>
     </a-form-item>
-
 
     <a-form-item :wrapper-col="{ offset: 20, span: 16 }">
       <a-button type="primary" html-type="submit">登录</a-button>

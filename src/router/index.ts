@@ -24,6 +24,11 @@ const router = createRouter({
             component: () => import('../views/GalleryView/LayoutView.vue')
         },
         {
+            path: '/ppt',
+            name: 'ppt',
+            component: () => import('@/views/PPTView/LayoutView.vue')
+        },
+        {
             path: '/about',
             name: 'about',
             component: () => import('../views/AboutView/LayoutView.vue')
@@ -43,8 +48,6 @@ const router = createRouter({
             name: 'register',
             component: () => import('@/components/LoginView/RegisterView.vue')
         },
-
     ]
 })
-
 export default router

@@ -37,6 +37,13 @@ export const useCounterStore = defineStore('counter', () => {
     const draw_img_load3 = ref(false) // 绘画结果加载中3
     const draw_img_load4 = ref(false) // 绘画结果加载中4
     const gallery_img_list = ref([]) // 画廊所有图片url
+    const ppt_inp_type_select = ref("1") // PPT输入类型选择
+    const ppt_inp = ref("") // PPT输入描述
+    const ppt_mod_select = ref("1") // PPT模型选择
+    const ppt_theme_select = ref("1") // PPT主题选择
+    const ppt_author_inp = ref("") // PPT作者
+    const ppt_notes_select = ref(false) // PPT是否生成演讲备注
+
     return {
         selectedKeys,
         recording,
@@ -73,5 +80,11 @@ export const useCounterStore = defineStore('counter', () => {
         draw_img_load3,
         draw_img_load4,
         gallery_img_list,
+        ppt_inp_type_select,
+        ppt_inp,
+        ppt_mod_select,
+        ppt_theme_select,
+        ppt_author_inp,
+        ppt_notes_select,
     }
 })
