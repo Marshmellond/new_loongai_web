@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import {useCounterStore} from '@/stores/counter'
-import {UserOutlined, NodeIndexOutlined} from "@ant-design/icons-vue";
 import InfoView from "@/views/AboutView/InfoView.vue";
 import PasswdView from "@/views/AboutView/PasswdView.vue";
+
+import {useCounterStore} from '@/stores/counter'
+import {UserOutlined, NodeIndexOutlined} from "@ant-design/icons-vue";
 import {onMounted} from "vue";
 
 const counter = useCounterStore()
@@ -18,7 +19,7 @@ const get_about_data = () => {
   })
 }
 onMounted(get_about_data)
-localStorage.setItem('selectedKey', "5");
+localStorage.setItem('selectedKey', "7");
 </script>
 
 <template>
@@ -72,18 +73,18 @@ localStorage.setItem('selectedKey', "5");
 
   .ant-title {
     position: relative;
-    left: 20px;
+    left: 1.5vw;
   }
 
   .ant-head {
     position: relative;
-    left: 20px;
-    margin-bottom: 10px;
+    left: 1.5vw;
+    margin-bottom: 1vh;
   }
 
   .ant-tabs {
     position: relative;
-    left: 20px;
+    left: 1.5vw;
   }
 
 }

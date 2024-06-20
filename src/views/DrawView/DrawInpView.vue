@@ -4,10 +4,8 @@ import Dell2View from "@/views/DrawView/DrawInpView/Dell2View.vue";
 import XunfeiView from "@/views/DrawView/DrawInpView/XunfeiView.vue";
 import TongyiView from "@/views/DrawView/DrawInpView/TongyiView.vue";
 
-import {ref} from 'vue';
 import {message} from "ant-design-vue";
 import {PlusOutlined, DownloadOutlined} from "@ant-design/icons-vue";
-import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
 
 
@@ -298,14 +296,14 @@ const on_generate = () => {
 
 .div-mod-div {
   display: flex;
-  margin-top: 10px;
+  margin-top: 1vh;
 
   .div-mod {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 50%;
-    height: 60px;
+    height: 7vh;
     border: 1px solid @theme-border-color;
     border-radius: 3px;
 
@@ -320,34 +318,34 @@ const on_generate = () => {
 
 .div-a {
   height: 95.5vh;
-  width: 400px;
+  width: 23vw;
   border-left: 1px solid @theme-border-color;
   background-color: white;
 }
 
 .div-x {
   height: 88.5vh;
-  padding: 8px;
+  padding: 1vh;
   overflow: auto;
 
   .div-title {
-    margin-left: 3px;
+    margin-left: 0.2vw;
   }
 
   .div-inp {
-    margin-top: 5px;
+    margin-top: 1vh;
   }
 
   .div-title2 {
-    margin-left: 3px;
-    margin-top: 5px;
+    margin-left: 0.2vw;
+    margin-top: 1vh;
 
   }
 
   .div3 {
     width: 100%;
     height: 50vh;
-    margin-top: 20px;
+    margin-top: 2vh;
   }
 
 }
@@ -356,7 +354,7 @@ const on_generate = () => {
   height: 7vh;
   border-top: 1px solid @theme-border-color;
   overflow: auto;
-  padding: 9px;
+  padding: 1vh;
 
   .ant-space {
     display: flex;

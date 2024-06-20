@@ -4,8 +4,8 @@ import {message} from "ant-design-vue";
 import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
 
+localStorage.setItem('selectedKey', "5");
 const counter = useCounterStore()
-localStorage.setItem('selectedKey', "4");
 const get_data = () => {
   const url = "/api/gallery/get_img"
   fetch(url).then((res) => {
@@ -53,7 +53,7 @@ onMounted(get_data)
 
 
     .div2 {
-      margin: 5px;
+      margin: 0.5vh;
       border-radius: 7px;
       overflow: hidden;
       //border: 1px solid red;

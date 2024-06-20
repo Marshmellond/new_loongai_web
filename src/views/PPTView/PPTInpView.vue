@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import {useCounterStore} from '@/stores/counter'
 import {DownloadOutlined, PlusOutlined} from "@ant-design/icons-vue";
+
+import {message} from "ant-design-vue";
+import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
 const inp_type_on1 = () => {
@@ -41,30 +43,43 @@ const notes_on1 = () => {
 }
 
 const on_generate = () => {
+  counter.ppt_path_url = ""
   if (counter.ppt_inp.length > 0) {
-    if (counter.ppt_mod_select === "1") {
-      const url = "/api/ppt/generate/xunfei"
-      let body = {
-        ppt_inp_type_select: counter.ppt_inp_type_select,
-        ppt_inp: counter.ppt_inp,
-        ppt_theme_select: counter.ppt_theme_select,
-        ppt_author_inp: counter.ppt_author_inp,
-        ppt_notes_select: counter.ppt_notes_select,
+    if (counter.ppt_author_inp.length > 0) {
+      if (counter.ppt_mod_select === "1") {
+        counter.ppt_show_load_status = true
+        const url = "/api/ppt/generate/xunfei"
+        let body = {
+          ppt_inp_type_select: counter.ppt_inp_type_select,
+          ppt_inp: counter.ppt_inp,
+          ppt_theme_select: counter.ppt_theme_select,
+          ppt_author_inp: counter.ppt_author_inp,
+          ppt_notes_select: counter.ppt_notes_select,
+        }
+        fetch(url, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(body),
+          credentials: "include"
+        }).then((res) => {
+          if (res.ok) {
+            return res.json()
+          }
+        }).then((data) => {
+          if (data["code"] == 1) {
+            counter.ppt_show_load_status = false
+            counter.ppt_path_url = data["data"]["ppt_path_url"]
+          }
+        })
       }
-      fetch(url, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(body),
-        credentials: "include"
-      }).then((res) => {
-        if (res.ok) {
-          return res.json()
-        }
-      }).then((data) => {
-        if (data["code"] == 1) {
-
-        }
-      })
+    } else {
+      message.error("请输入作者名")
+    }
+  } else {
+    if (counter.ppt_inp_type_select === '1') {
+      message.error("请输入主题描述")
+    } else {
+      message.error("请输入文本内容")
     }
   }
 }
@@ -86,7 +101,10 @@ const on_generate = () => {
         <div class="div-mod-title">文本生成</div>
       </div>
     </div>
-    <div class="div-title2">关键词描述</div>
+    <div class="div-title2"
+         v-if="counter.ppt_inp_type_select==='1'"
+    >主题描述
+    </div>
     <a-textarea
         v-model:value="counter.ppt_inp"
         placeholder="一句话主题输入，扩写内容"
@@ -94,6 +112,10 @@ const on_generate = () => {
         class="div-inp"
         v-if="counter.ppt_inp_type_select==='1'"
     />
+    <div class="div-title2"
+         v-if="counter.ppt_inp_type_select==='2'"
+    >文本内容
+    </div>
     <a-textarea
         v-model:value="counter.ppt_inp"
         placeholder="千字长文本输入，智能总结生成"
@@ -183,22 +205,22 @@ const on_generate = () => {
 <style scoped lang="less">
 .div1 {
   overflow: auto;
-  padding: 10px;
+  padding: 1vh;
   width: 100%;
   height: 88.5vh;
   background: white;
 
   .div-title {
-    margin-left: 3px;
+    margin-left: 0.2vw;
   }
 
   .div-title2 {
-    margin-left: 3px;
-    margin-top: 10px;
+    margin-left: 0.2vw;
+    margin-top: 2vh;
   }
 
   .div-inp {
-    margin-top: 5px;
+    margin-top: 1vh;
   }
 
   .div-mod-div-select {
@@ -208,14 +230,14 @@ const on_generate = () => {
 
   .div-mod-div {
     display: flex;
-    margin-top: 10px;
+    margin-top: 1vh;
 
     .div-mod1 {
       display: flex;
       justify-content: center;
       align-items: center;
       width: 50%;
-      height: 40px;
+      height: 4vh;
       border: 1px solid @theme-border-color;
       border-radius: 3px;
 
@@ -229,7 +251,7 @@ const on_generate = () => {
       justify-content: center;
       align-items: center;
       width: 50%;
-      height: 60px;
+      height: 6vh;
       border: 1px solid @theme-border-color;
       border-radius: 3px;
 
@@ -244,7 +266,7 @@ const on_generate = () => {
   height: 7vh;
   border-top: 1px solid @theme-border-color;
   overflow: auto;
-  padding: 9px;
+  padding: 1vh;
 
   .ant-space {
     display: flex;

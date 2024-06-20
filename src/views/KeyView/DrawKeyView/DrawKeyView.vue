@@ -1,9 +1,9 @@
 <script setup lang="ts">
-
-import {ref} from "vue";
 import DrawOpenaiView from "@/views/KeyView/DrawKeyView/DrawOpenaiView.vue";
 import DrawXunfeiView from "@/views/KeyView/DrawKeyView/DrawXunfeiView.vue";
 import DrawTongyiView from "@/views/KeyView/DrawKeyView/DrawTongyiView.vue";
+
+import {ref} from "vue";
 import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
 

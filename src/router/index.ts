@@ -9,6 +9,11 @@ const router = createRouter({
             component: () => import('@/views/ChatView/LayoutView.vue')
         },
         {
+            path: '/workflow',
+            name: 'workflow',
+            component: () => import('../views/WorkflowView/LayoutView.vue')
+        },
+        {
             path: '/app',
             name: 'app',
             component: () => import('../views/AppView/LayoutView.vue')

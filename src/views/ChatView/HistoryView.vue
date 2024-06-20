@@ -122,9 +122,7 @@ const add_record = () => {
       </a-space>
     </div>
 
-    <div
-        class="div3"
-    >
+    <div class="div3">
       <div v-if="counter.recording.length===0" class="no-chat">
         <CoffeeOutlined class="no-ico"/>
         <span class="no-txt">暂无对话</span>
@@ -175,7 +173,7 @@ const add_record = () => {
   }
 
   .no-txt {
-    margin-top: 10px;
+    margin-top: 1vh;
     color: #c1c1c1;
     font-size: 130%;
   }
@@ -198,22 +196,21 @@ const add_record = () => {
   background-color: @theme-background-color;
 
   .div2 {
-    height: 5.5vh;
+    height: 5.9vh;
     border-bottom: 1px solid @theme-border-color;
     background-color: @theme-background-color;
   }
 
   .div3 {
-    height: 82vh;
-    width: 250px;
-    border-left: 1px solid @theme-border-color;
+    height: 83vh;
+    width: 14.5vw;
     background-color: @theme-background-color;
     overflow: auto; /* 添加这一行 */
 
 
     .div5 {
-      height: 70px;
-      width: 232px;
+      height: 8.5vh;
+      width: 13.5vw;
       position: relative;
       top: 1%;
       left: 1%;
@@ -234,10 +231,10 @@ const add_record = () => {
         .ant-title {
           position: relative;
           left: 5%;
-          top: 10px;
+          top: 1.2vh;
           font-size: 0.9rem;
           color: black;
-          max-width: 210px; /* 你可以根据需要调整这个值 */
+          max-width: 12.5vw; /* 你可以根据需要调整这个值 */
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis; /* 这将添加省略号，如果文本超出其最大宽度 */
@@ -246,7 +243,7 @@ const add_record = () => {
         .ant-time {
           position: relative;
           left: 5%;
-          top: 20px;
+          top: 2.2vh;
           font-size: 0.8rem;
           width: 90%;
           color: black;
@@ -256,7 +253,7 @@ const add_record = () => {
           position: relative;
           width: 8%;
           left: 85%;
-          top: 3px;
+          top: 0.2vh;
           font-size: 1.2rem;
           visibility: hidden;
 
@@ -275,7 +272,7 @@ const add_record = () => {
   }
 
   .div4 {
-    width: 250px;
+    width: 14.5vw;
     border-top: 1px solid @theme-border-color;
     background-color: @theme-background-color;
   }

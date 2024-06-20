@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {CommentOutlined, DeleteOutlined, ThunderboltOutlined} from '@ant-design/icons-vue';
+
 import {useCounterStore} from '@/stores/counter'
 import {onMounted} from "vue";
 import {useRouter} from 'vue-router';
@@ -136,7 +137,6 @@ onMounted(get_data)
   align-items: center;
 }
 
-
 .div-layout {
   display: flex;
   justify-content: center;
@@ -145,7 +145,7 @@ onMounted(get_data)
   .div-layout2 {
     display: flex;
     flex-wrap: wrap;
-    width: 90%;
+    width: 100%;
 
     .div2 {
       display: flex;
@@ -153,28 +153,27 @@ onMounted(get_data)
       align-items: flex-start;
       background-color: #fdfdfd;
       border: 1px solid #e3e3e3;
-      width: 300px;
-      height: 180px;
+      width: 17.5vw;
+      height: 21vh;
       border-radius: 5px;
-      margin-left: 10px;
-      margin-top: 10px;
+      margin-left: 1vw;
+      margin-top: 1vh;
       overflow: hidden;
-
 
       .app-head2 {
         position: relative;
-        left: 10px;
-        top: 10px;
+        left: 0.6vw;
+        top: 1vh;
         background-color: #e8e4e4;
       }
 
       .app-title2 {
         position: relative;
-        left: 20px;
-        top: 10px;
+        left: 1vw;
+        top: 1vh;
         font-size: 18px;
         font-weight: bold;
-        max-width: 150px;
+        max-width: 10vw;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -184,25 +183,24 @@ onMounted(get_data)
         background-color: #d6e7f8;
         border-radius: 5px;
         position: relative;
-        left: 10px;
-        top: 10px;
+        left: 0.6vw;
+        top: 1vh;
         font-size: 15px;
-        padding: 4px;
-        max-width: 120px;
+        padding: 0.4vh;
+        max-width: 7vw;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
       }
 
-
       .app-title4 {
         background-color: #f2f3f3;
         border-radius: 5px;
         position: relative;
-        left: 190px;
-        top: -22px;
+        left: 11vw;
+        top: -2.5vh;
         font-size: 15px;
-        padding: 4px;
+        padding: 0.4vh;
       }
 
       .app-title4:hover {
@@ -212,29 +210,28 @@ onMounted(get_data)
       .app-title5 {
         border-radius: 5px;
         position: relative;
-        left: 260px;
-        top: -110px;
+        left: 15vw;
+        top: -13vh;
         font-size: 15px;
-        padding: 4px;
+        padding: 1vh;
       }
 
       .app-title5:hover {
         color: red;
       }
 
-
       .app-title6 {
         position: relative;
-        padding: 10px;
-        margin-right: 10px;
-        top: -50px;
+        padding: 1vh;
+        margin-right: 1vw;
+        top: -7vh;
+        left: 0.3vw;
         font-size: 12px;
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         text-overflow: ellipsis;
       }
-
 
     }
   }

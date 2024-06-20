@@ -14,13 +14,6 @@ const on2 = () => {
 const on3 = () => {
   counter.draw_dell3_select_size = "竖图"
 }
-const onn1 = () => {
-  counter.draw_dell3_select_picture = "高清"
-
-}
-const onn2 = () => {
-  counter.draw_dell3_select_picture = "细节增强"
-}
 const on_num1 = () => {
   counter.draw_num_select = '1'
 }
@@ -79,24 +72,24 @@ const on_num4 = () => {
 }
 
 .div-title1 {
-  margin-left: 3px;
-  margin-top: 10px;
+  margin-left: 0.2vw;
+  margin-top: 1vh;
 }
 
 .div-title2 {
-  margin-top: 10px;
+  margin-top: 1vh;
 }
 
 .div-mod-div {
   display: flex;
-  margin-top: 10px;
+  margin-top: 1vh;
 
   .div-mod {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 30%;
-    height: 40px;
+    height: 5vh;
     border: 1px solid @theme-border-color;
     border-radius: 3px;
 

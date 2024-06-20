@@ -41,8 +41,10 @@ export const useCounterStore = defineStore('counter', () => {
     const ppt_inp = ref("") // PPT输入描述
     const ppt_mod_select = ref("1") // PPT模型选择
     const ppt_theme_select = ref("1") // PPT主题选择
-    const ppt_author_inp = ref("") // PPT作者
+    const ppt_author_inp = ref("") // PPT作者名
     const ppt_notes_select = ref(false) // PPT是否生成演讲备注
+    const ppt_path_url = ref("") // PPT生成地址
+    const ppt_show_load_status = ref(false) // PPT显示区是否生成中
 
     return {
         selectedKeys,
@@ -86,5 +88,7 @@ export const useCounterStore = defineStore('counter', () => {
         ppt_theme_select,
         ppt_author_inp,
         ppt_notes_select,
+        ppt_path_url,
+        ppt_show_load_status,
     }
 })

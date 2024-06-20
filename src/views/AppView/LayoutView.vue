@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import {ref} from 'vue';
 import DefaultView from "@/views/AppView/DefaultView.vue";
 import UserView from "@/views/AppView/UserView.vue";
 import AddModView from "@/views/AppView/AddModView.vue";
 
+import {ref} from 'vue';
+
+localStorage.setItem('selectedKey', "3");
 const activeKey = ref('2');
-localStorage.setItem('selectedKey', "2");
 </script>
 
 <template>

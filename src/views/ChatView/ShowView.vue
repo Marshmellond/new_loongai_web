@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import {ref, onUpdated, watch} from 'vue';
-import {CloseOutlined} from '@ant-design/icons-vue';
 import {useCounterStore} from '@/stores/counter'
 import {marked} from 'marked';
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github-dark.css'; // 或其他样式
 import {onMounted} from "vue";
+import {LoadingOutlined} from '@ant-design/icons-vue';
+import {h} from 'vue';
+
+const indicator = h(LoadingOutlined, {
+  style: {
+    fontSize: '24px',
+  },
+  spin: true,
+});
 
 marked.setOptions({
   highlight: function (code, lang) {
@@ -174,7 +182,7 @@ const seed_message = () => {
   <div class="div1">
     <div class="div2">
 
-      <div v-if="counter.chat_img_head" style="margin-left: 5px">
+      <div v-if="counter.chat_img_head" style="margin-left: 0.5vw">
         <a-avatar shape="square" class="ant-head1">
           <template #icon>
             <img :src="counter.chat_img_head" alt="">
@@ -192,9 +200,7 @@ const seed_message = () => {
         <span class="div2-title">{{ counter.chat_mod_name }}</span>
       </div>
 
-      <div class=div2-close>
-        <CloseOutlined/>
-      </div>
+
     </div>
     <div class="div3" ref="scrollContainer">
       <div
@@ -206,7 +212,8 @@ const seed_message = () => {
           </template>
         </a-avatar>
         <div class="div-content">
-          <a-spin class="chat-show-load" v-if="chat_show_load && index === counter.contents.length - 1"/>
+          <a-spin :indicator="indicator" class="chat-show-load"
+                  v-if="chat_show_load && index === counter.contents.length - 1"/>
           <span class="div3-title" v-html="item[1]"></span><br>
         </div>
       </div>
@@ -229,12 +236,11 @@ const seed_message = () => {
 </template>
 
 <style scoped lang="less">
-@import "src/assets/css/frame.less";
 @import "src/assets/css/theme.less";
 
 .chat-show-load {
-  width: 30px;
-  margin-top: 17px;
+  width: 3vw;
+  margin-top: 3vh;
 }
 
 .ant-head1 {
@@ -246,7 +252,7 @@ const seed_message = () => {
 .ant-head2 {
   position: relative;
   left: 14.5%;
-  top: 10px;
+  top: 1vh;
   background-color: #e8e4e4;
 }
 
@@ -259,11 +265,10 @@ const seed_message = () => {
 
 .div2 {
   width: 99.96%;
-  height: 50px;
+  height: 5.9vh;
   position: relative;
-  left: 1px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   border-bottom: 1px solid @theme-border-color;
   border-left: 1px solid @theme-border-color;
@@ -273,19 +278,7 @@ const seed_message = () => {
     position: relative;
     left: 0.7%;
     line-height: normal;
-    margin-left: 3px;
-  }
-
-  .div2-close {
-    .the-frame();
-    margin-left: auto;
-    position: relative;
-    right: 10px;
-
-    &:hover {
-      color: #fc2c54;
-      border: 1px solid #fc2c54;
-    }
+    margin-left: 0.2vw;
   }
 }
 
@@ -293,7 +286,6 @@ const seed_message = () => {
   width: 99.96%;
   height: 70vh;
   position: relative;
-  left: 1px;
   border-bottom: 1px solid @theme-border-color;
   border-left: 1px solid @theme-border-color;
   background-color: @theme-background-color;
@@ -323,10 +315,8 @@ const seed_message = () => {
 
 .div4 {
   width: 99.96%;
-  height: 188px;
+  height: 19.6vh;
   position: relative;
-  left: 1px;
-  border-bottom: 1px solid @theme-border-color;
   border-left: 1px solid @theme-border-color;
   background-color: @theme-background-color;
 
@@ -338,7 +328,7 @@ const seed_message = () => {
   .textarea-input {
     position: relative;
     left: 20%;
-    top: 10px;
+    top: 1vh;
   }
 }
 

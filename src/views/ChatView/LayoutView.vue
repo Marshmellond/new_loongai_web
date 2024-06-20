@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import HistoryView from "@/views/ChatView/HistoryView.vue";
 import ShowView from "@/views/ChatView/ShowView.vue";
+
 localStorage.setItem('selectedKey', "1");
 </script>
 
@@ -14,7 +15,7 @@ localStorage.setItem('selectedKey', "1");
 <style scoped lang="less">
 @import "src/assets/css/theme.less";
 
-.div-home{
+.div-home {
   display: flex;
 }
 </style>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {RocketOutlined, NodeIndexOutlined} from '@ant-design/icons-vue';
-
 import LoginView from "@/components/LoginView/LoginView.vue";
 import RegisterView from "@/components/LoginView/RegisterView.vue";
+
+import {RocketOutlined, NodeIndexOutlined} from '@ant-design/icons-vue';
 
 import {useCounterStore} from '@/stores/counter'
 
@@ -52,8 +52,8 @@ const counter = useCounterStore()
 
   .div-login {
     position: relative;
-    top: 15%;
     margin: auto;
+    top: 15%;
     width: 30%;
     min-height: 50%;
     background-color: #fdfdfd;
@@ -78,7 +78,5 @@ const counter = useCounterStore()
       }
     }
   }
-
-
 }
 </style>

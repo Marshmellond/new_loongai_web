@@ -1,6 +1,20 @@
 <script setup lang="ts">
-localStorage.setItem('selectedKey', "5");
 import PPTInpView from "@/views/PPTView/PPTInpView.vue";
+
+import {RocketOutlined} from "@ant-design/icons-vue";
+import {LoadingOutlined} from '@ant-design/icons-vue';
+
+import {h} from 'vue';
+import {useCounterStore} from '@/stores/counter'
+
+localStorage.setItem('selectedKey', "6");
+const counter = useCounterStore()
+const indicator = h(LoadingOutlined, {
+  style: {
+    fontSize: '24px',
+  },
+  spin: true,
+});
 </script>
 
 <template>
@@ -8,15 +22,52 @@ import PPTInpView from "@/views/PPTView/PPTInpView.vue";
     <div class="div-inp">
       <PPTInpView></PPTInpView>
     </div>
-    <!--    <iframe src="https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fbjcdn.openstorage.cn%2Fxinghuo-privatedata%2F%252Ftmp%2FapiTempFile56242e1c9b88474e8657f18f2593d59a5158001851905691948%2F%25E9%259B%2586%25E5%259B%25A2%25E5%25AE%25A2%25E6%2588%25B7%25E9%2583%25A82023%25E5%25B9%25B4%25E5%25BA%25A6%25E5%25B7%25A5%25E4%25BD%259C%25E6%2580%25BB%25E7%25BB%2593.pptx&wdOrigin=BROWSELINK" class="div-show"></iframe>-->
+    <iframe
+        :src="'https://view.officeapps.live.com/op/view.aspx?src='+counter.ppt_path_url"
+        class="div-show"
+        v-if="counter.ppt_path_url.length>0"
+    >
+    </iframe>
+    <div
+        class="div-show-load"
+        v-if="counter.ppt_path_url.length==0"
+    >
+      <div class="div-show-load-con1"
+           v-if="!counter.ppt_show_load_status"
+      >
+        <RocketOutlined class="div-show-load-ico"/>
+        <span class="div-show-load-title">等你好久啦</span>
+        <span class="div-show-load-title">快在左侧生成吧</span>
+      </div>
+
+      <div class="div-show-load-con2"
+           v-if="counter.ppt_show_load_status"
+      >
+        <a-spin :indicator="indicator" class=""/>
+        <span>正在生成中</span>
+      </div>
+
+    </div>
+
+    <div class="div-history">
+      历史记录
+    </div>
   </div>
 </template>
 
 <style scoped lang="less">
 .div-overflow {
+  display: flex;
   width: 100%;
   height: 95.5vh;
-  display: flex;
+
+
+  .div-history {
+    margin-left: 0.6vw;
+    width: 8%;
+    height: 95.5vh;
+    border: 1px solid;
+  }
 
   .div-inp {
     width: 20%;
@@ -26,9 +77,46 @@ import PPTInpView from "@/views/PPTView/PPTInpView.vue";
   }
 
   .div-show {
-    width: 80%;
-    height: 95.5vh;
+    margin-top: 2.5vh;
+    margin-left: 1vw;
+    width: 70%;
+    height: 90vh;
+    border: none;
+    border-radius: 5px;
   }
+
+  .div-show-load {
+    margin-top: 2.5vh;
+    margin-left: 1vw;
+    width: 70%;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px dashed #b8b8b8;
+    border-radius: 5px;
+
+
+  }
+
+  .div-show-load-con1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .div-show-load-ico {
+      font-size: 24px;
+    }
+  }
+
+  .div-show-load-con2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
 }
 
 </style>

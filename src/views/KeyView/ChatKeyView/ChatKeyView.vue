@@ -1,9 +1,9 @@
 <script setup lang="ts">
-
-import {ref} from "vue";
 import ChatXunfeiView from "@/views/KeyView/ChatKeyView/ChatXunfeiView.vue";
 import ChatTongyiView from "@/views/KeyView/ChatKeyView/ChatTongyiView.vue";
 import ChatOpenaiView from "@/views/KeyView/ChatKeyView/ChatOpenaiView.vue";
+
+import {ref} from "vue";
 import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
 

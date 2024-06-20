@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import TheHeader from "@/components/HeaderView/TheHeader.vue";
+import TheLogin from "@/components/LoginView/TheLogin.vue";
+
 import {
   UserOutlined,
   ShopOutlined,
@@ -7,11 +10,10 @@ import {
   PictureOutlined,
   KeyOutlined,
   FilePptOutlined,
+  ShareAltOutlined,
 } from '@ant-design/icons-vue';
 
 import {RouterLink, RouterView} from 'vue-router'
-import TheHeader from "@/components/HeaderView/TheHeader.vue";
-import TheLogin from "@/components/LoginView/TheLogin.vue";
 import {useCounterStore} from '@/stores/counter'
 import {onMounted, watch} from "vue";
 
@@ -70,26 +72,30 @@ onMounted(checkLoginStatus)
             <span class="nav-text"><RouterLink to="/">对话</RouterLink></span>
           </a-menu-item>
           <a-menu-item key="2">
+            <ShareAltOutlined/>
+            <span class="nav-text"><RouterLink to="/workflow">流程</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="3">
             <ShopOutlined/>
             <span class="nav-text"><RouterLink to="/app">应用</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="3">
+          <a-menu-item key="4">
             <HighlightOutlined/>
             <span class="nav-text"><RouterLink to="/draw">绘画</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="4">
+          <a-menu-item key="5">
             <PictureOutlined/>
             <span class="nav-text"><RouterLink to="/gallery">画廊</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="5">
+          <a-menu-item key="6">
             <FilePptOutlined/>
             <span class="nav-text"><RouterLink to="/ppt">PPT</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="6">
+          <a-menu-item key="7">
             <user-outlined/>
             <span class="nav-text"><RouterLink to="/about">我的</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="7">
+          <a-menu-item key="8">
             <KeyOutlined/>
             <span class="nav-text"><RouterLink to="/key">key</RouterLink></span>
           </a-menu-item>
@@ -124,6 +130,7 @@ onMounted(checkLoginStatus)
   .ant-sidebar {
     background-color: @theme-background-color;
     height: 95.5vh;
+    width: 100vw;
     overflow: hidden;
   }
 

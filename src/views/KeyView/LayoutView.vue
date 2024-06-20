@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import ChatKeyView from "@/views/KeyView/ChatKeyView/ChatKeyView.vue";
 import DrawKeyView from "@/views/KeyView/DrawKeyView/DrawKeyView.vue";
+
 import {ref} from 'vue';
-localStorage.setItem('selectedKey', "6");
+
+localStorage.setItem('selectedKey', "8");
 const activeKey = ref("1");
 </script>
 
