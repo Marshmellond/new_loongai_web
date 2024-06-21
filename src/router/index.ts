@@ -53,6 +53,11 @@ const router = createRouter({
             name: 'register',
             component: () => import('@/components/LoginView/RegisterView.vue')
         },
+        {
+            path: '/:catchAll(.*)', // 捕捉所有不匹配的路由
+            name: 'NotFound',
+            component: () => import('@/components/NotFoundView/NotFoundView.vue')
+        }
     ]
 })
 export default router

@@ -267,6 +267,7 @@ const on_generate = () => {
 .div2 {
   height: 7vh;
   border-top: 1px solid @theme-border-color;
+  background: white;
   overflow: auto;
   padding: 1vh;
 

@@ -2,10 +2,13 @@
 import DefaultView from "@/views/AppView/DefaultView.vue";
 import UserView from "@/views/AppView/UserView.vue";
 import AddModView from "@/views/AppView/AddModView.vue";
+import {useCounterStore} from '@/stores/counter'
 
 import {ref} from 'vue';
+const counter = useCounterStore()
 
 localStorage.setItem('selectedKey', "3");
+counter.selectedKeys = [localStorage.getItem("selectedKey")]
 const activeKey = ref('2');
 </script>
 

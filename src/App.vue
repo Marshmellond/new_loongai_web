@@ -14,8 +14,8 @@ import {
 } from '@ant-design/icons-vue';
 
 import {RouterLink, RouterView} from 'vue-router'
-import {useCounterStore} from '@/stores/counter'
 import {onMounted, watch} from "vue";
+import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
@@ -48,6 +48,7 @@ watch(
     }
 )
 onMounted(checkLoginStatus)
+localStorage.setItem('selectedKey', "6");
 </script>
 <template>
   <a-layout>

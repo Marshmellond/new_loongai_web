@@ -7,8 +7,9 @@ import {LoadingOutlined} from '@ant-design/icons-vue';
 import {h} from 'vue';
 import {useCounterStore} from '@/stores/counter'
 
-localStorage.setItem('selectedKey', "6");
 const counter = useCounterStore()
+localStorage.setItem('selectedKey', "6");
+counter.selectedKeys = [localStorage.getItem("selectedKey")]
 const indicator = h(LoadingOutlined, {
   style: {
     fontSize: '24px',

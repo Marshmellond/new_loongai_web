@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import HistoryView from "@/views/ChatView/HistoryView.vue";
 import ShowView from "@/views/ChatView/ShowView.vue";
+import {useCounterStore} from '@/stores/counter'
 
+const counter = useCounterStore()
 localStorage.setItem('selectedKey', "1");
+counter.selectedKeys = [localStorage.getItem("selectedKey")]
 </script>
 
 <template>
