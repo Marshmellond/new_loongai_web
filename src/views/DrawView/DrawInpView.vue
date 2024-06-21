@@ -289,6 +289,8 @@ const on_generate = () => {
 </template>
 
 <style scoped lang="less">
+@import "src/assets/css/theme.less";
+
 .div-mod-div-select {
   border: 1px solid #4e90ec !important;;
   background: #ffffff;

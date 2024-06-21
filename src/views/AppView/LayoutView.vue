@@ -32,7 +32,6 @@ const activeKey = ref('2');
 @import "src/assets/css/theme.less";
 
 .app-beijing {
-  background-color: #eff3f7;
   height: 100%;
   width: 100%;
   overflow: auto;

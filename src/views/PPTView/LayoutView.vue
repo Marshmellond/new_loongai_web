@@ -56,6 +56,8 @@ const indicator = h(LoadingOutlined, {
 </template>
 
 <style scoped lang="less">
+@import "src/assets/css/theme.less";
+
 .div-overflow {
   display: flex;
   width: 100%;

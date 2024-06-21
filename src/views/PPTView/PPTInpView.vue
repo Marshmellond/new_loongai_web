@@ -203,6 +203,8 @@ const on_generate = () => {
 </template>
 
 <style scoped lang="less">
+@import "src/assets/css/theme.less";
+
 .div1 {
   overflow: auto;
   padding: 1vh;

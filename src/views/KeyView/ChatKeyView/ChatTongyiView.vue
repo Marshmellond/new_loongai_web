@@ -104,7 +104,7 @@ const onFinish = () => {
 
 
 <style scoped lang="less">
-@import "../../../assets/css/theme.less";
+@import "src/assets/css/theme.less";
 
 .ant-form {
   position: relative;

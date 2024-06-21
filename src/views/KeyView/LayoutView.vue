@@ -51,7 +51,7 @@ const activeKey = ref("1");
 @import "src/assets/css/theme.less";
 
 .div-beijing {
-  background-color: #eff3f7;
+  background-color: @theme-background-color2;
   height: 100%;
   width: 100%;
 }
@@ -62,8 +62,8 @@ const activeKey = ref("1");
   left: 1%;
   width: 95%;
   height: 60vh;
-  background-color: #fdfdfd;
-  border: 1px solid #e3e3e3;
+  background-color: @theme-background-color;
+  border: 1px solid @theme-border-color;
   border-radius: 5px;
 }
 

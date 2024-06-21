@@ -48,7 +48,7 @@ const counter = useCounterStore()
 
 .div-background {
   height: 95.5vh;
-  background-color: #eff3f7;
+  background-color: @theme-background-color2;
 
   .div-login {
     position: relative;
@@ -56,7 +56,7 @@ const counter = useCounterStore()
     top: 15%;
     width: 30%;
     min-height: 50%;
-    background-color: #fdfdfd;
+    background-color: @theme-background-color;
     border: 1px solid @theme-border-color;
     border-radius: 5px;
 

@@ -137,6 +137,7 @@ onMounted(checkLoginStatus)
   .ant-content {
     height: 95.5vh;
     overflow: hidden;
+    background-color: @theme-background-color2;
   }
 }
 </style>

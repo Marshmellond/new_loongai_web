@@ -66,8 +66,8 @@ localStorage.setItem('selectedKey', "7");
   left: 1%;
   width: 95%;
   height: 60vh;
-  background-color: #fdfdfd;
-  border: 1px solid #e3e3e3;
+  background-color: @theme-background-color;
+  border: 1px solid @theme-border-color;
   border-radius: 5px;
   overflow: hidden;
 

@@ -106,6 +106,7 @@ onMounted(get_data)
 </template>
 
 <style scoped lang="less">
+@import "src/assets/css/theme.less";
 
 .div-default {
   display: flex;

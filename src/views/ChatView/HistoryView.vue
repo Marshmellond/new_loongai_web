@@ -215,7 +215,7 @@ const add_record = () => {
       top: 1%;
       left: 1%;
       margin-bottom: 2%;
-      background: #fdfdfd;
+      background: @theme-background-color;
       border-radius: 1px;
       //border: 1px solid #e4e4e4;
 
@@ -289,8 +289,8 @@ const add_record = () => {
       position: relative;
       top: 1vh;
       left: -45%;
-      background: #fdfdfd;
-      border: 1px solid #e4e4e4;
+      background: @theme-background-color;
+      border: 1px solid @theme-border-color;
     }
 
     .ant-search {

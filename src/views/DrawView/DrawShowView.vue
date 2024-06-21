@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import {ref, onMounted, onUnmounted} from 'vue';
 import {useCounterStore} from '@/stores/counter'
+
 const counter = useCounterStore()
 
 const windowWidth = ref(window.innerWidth);
@@ -387,6 +388,8 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="less">
+@import "src/assets/css/theme.less";
+
 .chat-show-load {
   width: 30px;
   margin-top: 17px;
