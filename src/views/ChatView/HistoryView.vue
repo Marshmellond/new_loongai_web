@@ -1,10 +1,91 @@
 <script setup lang="ts">
 import {ref} from 'vue';
-import {PlusOutlined, DeleteOutlined, CoffeeOutlined} from '@ant-design/icons-vue';
+import type {CascaderProps} from 'ant-design-vue';
+import {PlusOutlined, CoffeeOutlined, FormOutlined, MoreOutlined} from '@ant-design/icons-vue';
 import {useCounterStore} from '@/stores/counter'
 import {onMounted} from "vue";
 
 const counter = useCounterStore()
+const open = ref<boolean>(false);
+let edit_name = ref("")
+let edit_mod = ref("")
+let edit_mod_view = ref("")
+let edit_app = ref("")
+let edit_app_view = ref("")
+let edit_mod_options: CascaderProps['options'] = [
+  {
+    value: 'xunfei',
+    label: '讯飞星火',
+    children: [
+      {
+        value: 'hangzhou',
+        label: 'Hangzhou',
+      },
+    ],
+  },
+  {
+    value: 'tongyi',
+    label: '通义千文',
+    children: [
+      {
+        value: 'nanjing',
+        label: 'Nanjing',
+      },
+    ],
+  },
+  {
+    value: 'openai',
+    label: 'openai',
+    children: [
+      {
+        value: 'nanjing',
+        label: 'Nanjing',
+      },
+    ],
+  },
+];
+let edit_app_options: CascaderProps['options'] = [
+  {
+    value: 'xunfei',
+    label: '讯飞星火',
+    children: [
+      {
+        value: 'hangzhou',
+        label: 'Hangzhou',
+      },
+    ],
+  },
+  {
+    value: 'tongyi',
+    label: '通义千文',
+    children: [
+      {
+        value: 'nanjing',
+        label: 'Nanjing',
+      },
+    ],
+  },
+  {
+    value: 'openai',
+    label: 'openai',
+    children: [
+      {
+        value: 'nanjing',
+        label: 'Nanjing',
+      },
+    ],
+  },
+];
+const show_edit = (item) => {
+  console.log(item)
+  edit_name.value = item[1]
+  edit_mod_view.value = item[3]
+  open.value = true;
+}
+const handleOk = () => {
+  open.value = false;
+};
+
 
 const search_value = ref<string>('');
 const get_rec_data = () => {
@@ -87,6 +168,7 @@ const delete_record = (id: string) => {
 };
 // ---------------end---------------
 
+
 // ---------------选择对话---------------
 const selectItem = (id: string) => {
   counter.selected_item = id;
@@ -105,6 +187,8 @@ const add_record = () => {
   })
 }
 // ---------------end---------------
+
+
 </script>
 
 <template>
@@ -134,8 +218,33 @@ const add_record = () => {
       >
         <div class="ant-div" :class="{ 'selected': item[0] === counter.selected_item }" @click="selectItem(item[0])">
           <span class="ant-title">{{ item[1] }}</span>
-          <span class="ant-time">{{ item[2] }}</span>
-          <DeleteOutlined class="ant-delete" @click="delete_record(item[0])"/>
+          <div class="ant-div2">
+            <span class="ant-time">{{ item[2] }}</span>
+            <FormOutlined class="ant-edit" @click="show_edit(item)"/>
+
+            <a-dropdown placement="bottom">
+              <MoreOutlined class="ant-utils"/>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item @click="topping(item[0])">
+                    置顶对话
+                  </a-menu-item>
+                  <a-menu-item @click="delete_record(item[0])">
+                    删除对话
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
+            <a-modal v-model:open="open" title="对话信息" @ok="handleOk" okText="保存" cancelText="关闭">
+              <div class="edit-title">名称</div>
+              <a-input v-model:value="edit_name"/>
+              <div class="edit-title">模型</div>
+              <a-cascader v-model:value="edit_mod" :options="edit_mod_options" :placeholder="edit_mod_view"/>
+              <div class="edit-title">应用</div>
+              <a-cascader v-model:value="edit_app" :options="edit_app_options" :placeholder="edit_app_view"/>
+            </a-modal>
+          </div>
+          <!--          <DeleteOutlined class="ant-delete" @click="delete_record(item[0])"/>-->
         </div>
       </div>
     </div>
@@ -158,6 +267,11 @@ const add_record = () => {
 
 <style lang="less" scoped>
 @import "src/assets/css/theme.less";
+
+.edit-title {
+  margin-top: 2vh;
+  margin-bottom: 0.5vh;
+}
 
 .no-chat {
   position: relative;
@@ -226,6 +340,30 @@ const add_record = () => {
 
         &:hover {
           background: #f0f0f0;
+        }
+
+        .ant-div2 {
+          display: flex;
+
+          .ant-edit {
+            position: relative;
+            top: 1.5vh;
+            left: -1vw;
+            font-weight: bold;
+
+            &:hover {
+              color: #3085fb; // 使用你在 theme.less 文件中定义的颜色变量
+            }
+
+
+          }
+
+          .ant-utils {
+            position: relative;
+            top: 1.5vh;
+            left: -0.5vw;
+            font-size: 16px;
+          }
         }
 
         .ant-title {
