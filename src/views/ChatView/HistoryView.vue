@@ -1,89 +1,109 @@
 <script setup lang="ts">
 import {ref} from 'vue';
-import type {CascaderProps} from 'ant-design-vue';
 import {PlusOutlined, CoffeeOutlined, FormOutlined, MoreOutlined} from '@ant-design/icons-vue';
 import {useCounterStore} from '@/stores/counter'
 import {onMounted} from "vue";
+import {message} from "ant-design-vue";
 
 const counter = useCounterStore()
 const open = ref<boolean>(false);
-let edit_name = ref("")
-let edit_mod = ref("")
-let edit_mod_view = ref("")
-let edit_app = ref("")
-let edit_app_view = ref("")
-let edit_mod_options: CascaderProps['options'] = [
-  {
-    value: 'xunfei',
-    label: '讯飞星火',
-    children: [
-      {
-        value: 'hangzhou',
-        label: 'Hangzhou',
-      },
-    ],
-  },
-  {
-    value: 'tongyi',
-    label: '通义千文',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-      },
-    ],
-  },
-  {
-    value: 'openai',
-    label: 'openai',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-      },
-    ],
-  },
-];
-let edit_app_options: CascaderProps['options'] = [
-  {
-    value: 'xunfei',
-    label: '讯飞星火',
-    children: [
-      {
-        value: 'hangzhou',
-        label: 'Hangzhou',
-      },
-    ],
-  },
-  {
-    value: 'tongyi',
-    label: '通义千文',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-      },
-    ],
-  },
-  {
-    value: 'openai',
-    label: 'openai',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-      },
-    ],
-  },
-];
+
 const show_edit = (item) => {
-  console.log(item)
-  edit_name.value = item[1]
-  edit_mod_view.value = item[3]
+  counter.edit_temp_select_red_id = item[0]
+  const url = "/api/chat/edit_rec_data"
+  let body = {
+    chat_rec_id: counter.edit_temp_select_red_id,
+  }
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      counter.edit_name = data["data"]["edit_name"]
+      counter.edit_mod_view = data["data"]["edit_mod_view"]
+      counter.edit_app_view = data["data"]["edit_app_view"]
+      counter.edit_mod_options = data["data"]["edit_mod_options"]
+      counter.edit_app_options = data["data"]["edit_app_options"]
+    }
+  })
   open.value = true;
 }
+
 const handleOk = () => {
+  const url = "/api/chat/alter_edit_rec_data"
+  if (counter.edit_mod.length == 0) {
+    counter.edit_mod = {0: "data-null", 1: "data-null"}
+  }
+  if (counter.edit_app.length == 0) {
+    counter.edit_app = {0: "data-null", 1: "data-null"}
+  }
+  if (counter.edit_app[0] == "无") {
+    counter.edit_app = {0: "无", 1: "无"}
+  }
+  const chat_rec_id = counter.edit_temp_select_red_id
+  let body = {
+    chat_rec_id: chat_rec_id,
+    chat_rec_title: counter.edit_name,
+    chat_api: counter.edit_mod[0],
+    api_select: counter.edit_mod[1],
+    chat_mod_id: counter.edit_app[1]
+  }
+  console.log(body)
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      get_rec_data()
+      const get_show_data = () => {
+        let body = {
+          chat_rec_id: chat_rec_id,
+        }
+        const url = "/api/chat/get_api_ver"
+        fetch(url, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(body),
+          credentials: "include"
+        }).then((res) => {
+          if (res.ok) {
+            return res.json()
+          }
+        }).then((data) => {
+          if (data["code"] == 1) {
+            counter.chat_api = ""
+            counter.chat_api += `${data["api_name"]}-${data["api_ver"]}`
+            counter.chat_img_head = data["chat_img_head"]
+            counter.chat_mod_img_head = data["chat_mod_img_head"]
+            counter.chat_mod_name = data["chat_mod_name"]
+          }
+        })
+      }
+      get_show_data()
+      message.success("对话信息更新成功")
+    }
+  })
+
+  counter.edit_name = ""
+  counter.edit_mod_view = ""
+  counter.edit_app_view = ""
+  counter.edit_mod = ""
+  counter.edit_app = ""
+  counter.edit_temp_select_red_id = ""
   open.value = false;
+
 };
 
 
@@ -226,7 +246,7 @@ const add_record = () => {
               <MoreOutlined class="ant-utils"/>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item @click="topping(item[0])">
+                  <a-menu-item>
                     置顶对话
                   </a-menu-item>
                   <a-menu-item @click="delete_record(item[0])">
@@ -237,14 +257,15 @@ const add_record = () => {
             </a-dropdown>
             <a-modal v-model:open="open" title="对话信息" @ok="handleOk" okText="保存" cancelText="关闭">
               <div class="edit-title">名称</div>
-              <a-input v-model:value="edit_name"/>
+              <a-input v-model:value="counter.edit_name"/>
               <div class="edit-title">模型</div>
-              <a-cascader v-model:value="edit_mod" :options="edit_mod_options" :placeholder="edit_mod_view"/>
+              <a-cascader v-model:value="counter.edit_mod" :options="counter.edit_mod_options"
+                          :placeholder="counter.edit_mod_view"/>
               <div class="edit-title">应用</div>
-              <a-cascader v-model:value="edit_app" :options="edit_app_options" :placeholder="edit_app_view"/>
+              <a-cascader v-model:value="counter.edit_app" :options="counter.edit_app_options"
+                          :placeholder="counter.edit_app_view"/>
             </a-modal>
           </div>
-          <!--          <DeleteOutlined class="ant-delete" @click="delete_record(item[0])"/>-->
         </div>
       </div>
     </div>
@@ -363,6 +384,10 @@ const add_record = () => {
             top: 1.5vh;
             left: -0.5vw;
             font-size: 16px;
+
+            &:hover {
+              color: #3085fb; // 使用你在 theme.less 文件中定义的颜色变量
+            }
           }
         }
 

@@ -1,5 +1,6 @@
 import {ref} from 'vue'
 import {defineStore} from 'pinia'
+import type {CascaderProps} from 'ant-design-vue';
 
 export const useCounterStore = defineStore('counter', () => {
     const selectedKeys = ref<string[]>(['1']); // 左侧导航栏选择
@@ -45,7 +46,14 @@ export const useCounterStore = defineStore('counter', () => {
     const ppt_notes_select = ref(false) // PPT是否生成演讲备注
     const ppt_path_url = ref("") // PPT生成地址
     const ppt_show_load_status = ref(false) // PPT显示区是否生成中
-
+    const edit_name = ref("")
+    const edit_mod = ref("")
+    const edit_mod_view = ref("")
+    const edit_app = ref("")
+    const edit_app_view = ref("")
+    const edit_mod_options = ref([])
+    const edit_app_options = ref([])
+    const edit_temp_select_red_id = ref("")
     return {
         selectedKeys,
         recording,
@@ -90,5 +98,13 @@ export const useCounterStore = defineStore('counter', () => {
         ppt_notes_select,
         ppt_path_url,
         ppt_show_load_status,
+        edit_name,
+        edit_mod,
+        edit_mod_view,
+        edit_app,
+        edit_app_view,
+        edit_mod_options,
+        edit_app_options,
+        edit_temp_select_red_id
     }
 })
