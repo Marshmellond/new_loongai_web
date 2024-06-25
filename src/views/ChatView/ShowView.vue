@@ -5,11 +5,12 @@ import {marked} from 'marked';
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github-dark.css'; // 或其他样式
 import {onMounted} from "vue";
-import {LoadingOutlined, DeleteOutlined, FormOutlined} from '@ant-design/icons-vue';
+import {LoadingOutlined, DeleteOutlined, FormOutlined, SoundOutlined, SwitcherOutlined} from '@ant-design/icons-vue';
 import {h} from 'vue';
 import {message} from "ant-design-vue";
 
 const open = ref<boolean>(false);
+const div_mouse_show = ref<boolean>(false);
 const indicator = h(LoadingOutlined, {
   style: {
     fontSize: '24px',
@@ -84,7 +85,7 @@ const get_data = () => {
       if (data["code"] == 1) {
         counter.contents = []
         for (let i of data["data"]) {
-          counter.contents.push([i[0], marked(i[1]), i[2], i[3]])
+          counter.contents.push([i[0], marked(i[1]), i[2], i[3], i[4], i[1], false])
         }
       }
     })
@@ -130,7 +131,7 @@ const seed_message = () => {
   }).then((data) => {
     if (data["code"] == 1) {
       for (let i of data["data"]) {
-        counter.contents.push([i[0], marked(i[1]), i[2], i[3]])
+        counter.contents.push([i[0], marked(i[1]), i[2], i[3], i[4], i[1], false])
       }
       chat_show_load.value = true
       const url2 = "/api/chat/add_con_chat"
@@ -325,6 +326,30 @@ const handleOk = () => {
   open.value = false;
 
 };
+
+const click_sound = (text: string) => {
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  utterance.rate = 1.5; // 语速 0.1-10
+  utterance.volume = 1 // 音量 0-1
+  utterance.pitch = 1.5; // 音调 0-2
+
+  // 朗读文本
+  speechSynthesis.speak(utterance);
+}
+const click_sound_stop = () => {
+  speechSynthesis.cancel()
+}
+const click_copy = (text: string) => {
+  navigator.clipboard.writeText(text);
+  message.success("复制成功")
+}
+const div_mouseover = (index) => {
+  counter.contents[index][6] = true
+}
+const div_mouseout = (index) => {
+  counter.contents[index][6] = false
+}
 </script>
 <template>
 
@@ -332,7 +357,7 @@ const handleOk = () => {
     <div class="div2">
       <FormOutlined class="ant-edit" @click="show_edit"/>
       <DeleteOutlined class="ant-delete" @click="delete_record"/>
-      <div v-if="counter.chat_img_head" style="margin-left: -3.5vw">
+      <div v-if="counter.chat_img_head" style="margin-left: -3vw">
         <a-avatar shape="square" class="ant-head1">
           <template #icon>
             <img :src="counter.chat_img_head" alt="">
@@ -359,6 +384,7 @@ const handleOk = () => {
                     :placeholder="counter.edit_app_view"/>
       </a-modal>
     </div>
+
     <div class="div3" ref="scrollContainer">
       <div
           class="div-div"
@@ -368,15 +394,22 @@ const handleOk = () => {
             <img :src="item[3]" alt="">
           </template>
         </a-avatar>
-        <div class="div-content">
+
+        <div class="div-content" @mouseover="div_mouseover(index)" @mouseout="div_mouseout(index)">
           <a-spin :indicator="indicator" class="chat-show-load"
                   v-if="chat_show_load && index === counter.contents.length - 1"/>
-          <span class="div3-title" v-html="item[1]"></span><br>
+          <span class="div3-title" v-html="item[1]"></span>
+          <div class="div-content-ico" v-if="item[4]=='ai'" :style="{ visibility: item[6] ? 'visible' : 'hidden' }">
+            <SoundOutlined class="div-content-ico-sound" @click="click_sound(item[5])"/>
+            <SwitcherOutlined class="div-content-ico-copy" @click="click_copy(item[5])"/>
+          </div>
         </div>
       </div>
-
     </div>
-    <div class="div4">
+
+
+    <div class=" div4
+          ">
       <a-textarea
           v-model:value="textarea_input"
           placeholder="输入消息内容"
@@ -394,6 +427,28 @@ const handleOk = () => {
 
 <style scoped lang="less">
 @import "src/assets/css/theme.less";
+
+.div-content-ico {
+
+  .div-content-ico-sound {
+    border-radius: 5px;
+    padding: 0.8vh;
+
+    &:hover {
+      background: #e2e3e6;
+    }
+  }
+
+  .div-content-ico-copy {
+    border-radius: 5px;
+    padding: 0.8vh;
+
+    &:hover {
+      background: #e2e3e6;
+    }
+  }
+}
+
 
 .edit-title {
   margin-top: 2vh;
@@ -420,12 +475,11 @@ const handleOk = () => {
 
   .ant-edit {
     position: relative;
-    left: 74vw;
+    left: 74.5vw;
     font-size: 18px;
     border: 1px solid #b0b0b3;
     border-radius: 5px;
-    padding: 0.5vh;
-    width: 2vw;
+    padding: 0.6vh;
 
 
     &:hover {
@@ -438,12 +492,11 @@ const handleOk = () => {
 
   .ant-delete {
     position: relative;
-    left: 74.5vw;
+    left: 75vw;
     font-size: 18px;
     border: 1px solid #b0b0b3;
     border-radius: 5px;
-    padding: 0.5vh;
-    width: 2vw;
+    padding: 0.6vh;
 
     &:hover {
       color: #3085fb;
@@ -454,7 +507,9 @@ const handleOk = () => {
 
 .chat-show-load {
   width: 3vw;
-  margin-top: 3vh;
+  height: 5vh;
+  position: relative;
+  top: 0.5vh;
 }
 
 .ant-head1 {
@@ -496,14 +551,16 @@ const handleOk = () => {
       left: 15%;
       max-width: 60vw; // 指定最大宽度，超过这个宽度内容会自动换行
       min-height: 10%; // 设置最小高度
-      //border: 1px solid @theme-border-color;
+      border: 1px solid @theme-border-color;
       border-radius: 5px;
       overflow: auto; // 设置溢出为自动
       word-wrap: break-word; // 设置文字换行
       overflow-wrap: break-word; // 设置文字换行
+      margin-top: 1vh;
 
       .div3-title {
         position: relative;
+        top: -1vh;
       }
     }
   }

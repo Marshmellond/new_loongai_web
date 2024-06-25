@@ -8,7 +8,7 @@ import {h} from 'vue';
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-localStorage.setItem('selectedKey', "6");
+localStorage.setItem('selectedKey', "7");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 const indicator = h(LoadingOutlined, {
   style: {

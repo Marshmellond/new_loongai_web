@@ -11,6 +11,7 @@ import {
   KeyOutlined,
   FilePptOutlined,
   ShareAltOutlined,
+  CustomerServiceOutlined,
 } from '@ant-design/icons-vue';
 
 import {RouterLink, RouterView} from 'vue-router'
@@ -89,14 +90,18 @@ localStorage.setItem('selectedKey', "6");
             <span class="nav-text"><RouterLink to="/gallery">画廊</RouterLink></span>
           </a-menu-item>
           <a-menu-item key="6">
+            <CustomerServiceOutlined/>
+            <span class="nav-text"><RouterLink to="/music">音乐</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="7">
             <FilePptOutlined/>
             <span class="nav-text"><RouterLink to="/ppt">PPT</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="7">
+          <a-menu-item key="8">
             <user-outlined/>
             <span class="nav-text"><RouterLink to="/about">我的</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="8">
+          <a-menu-item key="9">
             <KeyOutlined/>
             <span class="nav-text"><RouterLink to="/key">key</RouterLink></span>
           </a-menu-item>

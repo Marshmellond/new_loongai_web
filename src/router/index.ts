@@ -34,6 +34,11 @@ const router = createRouter({
             component: () => import('@/views/PPTView/LayoutView.vue')
         },
         {
+            path: '/music',
+            name: 'music',
+            component: () => import('@/views/MusicView/LayoutView.vue')
+        },
+        {
             path: '/about',
             name: 'about',
             component: () => import('../views/AboutView/LayoutView.vue')
