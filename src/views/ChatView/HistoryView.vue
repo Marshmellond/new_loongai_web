@@ -5,9 +5,10 @@ import {useCounterStore} from '@/stores/counter'
 import {onMounted} from "vue";
 import {message} from "ant-design-vue";
 
+
 const counter = useCounterStore()
 const open = ref<boolean>(false);
-
+counter.selected_item = localStorage.getItem("chat_selected_item");
 const show_edit = (item) => {
   counter.edit_temp_select_red_id = item[0]
   const url = "/api/chat/edit_rec_data"
@@ -54,7 +55,6 @@ const handleOk = () => {
     api_select: counter.edit_mod[1],
     chat_mod_id: counter.edit_app[1]
   }
-  console.log(body)
   fetch(url, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
@@ -88,6 +88,7 @@ const handleOk = () => {
             counter.chat_img_head = data["chat_img_head"]
             counter.chat_mod_img_head = data["chat_mod_img_head"]
             counter.chat_mod_name = data["chat_mod_name"]
+            counter.chat_rec_title = data["chat_rec_title"]
           }
         })
       }
@@ -108,7 +109,7 @@ const handleOk = () => {
 
 
 const search_value = ref<string>('');
-const get_rec_data = () => {
+const get_rec_data = (status: boolean) => {
   const url = "/api/chat/get_rec_data"
   fetch(url).then((res) => {
     return res.json()
@@ -118,9 +119,9 @@ const get_rec_data = () => {
       for (let i of data["data"]) {
         counter.recording.unshift(i)
       }
-      if (counter.recording.length > 0) {
-        counter.selected_item = counter.recording[0][0];
-      }
+    }
+    if (status) {
+      counter.selected_item = counter.recording[0][0]
     }
     if (counter.recording.length === 0) {
       counter.selected_item = "";
@@ -179,7 +180,11 @@ const delete_record = (id: string) => {
     counter.chat_api = ""
     counter.chat_img_head = ""
     counter.chat_mod_img_head = ""
-    get_rec_data()
+    if (counter.selected_item == id) {
+      get_rec_data(true)
+    } else {
+      get_rec_data(false)
+    }
   })
   if (counter.recording.length === 0) {
     counter.selected_item = "";
@@ -204,7 +209,7 @@ const add_record = () => {
       return res.json()
     }
   }).then(() => {
-    get_rec_data()
+    get_rec_data(true)
   })
 }
 // ---------------end---------------
@@ -237,7 +242,7 @@ const add_record = () => {
           v-for="(item) in counter.recording" :key="item[0]"
           v-if="counter.recording.length!==0"
       >
-        <div class="ant-div" :class="{ 'selected': item[0] === counter.selected_item }" @click="selectItem(item[0])">
+        <div class="ant-div" :class="{ 'selected': item[0] == counter.selected_item }" @click="selectItem(item[0])">
           <span class="ant-title">{{ item[1] }}</span>
           <div class="ant-div2">
             <span class="ant-time">{{ item[2] }}</span>
@@ -290,6 +295,11 @@ const add_record = () => {
 <style lang="less" scoped>
 @import "src/assets/css/theme.less";
 
+.selected {
+  border-left: 2px solid #3086fd;
+  background: #f0f0f0;
+}
+
 .edit-title {
   margin-top: 2vh;
   margin-bottom: 0.5vh;
@@ -312,16 +322,6 @@ const add_record = () => {
     margin-top: 1vh;
     color: #c1c1c1;
     font-size: 130%;
-  }
-}
-
-
-.selected {
-  border-left: 2px solid #3086fd;
-  background: #f0f0f0;
-
-  .ant-delete {
-    visibility: visible !important;
   }
 }
 
@@ -401,7 +401,7 @@ const add_record = () => {
           top: 1.2vh;
           font-size: 0.9rem;
           color: black;
-          max-width: 12.5vw; /* 你可以根据需要调整这个值 */
+          max-width: 10vw; /* 你可以根据需要调整这个值 */
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis; /* 这将添加省略号，如果文本超出其最大宽度 */

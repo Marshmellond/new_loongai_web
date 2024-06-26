@@ -54,6 +54,7 @@ export const useCounterStore = defineStore('counter', () => {
     const edit_mod_options = ref([])
     const edit_app_options = ref([])
     const edit_temp_select_red_id = ref("")
+    const chat_rec_title = ref("") // 对面页面显示页面对话记录选择
     return {
         selectedKeys,
         recording,
@@ -105,6 +106,7 @@ export const useCounterStore = defineStore('counter', () => {
         edit_app_view,
         edit_mod_options,
         edit_app_options,
-        edit_temp_select_red_id
+        edit_temp_select_red_id,
+        chat_rec_title
     }
 })

@@ -4,22 +4,18 @@ import {useCounterStore} from '@/stores/counter'
 import {marked} from 'marked';
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github-dark.css'; // 或其他样式
-import Icon, {HomeOutlined} from '@ant-design/icons-vue';
+import Icon from '@ant-design/icons-vue';
 import {onMounted} from "vue";
 import {
   LoadingOutlined,
   DeleteOutlined,
   FormOutlined,
-  SoundOutlined,
-  SwitcherOutlined,
-  BlockOutlined
 } from '@ant-design/icons-vue';
 import {h} from 'vue';
 import {message} from "ant-design-vue";
 
 const counter = useCounterStore()
 const open = ref<boolean>(false);
-const div_mouse_show = ref<boolean>(false);
 const indicator = h(LoadingOutlined, {
   style: {
     fontSize: '24px',
@@ -42,7 +38,6 @@ marked.setOptions({
   gfmtrue: true,
   breaks: true
 })
-console.log(counter.selected_item)
 
 const chat_show_load = ref(false)
 const textarea_input = ref<string>('');
@@ -75,6 +70,7 @@ const get_data = () => {
         counter.chat_img_head = data["chat_img_head"]
         counter.chat_mod_img_head = data["chat_mod_img_head"]
         counter.chat_mod_name = data["chat_mod_name"]
+        counter.chat_rec_title = data["chat_rec_title"]
       }
     })
     const url2 = "/api/chat/get_con_chat"
@@ -194,7 +190,7 @@ const seed_message = () => {
     }
   })
 }
-const get_rec_data = () => {
+const get_rec_data = (status: boolean) => {
   const url = "/api/chat/get_rec_data"
   fetch(url).then((res) => {
     return res.json()
@@ -204,9 +200,9 @@ const get_rec_data = () => {
       for (let i of data["data"]) {
         counter.recording.unshift(i)
       }
-      if (counter.recording.length > 0) {
-        counter.selected_item = counter.recording[0][0];
-      }
+    }
+    if (status) {
+      counter.selected_item = counter.recording[0][0]
     }
     if (counter.recording.length === 0) {
       counter.selected_item = "";
@@ -232,7 +228,7 @@ const delete_record = () => {
     counter.chat_api = ""
     counter.chat_img_head = ""
     counter.chat_mod_img_head = ""
-    get_rec_data()
+    get_rec_data(true)
   })
   if (counter.recording.length === 0) {
     counter.selected_item = "";
@@ -320,6 +316,7 @@ const handleOk = () => {
             counter.chat_img_head = data["chat_img_head"]
             counter.chat_mod_img_head = data["chat_mod_img_head"]
             counter.chat_mod_name = data["chat_mod_name"]
+            counter.chat_rec_title = data["chat_rec_title"]
           }
         })
       }
@@ -368,6 +365,7 @@ const click_copy = (text: string) => {
     <div class="div2">
       <FormOutlined class="ant-edit" @click="show_edit"/>
       <DeleteOutlined class="ant-delete" @click="delete_record"/>
+
       <div v-if="counter.chat_img_head" style="margin-left: -3vw">
         <a-avatar shape="square" class="ant-head1">
           <template #icon>
@@ -384,6 +382,7 @@ const click_copy = (text: string) => {
         </a-avatar>
         <span class="div2-title">{{ counter.chat_mod_name }}</span>
       </div>
+      <span class="div2-recode-title">{{ counter.chat_rec_title }}</span>
       <a-modal v-model:open="open" title="对话信息" @ok="handleOk" okText="保存" cancelText="关闭">
         <div class="edit-title">名称</div>
         <a-input v-model:value="counter.edit_name"/>
@@ -662,6 +661,17 @@ const click_copy = (text: string) => {
   align-items: center;
   border-bottom: 1px solid @theme-border-color;
   background-color: @theme-background-color;
+
+  .div2-recode-title {
+    position: absolute;
+    left: 35vw;
+    font-size: 0.9rem;
+    color: black;
+    max-width: 10vw; /* 你可以根据需要调整这个值 */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; /* 这将添加省略号，如果文本超出其最大宽度 */
+  }
 
   .ant-head1 {
     background-color: #e8e4e4;
