@@ -4,11 +4,20 @@ import {useCounterStore} from '@/stores/counter'
 import {marked} from 'marked';
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github-dark.css'; // 或其他样式
+import Icon, {HomeOutlined} from '@ant-design/icons-vue';
 import {onMounted} from "vue";
-import {LoadingOutlined, DeleteOutlined, FormOutlined, SoundOutlined, SwitcherOutlined} from '@ant-design/icons-vue';
+import {
+  LoadingOutlined,
+  DeleteOutlined,
+  FormOutlined,
+  SoundOutlined,
+  SwitcherOutlined,
+  BlockOutlined
+} from '@ant-design/icons-vue';
 import {h} from 'vue';
 import {message} from "ant-design-vue";
 
+const counter = useCounterStore()
 const open = ref<boolean>(false);
 const div_mouse_show = ref<boolean>(false);
 const indicator = h(LoadingOutlined, {
@@ -33,8 +42,8 @@ marked.setOptions({
   gfmtrue: true,
   breaks: true
 })
+console.log(counter.selected_item)
 
-const counter = useCounterStore()
 const chat_show_load = ref(false)
 const textarea_input = ref<string>('');
 watch(() => counter.selected_item, () => {
@@ -133,6 +142,7 @@ const seed_message = () => {
       for (let i of data["data"]) {
         counter.contents.push([i[0], marked(i[1]), i[2], i[3], i[4], i[1], false])
       }
+      console.log(counter.contents)
       chat_show_load.value = true
       const url2 = "/api/chat/add_con_chat"
       let body2 = {
@@ -174,6 +184,7 @@ const seed_message = () => {
               for (const iterator of messagesFiltered) {
                 temp_make_content.value += iterator.msg
                 counter.contents[counter.contents.length - 1][1] = marked(temp_make_content.value)
+                counter.contents[counter.contents.length - 1][5] = temp_make_content.value
               }
               reader?.read().then(process);
             }
@@ -326,8 +337,9 @@ const handleOk = () => {
   open.value = false;
 
 };
-
-const click_sound = (text: string) => {
+const speechSynthesis_status = ref(false)
+const click_sound = (text: string, index) => {
+  counter.contents[index][6] = true
   const utterance = new SpeechSynthesisUtterance(text);
 
   utterance.rate = 1.5; // 语速 0.1-10
@@ -336,19 +348,18 @@ const click_sound = (text: string) => {
 
   // 朗读文本
   speechSynthesis.speak(utterance);
+
+  utterance.onend = () => {
+    counter.contents[index][6] = false;
+  };
 }
-const click_sound_stop = () => {
+const click_sound_stop = (index) => {
   speechSynthesis.cancel()
+  counter.contents[index][6] = false
 }
 const click_copy = (text: string) => {
   navigator.clipboard.writeText(text);
   message.success("复制成功")
-}
-const div_mouseover = (index) => {
-  counter.contents[index][6] = true
-}
-const div_mouseout = (index) => {
-  counter.contents[index][6] = false
 }
 </script>
 <template>
@@ -365,7 +376,7 @@ const div_mouseout = (index) => {
         </a-avatar>
         <span class="div2-title">{{ counter.chat_api }}</span>
       </div>
-      <div v-if="counter.chat_mod_img_head" style="margin-left: 30px">
+      <div v-if="counter.chat_mod_img_head" style="margin-left: 2vw">
         <a-avatar shape="square" class="ant-head1">
           <template #icon>
             <img :src="counter.chat_mod_img_head" alt="">
@@ -386,35 +397,115 @@ const div_mouseout = (index) => {
     </div>
 
     <div class="div3" ref="scrollContainer">
-      <div
-          class="div-div"
-          v-for="(item, index) in counter.contents" :key="item[0]">
-        <a-avatar shape="square" class="ant-head2">
-          <template #icon>
-            <img :src="item[3]" alt="">
-          </template>
-        </a-avatar>
+      <div v-for="(item, index) in counter.contents" :key="item[0]">
+        <div class="div-div-user" v-if="item[4]=='user'">
+          <a-radio-group size="small" class="div-utils-user">
+            <a-radio-button value="a" @click="click_copy(item[5])">
+              <icon :style="{ color: '#8994a6'}" class="icon-user-blue">
+                <template #component>
+                  <svg t="1719391307585" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                       xmlns="http://www.w3.org/2000/svg" p-id="14272" width="16" height="16">
+                    <path
+                        d="M394.666667 106.666667h448a74.666667 74.666667 0 0 1 74.666666 74.666666v448a74.666667 74.666667 0 0 1-74.666666 74.666667H394.666667a74.666667 74.666667 0 0 1-74.666667-74.666667V181.333333a74.666667 74.666667 0 0 1 74.666667-74.666666z m0 64a10.666667 10.666667 0 0 0-10.666667 10.666666v448a10.666667 10.666667 0 0 0 10.666667 10.666667h448a10.666667 10.666667 0 0 0 10.666666-10.666667V181.333333a10.666667 10.666667 0 0 0-10.666666-10.666666H394.666667z m245.333333 597.333333a32 32 0 0 1 64 0v74.666667a74.666667 74.666667 0 0 1-74.666667 74.666666H181.333333a74.666667 74.666667 0 0 1-74.666666-74.666666V394.666667a74.666667 74.666667 0 0 1 74.666666-74.666667h74.666667a32 32 0 0 1 0 64h-74.666667a10.666667 10.666667 0 0 0-10.666666 10.666667v448a10.666667 10.666667 0 0 0 10.666666 10.666666h448a10.666667 10.666667 0 0 0 10.666667-10.666666v-74.666667z"
+                        fill="#8994a6" p-id="14273"></path>
+                  </svg>
+                </template>
+              </icon>
+            </a-radio-button>
+            <a-radio-button value="b">
+              <icon :style="{ color: '#8994a6'}" class="icon-user-green">
+                <template #component>
+                  <svg t="1719393386501" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                       xmlns="http://www.w3.org/2000/svg" p-id="22424" width="16" height="16">
+                    <path
+                        d="M913.408 384H732.16c-23.04 0-41.984-18.944-41.984-41.984 0-23.04 18.944-41.984 41.984-41.984h72.704c-65.536-92.672-173.568-153.088-295.936-153.088-200.192 0-362.496 162.304-362.496 362.496 0 200.192 162.304 362.496 362.496 362.496 200.192 0 362.496-162.304 362.496-362.496 0-23.04 18.944-41.984 41.984-41.984 23.04 0 41.984 18.944 41.984 41.984 0 246.272-199.68 445.952-445.952 445.952-246.272 0-445.952-199.68-445.952-445.952 0-246.272 199.68-445.952 445.952-445.952 149.504 0 281.6 73.728 362.496 186.368V175.104c0-23.04 18.944-41.984 41.984-41.984 23.04 0 41.984 18.944 41.984 41.984v167.424c-1.024 23.04-19.456 41.472-42.496 41.472z"
+                        fill="#8994a6" p-id="22425"></path>
+                  </svg>
+                </template>
+              </icon>
+            </a-radio-button>
+            <a-radio-button value="c">
+              <DeleteOutlined class="icon-user-red" :style="{ color: '#8994a6'}"/>
+            </a-radio-button>
+          </a-radio-group>
+          <a-avatar shape="square" class="ant-head2-user">
+            <template #icon>
+              <img :src="item[3]" alt="">
+            </template>
+          </a-avatar>
+        </div>
+        <div class="div-div-user2" v-if="item[4]=='user'">
+          <div class="div-content-user">
+            <span v-html="item[1]"></span>
+          </div>
+        </div>
 
-        <div class="div-content" @mouseover="div_mouseover(index)" @mouseout="div_mouseout(index)">
-          <a-spin :indicator="indicator" class="chat-show-load"
-                  v-if="chat_show_load && index === counter.contents.length - 1"/>
-          <span class="div3-title" v-html="item[1]"></span>
-          <div class="div-content-ico" v-if="item[4]=='ai'" :style="{ visibility: item[6] ? 'visible' : 'hidden' }">
-            <SoundOutlined class="div-content-ico-sound" @click="click_sound(item[5])"/>
-            <SwitcherOutlined class="div-content-ico-copy" @click="click_copy(item[5])"/>
+        <div class="div-div-ai" v-if="item[4]=='ai'">
+          <a-avatar shape="square" class="ant-head2-ai">
+            <template #icon>
+              <img :src="item[3]" alt="">
+            </template>
+          </a-avatar>
+          <a-radio-group size="small" class="div-utils-ai">
+            <a-radio-button value="a" @click="click_copy(item[5])">
+              <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
+                <template #component>
+                  <svg t="1719391307585" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                       xmlns="http://www.w3.org/2000/svg" p-id="14272" width="16" height="16">
+                    <path
+                        d="M394.666667 106.666667h448a74.666667 74.666667 0 0 1 74.666666 74.666666v448a74.666667 74.666667 0 0 1-74.666666 74.666667H394.666667a74.666667 74.666667 0 0 1-74.666667-74.666667V181.333333a74.666667 74.666667 0 0 1 74.666667-74.666666z m0 64a10.666667 10.666667 0 0 0-10.666667 10.666666v448a10.666667 10.666667 0 0 0 10.666667 10.666667h448a10.666667 10.666667 0 0 0 10.666666-10.666667V181.333333a10.666667 10.666667 0 0 0-10.666666-10.666666H394.666667z m245.333333 597.333333a32 32 0 0 1 64 0v74.666667a74.666667 74.666667 0 0 1-74.666667 74.666666H181.333333a74.666667 74.666667 0 0 1-74.666666-74.666666V394.666667a74.666667 74.666667 0 0 1 74.666666-74.666667h74.666667a32 32 0 0 1 0 64h-74.666667a10.666667 10.666667 0 0 0-10.666666 10.666667v448a10.666667 10.666667 0 0 0 10.666666 10.666666h448a10.666667 10.666667 0 0 0 10.666667-10.666666v-74.666667z"
+                        fill="#8994a6" p-id="14273"></path>
+                  </svg>
+                </template>
+              </icon>
+            </a-radio-button>
+            <a-radio-button value="b">
+              <icon :style="{ color: '#8994a6'}" class="icon-ai-pink" v-if="!item[6]"
+                    @click="click_sound(item[5], index)">
+                <template #component>
+                  <svg t="1719391283706" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                       xmlns="http://www.w3.org/2000/svg" p-id="12977" width="16" height="16">
+                    <path
+                        d="M128 420.576v200.864h149.12l175.456 140.064V284.288l-169.792 136.288H128z m132.256-64l204.288-163.968a32 32 0 0 1 52.032 24.96v610.432a32 32 0 0 1-51.968 24.992l-209.92-167.552H96a32 32 0 0 1-32-32v-264.864a32 32 0 0 1 32-32h164.256zM670.784 720.128a32 32 0 0 1-44.832-45.664 214.08 214.08 0 0 0 64.32-153.312 213.92 213.92 0 0 0-55.776-144.448 32 32 0 1 1 47.36-43.04 277.92 277.92 0 0 1 72.416 187.488 278.08 278.08 0 0 1-83.488 198.976zM822.912 858.88a32 32 0 1 1-45.888-44.608A419.008 419.008 0 0 0 896 521.152c0-108.704-41.376-210.848-114.432-288.384a32 32 0 0 1 46.592-43.872c84.16 89.28 131.84 207.04 131.84 332.256 0 127.84-49.76 247.904-137.088 337.728z"
+                        fill="#8994a6" p-id="12978"></path>
+                  </svg>
+                </template>
+              </icon>
+              <icon :style="{ color: '#8994a6'}" class="icon-ai-pink" v-if="item[6]"
+                    @click="click_sound_stop(index)">
+                <template #component>
+                  <svg t="1719393700872" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                       xmlns="http://www.w3.org/2000/svg" p-id="25036" width="16" height="16">
+                    <path
+                        d="M512 938.666667C277.333333 938.666667 85.333333 746.666667 85.333333 512S277.333333 85.333333 512 85.333333s426.666667 192 426.666667 426.666667-192 426.666667-426.666667 426.666667z m0-789.333334c-200.533333 0-362.666667 162.133333-362.666667 362.666667s162.133333 362.666667 362.666667 362.666667 362.666667-162.133333 362.666667-362.666667-162.133333-362.666667-362.666667-362.666667z"
+                        fill="#df57cd" p-id="25037"></path>
+                    <path
+                        d="M571.733333 627.2h-115.2c-29.866667 0-55.466667-25.6-55.466666-55.466667v-115.2c0-29.866667 25.6-55.466667 55.466666-55.466666h115.2c29.866667 0 55.466667 25.6 55.466667 55.466666v115.2c0 29.866667-25.6 55.466667-55.466667 55.466667z m-110.933333-64h98.133333v-98.133333h-98.133333v98.133333z"
+                        fill="#df57cd" p-id="25038"></path>
+                  </svg>
+                </template>
+              </icon>
+            </a-radio-button>
+          </a-radio-group>
+        </div>
+
+        <div class="div-div-ai2" v-if="item[4]=='ai'">
+          <div class="div-content-ai">
+            <a-spin :indicator="indicator" class="chat-show-load-ai"
+                    v-show="chat_show_load && index === counter.contents.length - 1"/>
+            <span v-html="item[1]"></span>
           </div>
         </div>
       </div>
+
     </div>
 
-
-    <div class=" div4
-          ">
+    <div class="div4">
       <a-textarea
           v-model:value="textarea_input"
           placeholder="输入消息内容"
-          :autoSize="{ minRows: 3, maxRows: 7.5 }"
-          style="width: 50%"
+          :autoSize="{ minRows: 2, maxRows: 12}"
+          style="width: 40%"
           :allowClear="true"
           class="textarea-input"
           @keydown="push_message"
@@ -428,27 +519,135 @@ const div_mouseout = (index) => {
 <style scoped lang="less">
 @import "src/assets/css/theme.less";
 
-.div-content-ico {
+.div4 {
+  width: 99.96%;
+  height: 80vh;
+  background: @theme-background-color2;
 
-  .div-content-ico-sound {
-    border-radius: 5px;
-    padding: 0.8vh;
 
-    &:hover {
-      background: #e2e3e6;
-    }
-  }
+  .textarea-input {
+    position: absolute; /* 使用绝对定位 */
+    bottom: 0; /* 固定在底部 */
+    margin-bottom: 3vh;
+    left: 50%; /* 将左侧位置设置为父元素的50% */
+    transform: translate(-50%, 0); /* 向左移动自身宽度的50%，以达到水平居中 */
 
-  .div-content-ico-copy {
-    border-radius: 5px;
-    padding: 0.8vh;
-
-    &:hover {
-      background: #e2e3e6;
-    }
   }
 }
 
+.div3 {
+  width: 99.96%;
+  height: 80vh;
+  background-color: @theme-background-color;
+  overflow: auto;
+
+  .div-div-user {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20vw;
+
+    .ant-head2-user {
+      background-color: #e8e4e4;
+    }
+
+    .div-utils-user {
+      margin-top: 0.3%;
+      margin-right: 0.5%;
+
+      .icon-user-blue:hover path {
+        fill: #3086fd;
+      }
+
+      .icon-user-green:hover path {
+        fill: #df57cd;
+      }
+
+      .icon-user-red:hover {
+        color: #fc2c54 !important; /* 鼠标悬停时改变的颜色为红色 */
+      }
+    }
+
+  }
+
+  .div-div-user2 {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20vw;
+
+    .div-content-user {
+      margin-top: 1%;
+      margin-bottom: 1%;
+      max-width: 45vw;
+      min-height: 10%; /* 设置最小高度 */
+      background: #dfe8fd;
+      border-radius: 5px 0 5px 5px;
+      word-wrap: break-word; /* 设置文字换行 */
+      overflow-wrap: break-word; /* 设置文字换行 */
+    }
+
+  }
+
+
+  .div-div-ai {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 12vw;
+
+    .ant-head2-ai {
+      background-color: #e8e4e4;
+    }
+
+    .div-utils-ai {
+      margin-top: 0.3%;
+      margin-left: 0.5%;
+
+      .icon-ai-blue:hover path {
+        fill: #3086fd;
+      }
+
+      .icon-ai-pink:hover path {
+        fill: #df57cd;
+      }
+    }
+
+  }
+
+  .div-div-ai2 {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 12vw;
+
+    .div-content-ai {
+      margin-top: 1%;
+      margin-bottom: 1%;
+      max-width: 45vw; // 指定最大宽度，超过这个宽度内容会自动换行
+      min-height: 10%; // 设置最小高度
+      background: #f5f6f8;
+      border-radius: 0 5px 5px 5px;
+      word-wrap: break-word; // 设置文字换行
+      overflow-wrap: break-word; // 设置文字换行
+
+      .chat-show-load-ai {
+        width: 4vw;
+        height: 5vh;
+        position: relative;
+        top: 0.5vh;
+      }
+
+    }
+  }
+
+
+}
+
+.div1 {
+  position: relative;
+  width: 100%;
+  height: 95.5vh;
+  overflow: hidden;
+  border-left: 1px solid @theme-border-color;
+  background: @theme-background-color;
+}
 
 .edit-title {
   margin-top: 2vh;
@@ -458,19 +657,19 @@ const div_mouseout = (index) => {
 .div2 {
   width: 99.96%;
   height: 5.9vh;
-  position: relative;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   border-bottom: 1px solid @theme-border-color;
-  border-left: 1px solid @theme-border-color;
   background-color: @theme-background-color;
+
+  .ant-head1 {
+    background-color: #e8e4e4;
+  }
 
   .div2-title {
     position: relative;
-    left: 0.7%;
-    line-height: normal;
-    margin-left: 0.2vw;
+    left: 0.3vw;
   }
 
   .ant-edit {
@@ -480,14 +679,12 @@ const div_mouseout = (index) => {
     border: 1px solid #b0b0b3;
     border-radius: 5px;
     padding: 0.6vh;
-
+    transition: color 0.3s ease, border-color 0.3s ease;
 
     &:hover {
       color: #3085fb;
       border: 1px solid #3085fb;
     }
-
-
   }
 
   .ant-delete {
@@ -497,91 +694,12 @@ const div_mouseout = (index) => {
     border: 1px solid #b0b0b3;
     border-radius: 5px;
     padding: 0.6vh;
+    transition: color 0.3s ease, border-color 0.3s ease;
 
     &:hover {
       color: #3085fb;
       border: 1px solid #3085fb;
     }
-  }
-}
-
-.chat-show-load {
-  width: 3vw;
-  height: 5vh;
-  position: relative;
-  top: 0.5vh;
-}
-
-.ant-head1 {
-  position: relative;
-  left: 0.5%;
-  background-color: #e8e4e4;
-}
-
-.ant-head2 {
-  position: relative;
-  left: 14.5%;
-  top: 1vh;
-  background-color: #e8e4e4;
-}
-
-
-.div1 {
-  width: 100%;
-  height: 95.5vh;
-  overflow: hidden;
-}
-
-
-.div3 {
-  width: 99.96%;
-  height: 70vh;
-  position: relative;
-  border-bottom: 1px solid @theme-border-color;
-  border-left: 1px solid @theme-border-color;
-  background-color: @theme-background-color;
-  overflow: auto;
-
-  .div-div {
-    display: flex;
-    justify-content: flex-start;
-
-    .div-content {
-      position: relative;
-      left: 15%;
-      max-width: 60vw; // 指定最大宽度，超过这个宽度内容会自动换行
-      min-height: 10%; // 设置最小高度
-      border: 1px solid @theme-border-color;
-      border-radius: 5px;
-      overflow: auto; // 设置溢出为自动
-      word-wrap: break-word; // 设置文字换行
-      overflow-wrap: break-word; // 设置文字换行
-      margin-top: 1vh;
-
-      .div3-title {
-        position: relative;
-        top: -1vh;
-      }
-    }
-  }
-}
-
-.div4 {
-  width: 99.96%;
-  height: 19.6vh;
-  position: relative;
-  border-left: 1px solid @theme-border-color;
-  background-color: @theme-background-color;
-
-  .div4-title {
-    position: relative;
-    left: 97%;
-  }
-
-  .textarea-input {
-    position: relative;
-    left: 20%;
-    top: 1vh;
   }
 }
 

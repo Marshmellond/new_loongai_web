@@ -192,6 +192,7 @@ const delete_record = (id: string) => {
 // ---------------选择对话---------------
 const selectItem = (id: string) => {
   counter.selected_item = id;
+  localStorage.setItem('chat_selected_item', id);
 };
 // ---------------end---------------
 
@@ -358,6 +359,7 @@ const add_record = () => {
         display: flex;
         flex-direction: column;
         height: 100%;
+        //transition: background 0.3s ease;
 
         &:hover {
           background: #f0f0f0;
@@ -371,6 +373,7 @@ const add_record = () => {
             top: 1.5vh;
             left: -1vw;
             font-weight: bold;
+            transition: color 0.3s ease;
 
             &:hover {
               color: #3085fb; // 使用你在 theme.less 文件中定义的颜色变量
@@ -384,6 +387,7 @@ const add_record = () => {
             top: 1.5vh;
             left: -0.5vw;
             font-size: 16px;
+            transition: color 0.3s ease;
 
             &:hover {
               color: #3085fb; // 使用你在 theme.less 文件中定义的颜色变量
@@ -410,25 +414,6 @@ const add_record = () => {
           font-size: 0.8rem;
           width: 90%;
           color: black;
-        }
-
-        .ant-delete {
-          position: relative;
-          width: 8%;
-          left: 85%;
-          top: 0.2vh;
-          font-size: 1.2rem;
-          visibility: hidden;
-
-          &:hover {
-            color: red; // 使用你在 theme.less 文件中定义的颜色变量
-          }
-        }
-
-        &:hover {
-          .ant-delete {
-            visibility: visible;
-          }
         }
       }
     }
