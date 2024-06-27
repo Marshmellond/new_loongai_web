@@ -3,7 +3,6 @@ import {ref, onUpdated, watch} from 'vue';
 import {useCounterStore} from '@/stores/counter'
 import {marked} from 'marked';
 import hljs from 'highlight.js'
-import 'highlight.js/styles/foundation.css'
 import Icon from '@ant-design/icons-vue';
 import {onMounted} from "vue";
 import {
@@ -16,15 +15,20 @@ import {message} from "ant-design-vue";
 
 const counter = useCounterStore()
 
-const render = new marked.Renderer()
 marked.setOptions({
-  renderer: render, // 这是必填项
-  gfm: true,	// 启动类似于Github样式的Markdown语法
-  pedantic: false, // 只解析符合Markdwon定义的，不修正Markdown的错误
-  sanitize: false, // 原始输出，忽略HTML标签（关闭后，可直接渲染HTML标签）
-
-  // 高亮的语法规范
-  highlight: (code, lang) => hljs.highlight(code, {language: lang}).value,
+  highlight: function (code, lang) {
+    try {
+      if (lang) {
+        return hljs.highlight(code, {language: lang}).value
+      } else {
+        return hljs.highlightAuto(code).value
+      }
+    } catch (error) {
+      return code
+    }
+  },
+  gfmtrue: true,
+  breaks: true
 })
 
 
@@ -86,7 +90,7 @@ const get_data = () => {
       if (data["code"] == 1) {
         counter.contents = []
         for (let i of data["data"]) {
-          counter.contents.push([i[0], marked(i[1]), i[2], i[3], i[4], i[1], false])
+          counter.contents.push([i[0], marked.parse(i[1]), i[2], i[3], i[4], i[1], false])
         }
       }
     })
@@ -105,14 +109,13 @@ onUpdated(() => {
 
 const push_message = (event) => {
   if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault();
     seed_message();
+    event.preventDefault();
     textarea_input.value = ''
-  } else if (event.key === 'Enter' && event.shiftKey) {
-    textarea_input.value += '\n';
   }
 }
-let temp_make_content = ref("")
+let temp_meg = ref("")
+const chat_status_bool = ref(false)
 const seed_message = () => {
   const url1 = "/api/chat/add_con_data"
   const chat_con_user = textarea_input.value
@@ -132,9 +135,8 @@ const seed_message = () => {
   }).then((data) => {
     if (data["code"] == 1) {
       for (let i of data["data"]) {
-        counter.contents.push([i[0], marked(i[1]), i[2], i[3], i[4], i[1], false])
+        counter.contents.push([i[0], marked.parse(i[1]), i[2], i[3], i[4], i[1], false])
       }
-      console.log(counter.contents)
       chat_show_load.value = true
       const url2 = "/api/chat/add_con_chat"
       let body2 = {
@@ -149,40 +151,34 @@ const seed_message = () => {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body2)
+      }).then((res) => {
+        if (res.ok) {
+          temp_meg.value = ""
+          chat_status_bool.value = true
+          chat_show_load.value = false
+          return res.body;
+        }
+      }).then((rb) => {
+        const reader = rb?.getReader();
+        const decoder = new TextDecoder("utf-8");
+
+        function process({done, value}) {
+          if (done) {
+            chat_status_bool.value = false
+            return;
+          }
+          if (chat_status_bool.value === false) {
+            return;
+          }
+          temp_meg.value += decoder.decode(value);
+          counter.contents[counter.contents.length - 1][1] = marked(temp_meg.value)
+          counter.contents[counter.contents.length - 1][5] = temp_meg.value
+          reader?.read().then(process);
+        }
+
+        reader?.read().then(process);
+        console.log("结束了")
       })
-          .then((res) => {
-            if (res.status === 200) {
-              temp_make_content.value = ""
-              chat_show_load.value = false
-              return res.body;
-            }
-          })
-          .then((rb) => {
-            const reader = rb?.getReader();
-
-            function process({done, value}) {
-              if (done) {
-                return;
-              }
-              const message = new TextDecoder("utf-8").decode(value);
-              let messages = message.split("data: ")
-              let messagesFiltered = []
-              for (const msg of messages) {
-                if (msg !== "") {
-                  let jsonData = JSON.parse(msg)
-                  messagesFiltered.push(jsonData)
-                }
-              }
-              for (const iterator of messagesFiltered) {
-                temp_make_content.value += iterator.msg
-                counter.contents[counter.contents.length - 1][1] = marked(temp_make_content.value)
-                counter.contents[counter.contents.length - 1][5] = temp_make_content.value
-              }
-              reader?.read().then(process);
-            }
-
-            reader?.read().then(process);
-          })
     }
   })
 }
@@ -281,7 +277,6 @@ const handleOk = () => {
     api_select: counter.edit_mod[1],
     chat_mod_id: counter.edit_app[1]
   }
-  console.log(body)
   fetch(url, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
@@ -355,6 +350,9 @@ const click_sound_stop = (index) => {
 const click_copy = (text: string) => {
   navigator.clipboard.writeText(text);
   message.success("复制成功")
+}
+const stop_chat = () => {
+  chat_status_bool.value = false
 }
 </script>
 <template>
@@ -506,7 +504,33 @@ const click_copy = (text: string) => {
           class="textarea-input"
           @keydown="push_message"
       />
+      <icon :style="{ color: '#000000'}" class="icon-div4-seed" @click="stop_chat" v-if="!chat_status_bool">
+        <template #component>
+          <svg t="1719487236129" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+               p-id="13290" width="36" height="36">
+            <path
+                d="M512.877641 511.997001m-301.216175 301.216175a425.984 425.984 0 1 0 602.43235-602.43235 425.984 425.984 0 1 0-602.43235 602.43235Z"
+                fill="#000000" p-id="13291" data-spm-anchor-id="a313x.search_index.0.i17.4ed63a81Ka2GI0"
+                class="selected"></path>
+            <path
+                d="M266.24 427.7248l422.5024-103.5776a24.9856 24.9856 0 0 1 28.4672 34.9696l-188.2624 395.1616a24.9344 24.9344 0 0 1-46.08-3.072l-47.9744-149.4016a24.7808 24.7808 0 0 1 5.12-24.3712L522.24 486.4a6.6048 6.6048 0 0 0-8.192-10.24l-109.0048 63.6416a24.9856 24.9856 0 0 1-24.6272 0.3072L260.2496 473.8048a24.9856 24.9856 0 0 1 5.9904-46.08z"
+                fill="#FFFFFF" p-id="13292"></path>
+          </svg>
+        </template>
+      </icon>
+      <icon :style="{ color: '#000000'}" class="icon-div4-stop" @click="stop_chat" v-if="chat_status_bool">
+        <template #component>
+          <svg t="1719484882928" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+               p-id="2570" width="32" height="32">
+            <path
+                d="M512 42.666667C252.793333 42.666667 42.666667 252.793333 42.666667 512s210.126667 469.333333 469.333333 469.333333 469.333333-210.126667 469.333333-469.333333S771.206667 42.666667 512 42.666667z m213.333333 645.333333a37.373333 37.373333 0 0 1-37.333333 37.333333H336a37.373333 37.373333 0 0 1-37.333333-37.333333V336a37.373333 37.373333 0 0 1 37.333333-37.333333h352a37.373333 37.373333 0 0 1 37.333333 37.333333z"
+                fill="#000000" p-id="2571"></path>
+          </svg>
+        </template>
+      </icon>
     </div>
+
+
   </div>
 
 
@@ -515,11 +539,11 @@ const click_copy = (text: string) => {
 <style scoped lang="less">
 @import "src/assets/css/theme.less";
 
+
 .div4 {
   width: 99.96%;
-  height: 80vh;
+  height: 20vh;
   background: @theme-background-color2;
-
 
   .textarea-input {
     position: absolute; /* 使用绝对定位 */
@@ -527,8 +551,21 @@ const click_copy = (text: string) => {
     margin-bottom: 3vh;
     left: 50%; /* 将左侧位置设置为父元素的50% */
     transform: translate(-50%, 0); /* 向左移动自身宽度的50%，以达到水平居中 */
-
   }
+
+  .icon-div4-seed {
+    position: relative;
+    left: 56vw;
+    top: 2vh;
+  }
+
+  .icon-div4-stop {
+    position: relative;
+    left: 56vw;
+    top: 1.8vh;
+  }
+
+
 }
 
 .div3 {
@@ -627,10 +664,10 @@ const click_copy = (text: string) => {
       overflow-wrap: break-word; // 设置文字换行
 
       .chat-show-load-ai {
-        width: 4vw;
-        height: 5vh;
+        width: 2.5vw;
+        height: 4.5vh;
         position: relative;
-        top: 0.5vh;
+        top: 1vh;
       }
 
     }
@@ -712,6 +749,4 @@ const click_copy = (text: string) => {
     }
   }
 }
-
-
 </style>
