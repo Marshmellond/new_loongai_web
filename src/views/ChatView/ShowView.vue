@@ -3,7 +3,7 @@ import {ref, onUpdated, watch} from 'vue';
 import {useCounterStore} from '@/stores/counter'
 import {marked} from 'marked';
 import hljs from 'highlight.js'
-import 'highlight.js/styles/github-dark.css'; // 或其他样式
+import 'highlight.js/styles/foundation.css'
 import Icon from '@ant-design/icons-vue';
 import {onMounted} from "vue";
 import {
@@ -15,6 +15,21 @@ import {h} from 'vue';
 import {message} from "ant-design-vue";
 
 const counter = useCounterStore()
+
+const render = new marked.Renderer()
+marked.setOptions({
+  renderer: render, // 这是必填项
+  gfm: true,	// 启动类似于Github样式的Markdown语法
+  pedantic: false, // 只解析符合Markdwon定义的，不修正Markdown的错误
+  sanitize: false, // 原始输出，忽略HTML标签（关闭后，可直接渲染HTML标签）
+
+  // 高亮的语法规范
+  highlight: (code, lang) => hljs.highlight(code, {language: lang}).value,
+})
+
+
+const chat_show_load = ref(false)
+const textarea_input = ref<string>('');
 const open = ref<boolean>(false);
 const indicator = h(LoadingOutlined, {
   style: {
@@ -22,25 +37,6 @@ const indicator = h(LoadingOutlined, {
   },
   spin: true,
 });
-
-marked.setOptions({
-  highlight: function (code, lang) {
-    try {
-      if (lang) {
-        return hljs.highlight(code, {language: lang}).value
-      } else {
-        return hljs.highlightAuto(code).value
-      }
-    } catch (error) {
-      return code
-    }
-  },
-  gfmtrue: true,
-  breaks: true
-})
-
-const chat_show_load = ref(false)
-const textarea_input = ref<string>('');
 watch(() => counter.selected_item, () => {
   get_data()
 })
@@ -202,9 +198,11 @@ const get_rec_data = (status: boolean) => {
       }
     }
     if (status) {
+      localStorage.setItem('chat_selected_item', counter.recording[0][0]);
       counter.selected_item = counter.recording[0][0]
     }
     if (counter.recording.length === 0) {
+      localStorage.setItem('chat_selected_item', "");
       counter.selected_item = "";
     }
   })
@@ -231,6 +229,7 @@ const delete_record = () => {
     get_rec_data(true)
   })
   if (counter.recording.length === 0) {
+    localStorage.setItem('chat_selected_item', "");
     counter.selected_item = "";
   }
 
@@ -334,7 +333,6 @@ const handleOk = () => {
   open.value = false;
 
 };
-const speechSynthesis_status = ref(false)
 const click_sound = (text: string, index) => {
   counter.contents[index][6] = true
   const utterance = new SpeechSynthesisUtterance(text);
@@ -394,7 +392,6 @@ const click_copy = (text: string) => {
                     :placeholder="counter.edit_app_view"/>
       </a-modal>
     </div>
-
     <div class="div3" ref="scrollContainer">
       <div v-for="(item, index) in counter.contents" :key="item[0]">
         <div class="div-div-user" v-if="item[4]=='user'">
@@ -435,7 +432,7 @@ const click_copy = (text: string) => {
         </div>
         <div class="div-div-user2" v-if="item[4]=='user'">
           <div class="div-content-user">
-            <span v-html="item[1]"></span>
+            <span v-html="item[1]" class="div-content-txt-user"></span>
           </div>
         </div>
 
@@ -582,6 +579,9 @@ const click_copy = (text: string) => {
       border-radius: 5px 0 5px 5px;
       word-wrap: break-word; /* 设置文字换行 */
       overflow-wrap: break-word; /* 设置文字换行 */
+
+      .div-content-txt-user {
+      }
     }
 
   }

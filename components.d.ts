@@ -37,6 +37,7 @@ declare module 'vue' {
     ATabs: typeof import('ant-design-vue/es')['Tabs']
     ATextarea: typeof import('ant-design-vue/es')['Textarea']
     AUpload: typeof import('ant-design-vue/es')['Upload']
+    AWatermark: typeof import('ant-design-vue/es')['Watermark']
     LoginView: typeof import('./src/components/LoginView/LoginView.vue')['default']
     NotFoundView: typeof import('./src/components/NotFoundView/NotFoundView.vue')['default']
     RegisterView: typeof import('./src/components/LoginView/RegisterView.vue')['default']

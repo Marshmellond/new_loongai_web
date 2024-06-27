@@ -15,10 +15,12 @@ const get_rec_data = () => {
         counter.recording.unshift(i)
       }
       if (counter.recording.length > 0) {
+        localStorage.setItem('chat_selected_item', counter.recording[0][0]);
         counter.selected_item = counter.recording[0][0];
       }
     }
     if (counter.recording.length === 0) {
+      localStorage.setItem('chat_selected_item', "");
       counter.selected_item = "";
     }
   })

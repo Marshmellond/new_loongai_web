@@ -121,9 +121,11 @@ const get_rec_data = (status: boolean) => {
       }
     }
     if (status) {
+      localStorage.setItem('chat_selected_item', counter.recording[0][0]);
       counter.selected_item = counter.recording[0][0]
     }
     if (counter.recording.length === 0) {
+      localStorage.setItem('chat_selected_item', "");
       counter.selected_item = "";
     }
   })
@@ -154,6 +156,7 @@ const search_record = () => {
         counter.recording.unshift(i)
       }
       if (counter.recording.length > 0) {
+        localStorage.setItem('chat_selected_item', counter.recording[0][0]);
         counter.selected_item = counter.recording[0][0];
       }
     }
@@ -187,6 +190,7 @@ const delete_record = (id: string) => {
     }
   })
   if (counter.recording.length === 0) {
+    localStorage.setItem('chat_selected_item', "");
     counter.selected_item = "";
   }
 
