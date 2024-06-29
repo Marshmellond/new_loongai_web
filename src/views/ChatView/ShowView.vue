@@ -983,6 +983,7 @@ const delete_message = (id) => {
     display: flex;
     justify-content: flex-end;
     margin-right: 2vw;
+    margin-top: 1vh;
 
     .ant-head2-user {
       background-color: #e8e4e4;
@@ -1014,7 +1015,7 @@ const delete_message = (id) => {
 
     .div-content-user {
       margin-top: 0.5%;
-      margin-bottom: 2%;
+      margin-bottom: 1%;
       max-width: 60vw;
       min-height: 10%; /* 设置最小高度 */
       background: #dfe8fd;

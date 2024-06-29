@@ -363,7 +363,7 @@ const add_record = () => {
         display: flex;
         flex-direction: column;
         height: 100%;
-        //transition: background 0.3s ease;
+        margin-left: 0.2vh;
 
         &:hover {
           background: #f0f0f0;

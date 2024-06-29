@@ -10,6 +10,12 @@
   },
   "dependencies": {
     "@types/marked": "^6.0.0",
+    "@vue-flow/background": "^1.3.0",
+    "@vue-flow/controls": "^1.1.2",
+    "@vue-flow/core": "^1.37.1",
+    "@vue-flow/minimap": "^1.5.0",
+    "@vue-flow/node-resizer": "^1.4.0",
+    "@vue-flow/node-toolbar": "^1.1.0",
     "ant-design-vue": "^4.2.1",
     "highlight.js": "^11.9.0",
     "marked": "^12.0.2",
