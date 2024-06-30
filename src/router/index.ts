@@ -11,12 +11,12 @@ const router = createRouter({
         {
             path: '/workflow',
             name: 'workflow',
-            component: () => import('../views/WorkflowView/LayoutView.vue')
+            component: () => import('@/views/WorkflowView/LayoutView.vue')
         },
         {
             path: '/app',
             name: 'app',
-            component: () => import('../views/AppView/LayoutView.vue')
+            component: () => import('@/views/AppView/LayoutView.vue')
         },
         {
             path: '/draw',
@@ -26,7 +26,7 @@ const router = createRouter({
         {
             path: '/gallery',
             name: 'gallery',
-            component: () => import('../views/GalleryView/LayoutView.vue')
+            component: () => import('@/views/GalleryView/LayoutView.vue')
         },
         {
             path: '/ppt',
@@ -41,12 +41,12 @@ const router = createRouter({
         {
             path: '/about',
             name: 'about',
-            component: () => import('../views/AboutView/LayoutView.vue')
+            component: () => import('@/views/AboutView/LayoutView.vue')
         },
         {
             path: '/key',
             name: 'key',
-            component: () => import('../views/KeyView/LayoutView.vue')
+            component: () => import('@/views/KeyView/LayoutView.vue')
         },
         {
             path: '/login',

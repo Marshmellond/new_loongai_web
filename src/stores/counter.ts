@@ -1,6 +1,6 @@
 import {ref} from 'vue'
 import {defineStore} from 'pinia'
-import type {CascaderProps} from 'ant-design-vue';
+
 
 export const useCounterStore = defineStore('counter', () => {
     const selectedKeys = ref<string[]>(['1']); // 左侧导航栏选择
@@ -55,6 +55,9 @@ export const useCounterStore = defineStore('counter', () => {
     const edit_app_options = ref([])
     const edit_temp_select_red_id = ref("")
     const chat_rec_title = ref("") // 对面页面显示页面对话记录选择
+
+    // ------------------工作流页面------------------
+    const nodes = ref([]) // 节点
     return {
         selectedKeys,
         recording,
@@ -107,6 +110,7 @@ export const useCounterStore = defineStore('counter', () => {
         edit_mod_options,
         edit_app_options,
         edit_temp_select_red_id,
-        chat_rec_title
+        chat_rec_title,
+        nodes
     }
 })
