@@ -57,7 +57,13 @@ export const useCounterStore = defineStore('counter', () => {
     const chat_rec_title = ref("") // 对面页面显示页面对话记录选择
 
     // ------------------工作流页面------------------
-    const nodes = ref([]) // 节点
+    const nodes = ref([{
+        id: '1',
+        data: {label: 'Node 1'},
+        // this will create the node-type `custom`
+        type: 'custom',
+        position: {x: 50, y: 50},
+    }]) // 节点
     return {
         selectedKeys,
         recording,

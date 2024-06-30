@@ -1,6 +1,37 @@
 <script setup lang="ts">
-
 import Icon from "@ant-design/icons-vue";
+import {useCounterStore} from '@/stores/counter'
+import {ref} from "vue";
+import { Panel, VueFlow, useVueFlow } from '@vue-flow/core'
+
+
+const counter = useCounterStore()
+const initialNodes = ref([
+  {
+    id: '1',
+    position: { x: 50, y: 50 },
+    data: { label: 'Node 1' },
+  }
+])
+const { addNodes } = useVueFlow()
+
+function generateRandomNode() {
+  return {
+    id: Math.random().toString(),
+    position: { x: Math.random() * 500, y: Math.random() * 500 },
+    label: 'Random Node',
+  }
+}
+
+function onAddNode() {
+  // add a single node to the graph
+  addNodes(generateRandomNode())
+}
+
+function onAddNodes() {
+  // add multiple nodes to the graph
+  addNodes(Array.from({ length: 10 }, generateRandomNode))
+}
 </script>
 
 <template>
@@ -9,7 +40,7 @@ import Icon from "@ant-design/icons-vue";
   </div>
   <div class="div1-content">
     <span style="font-size: 16px;margin-top: 2vh">文本输出</span>
-    <div class="div1-t1">
+    <div class="div1-t1" @click="onAddNode">
       <icon :style="{ color: '#000000'}">
         <template #component>
           <svg t="1719753473385" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"

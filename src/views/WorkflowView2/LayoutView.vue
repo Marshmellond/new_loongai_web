@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import LeftView from "@/views/WorkflowView/LeftView.vue";
 import RightView from "@/views/WorkflowView/RightView.vue";
 import '@vue-flow/core/dist/style.css';
@@ -14,49 +14,34 @@ import {Background} from '@vue-flow/background'
 import {ControlButton, Controls} from '@vue-flow/controls'
 import {MiniMap} from '@vue-flow/minimap'
 import Icon from "@ant-design/icons-vue";
+import SaveRestoreControls from './Controls.vue'
 
+
+import CustomNode from './CustomNode.vue'
+
+const nodes = ref([
+  {
+    id: '1',
+    data: {label: 'Node 1'},
+    // this will create the node-type `custom`
+    type: 'custom',
+    position: {x: 50, y: 50},
+  },
+  {
+    id: '2',
+    data: {label: 'Node 1'},
+    // this will create the node-type `custom`
+    type: 'custom',
+    position: {x: 50, y: 50},
+  }
+])
 </script>
 
 <template>
-  <div class="div1">
-    <LeftView></LeftView>
-  </div>
-  <div class="div2">
-    <RightView></RightView>
-  </div>
-  <VueFlow :nodes="nodes" class="div-flow">
-    <Background/>
+  <VueFlow :nodes="nodes">
+    <SaveRestoreControls />
+    <template #node-custom="customNodeProps">
+      <CustomNode v-bind="customNodeProps"/>
+    </template>
   </VueFlow>
-
 </template>
-
-<style scoped lang="less">
-
-
-.div-flow {
-  position: relative;
-  width: 74.3vw;
-  left: 10vw;
-}
-
-.div1 {
-  display: flex;
-  flex-direction: column;
-  width: 10vw;
-  height: 95.5vh;
-  position: absolute;
-  background: @theme-background-color;
-  border-left: 1px solid @theme-border-color;
-}
-
-
-.div2 {
-  display: flex;
-  flex-direction: column;
-  width: 10vw;
-  height: 95.5vh;
-  position: absolute;
-  right: 0;
-  background: @theme-background-color;
-}
-</style>
