@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import InputView from "@/views/WorkflowView/RightView/InputView.vue";
-import ResultView from "@/views/WorkflowView/RightView/ResultView.vue";
+import InputView from "@/views/WorkflowView/PanelView/RightView/InputView.vue";
+import ResultView from "@/views/WorkflowView/PanelView/RightView/ResultView.vue";
 import {ref} from 'vue';
 
 const activeKey = ref('1');

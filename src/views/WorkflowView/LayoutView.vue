@@ -6,8 +6,8 @@ const counter = useCounterStore()
 localStorage.setItem('selectedKey', "2");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 
-import LeftView from "@/views/WorkflowView/LeftView.vue";
-import RightView from "@/views/WorkflowView/RightView.vue";
+import LeftView from "@/views/WorkflowView/PanelView/LeftView/LeftView.vue";
+import RightView from "@/views/WorkflowView/PanelView/RightView/RightView.vue";
 import '@vue-flow/core/dist/style.css';
 import '@vue-flow/core/dist/theme-default.css';
 import {VueFlow, Panel, useVueFlow} from '@vue-flow/core'
@@ -15,9 +15,25 @@ import {Background} from '@vue-flow/background'
 import {ControlButton, Controls} from '@vue-flow/controls'
 import {MiniMap} from '@vue-flow/minimap'
 import Icon from "@ant-design/icons-vue";
+import BasicIcon from "@/views/WorkflowView/BasicView/BasicIcon.vue";
+import SaveRestoreControls from '@/views/WorkflowView/SaveUtilsView/Controls.vue'
+import "@/views/WorkflowView/BasicView/main.css"
 
+counter.nodes = JSON.parse(localStorage.getItem("vue-flow--save-restore")).nodes
+console.log(counter.nodes)
 // ------------------------------------变量初始化------------------------------------
-const {onConnect, addEdges, onNodesChange, getNodes, removeNodes, addNodes} = useVueFlow();
+const {
+  onConnect,
+  addEdges,
+  onNodesChange,
+  getNodes,
+  removeNodes,
+  addNodes,
+  onInit,
+  onNodeDragStop,
+  setViewport,
+  toObject
+} = useVueFlow();
 onConnect(addEdges)
 let selectedNode = ref(null)
 
@@ -39,6 +55,7 @@ onNodesChange(handleNodesChange);
 watch(
     () => counter.nodes,
     (newNodes) => {
+      localStorage.setItem("vue-flow--save-restore", JSON.stringify(toObject()))
     },
     {deep: true}
 );
@@ -47,54 +64,48 @@ watch(
 const handleNodeClick = (event, node) => {
   console.log(event, node)
 }
-
-// ------------------------------------画布右键菜单------------------------------------
-let contextMenu = ref({
-  x: 0,
-  y: 0,
-  show: false,
-  nodeId: null
+// ------------------------------------左上角基本的工具栏------------------------------------
+onInit((vueFlowInstance) => {
+  vueFlowInstance.fitView()
 })
 
-const handleContextMenu = (event) => {
-  event.preventDefault()
-  contextMenu.value.show = true
-  contextMenu.value.x = event.clientX - 280
-  contextMenu.value.y = event.clientY - 100
-}
 
-const handleContextMenuAction = (action) => {
-  if (action === 'delete' && contextMenu.value.nodeId) {
-    removeNodes([contextMenu.value.nodeId])
-    counter.nodes = counter.nodes.filter(node => node.id !== contextMenu.value.nodeId)
-  } else {
-    // 根据不同的 action 添加不同的节点
-    const newNode = {
-      id: `node_${counter.nodes.length + 1}`,
-      type: action,
-      position: { x: contextMenu.value.x, y: contextMenu.value.y },
-      // 其他节点属性...
+onNodeDragStop(({event, nodes, node}) => {
+  console.log('Node Drag Stop', {event, nodes, node})
+})
+
+
+onConnect((connection) => {
+  addEdges(connection)
+})
+
+
+function updatePos() {
+  counter.nodes = counter.nodes.map((node) => {
+    return {
+      ...node,
+      position: {
+        x: Math.random() * 400,
+        y: Math.random() * 400,
+      },
     }
-    addNode(newNode)
-    counter.nodes.push(newNode)
-  }
-  contextMenu.value.show = false
+  })
 }
 
-// 监听整个页面的点击事件，用于关闭右键菜单
-const handleClick = () => {
-  if (contextMenu.value.show) {
-    contextMenu.value.show = false
-  }
+
+function logToObject() {
+  console.log(toObject())
 }
 
-onMounted(() => {
-  window.addEventListener('click', handleClick)
-})
 
-onUnmounted(() => {
-  window.removeEventListener('click', handleClick)
-})
+function resetTransform() {
+  setViewport({x: 0, y: 0, zoom: 1})
+}
+
+function toggleDarkMode() {
+  counter.dark = !counter.dark
+}
+
 </script>
 
 <template>
@@ -104,55 +115,46 @@ onUnmounted(() => {
   <div class="div2">
     <RightView></RightView>
   </div>
-  <VueFlow :nodes="counter.nodes" class="div-flow" @node-click="handleNodeClick" @contextmenu="handleContextMenu">
+  <VueFlow
+      class="basic-flow"
+      :nodes="counter.nodes"
+      :edges="counter.edges"
+      :class="counter.dark"
+      :default-viewport="{ zoom: 1.5 }"
+      :min-zoom="0.2"
+      :max-zoom="4"
+      @node-click="handleNodeClick">
+    <SaveRestoreControls/>
     <Background/>
-  <div v-if="contextMenu.show" class="context-menu" :style="{ left: contextMenu.x + 'px', top: contextMenu.y + 'px' }">
-    <ul>
-      <li @click="handleContextMenuAction('add')">增加节点</li>
-      <li @click="handleContextMenuAction('reply')">指定回复</li>
-      <li @click="handleContextMenuAction('decision')">判断器</li>
-      <li @click="handleContextMenuAction('variable')">变量更新</li>
-      <li v-if="contextMenu.nodeId" @click="handleContextMenuAction('delete')">删除节点</li>
-    </ul>
-  </div>
+    <MiniMap/>
+    <Controls position="top-left">
+      <ControlButton title="Reset Transform" @click="resetTransform">
+        <BasicIcon name="reset"/>
+      </ControlButton>
+
+      <ControlButton title="Shuffle Node Positions" @click="updatePos">
+        <BasicIcon name="update"/>
+      </ControlButton>
+
+      <ControlButton title="Toggle Dark Mode" @click="toggleDarkMode">
+        <BasicIcon v-if="counter.dark" name="sun"/>
+        <BasicIcon v-else name="moon"/>
+      </ControlButton>
+
+      <ControlButton title="Log `toObject`" @click="logToObject">
+        <BasicIcon name="log"/>
+      </ControlButton>
+    </Controls>
   </VueFlow>
 
 </template>
 
 <style scoped lang="less">
-.context-menu {
-  position: absolute;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  z-index: 1000;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
-  li {
-    padding: 4px 8px;
-    cursor: pointer;
-    border-bottom: 1px solid #ddd;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    &:hover {
-      background-color: #eee;
-    }
-  }
-}
-
-.div-flow {
-  position: relative;
-  width: 74.3vw;
-  left: 10vw;
-}
 
 .div1 {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   width: 10vw;
   height: 95.5vh;
   position: absolute;

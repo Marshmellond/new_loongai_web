@@ -107,6 +107,7 @@ const test_move = () => {
     border-radius: 5px;
     margin-top: 1vh;
     cursor: pointer;
+    user-select: none;
 
     &:hover {
       background: #f2f4f6;

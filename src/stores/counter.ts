@@ -58,11 +58,12 @@ export const useCounterStore = defineStore('counter', () => {
 
     // ------------------工作流页面------------------
     const nodes = ref([{
-    id: "11111",
-    position: {x: 150, y: 50},
-    data: {label: `Node 11111`,},
-  }]) // 节点
+        id: "11111",
+        position: {x: 150, y: 50},
+        data: {label: `Node 11111`,},
+    }]) // 节点
     const edges = ref([]) // 连接关系
+    const dark = ref(false) // 主题
     return {
         selectedKeys,
         recording,
@@ -118,5 +119,6 @@ export const useCounterStore = defineStore('counter', () => {
         chat_rec_title,
         nodes,
         edges,
+        dark,
     }
 })
