@@ -18,7 +18,6 @@ import BasicIcon from "@/views/WorkflowView/BasicView/BasicIcon.vue";
 import SaveRestoreControls from '@/views/WorkflowView/SaveUtilsView/Controls.vue'
 import "@/views/WorkflowView/BasicView/main.css"
 
-counter.nodes = JSON.parse(localStorage.getItem("vue-flow--save-restore")).nodes
 // ------------------------------------变量初始化------------------------------------
 const dark = ref(true) // 主题
 let selectedNode = ref(null) // 选择节点
@@ -40,19 +39,14 @@ const {
 } = useVueFlow();
 
 onConnect(addEdges)
-
-const initialize_variable = () => {
-  if (localStorage.getItem("vue-flow--save-dark") == "true") {
-    dark.value = true
-  } else {
-    dark.value = false
-  }
-  if (JSON.parse(localStorage.getItem("vue-flow--save-restore")) != null) {
-    counter.nodes = JSON.parse(localStorage.getItem("vue-flow--save-restore")).nodes
-  }
-
+if (localStorage.getItem("vue-flow--save-dark") == "true") {
+  dark.value = true
+} else {
+  dark.value = false
 }
-onMounted(initialize_variable)
+if (localStorage.getItem("vue-flow--save-restore")?.length > 0) {
+  counter.nodes = JSON.parse(localStorage.getItem("vue-flow--save-restore")).nodes
+}
 
 // ------------------------------------移动node------------------------------------
 const handleNodesChange = (changes) => { // node移动变化
@@ -77,9 +71,40 @@ watch(
 );
 
 // ------------------------------------选中node------------------------------------
-const handleNodeClick = (event, node) => {
-  console.log(event, node)
-}
+const handleNodeClick = (event) => {
+  selectedNode.value = event.node.id;
+};
+
+// ------------------------------------删除node------------------------------------
+const deleteNode = (nodeId) => {
+  // 从VueFlow中删除节点
+  removeNodes([nodeId]);
+  // 从counter.nodes中删除节点
+  counter.nodes = counter.nodes.filter(node => node.id !== nodeId);
+  console.log(counter.nodes)
+};
+
+// 监听键盘事件
+const handleKeyDown = (event) => {
+  if (event.key === 'Backspace' || event.key === 'Delete') {
+    // 如果有选中的节点，则删除它
+    if (selectedNode.value) {
+      deleteNode(selectedNode.value);
+      selectedNode.value = null;
+    }
+  }
+};
+
+// 在组件挂载时添加键盘事件监听器
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown);
+});
+
+// 在组件卸载时移除键盘事件监听器
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown);
+});
+
 // ------------------------------------左上角基本的工具栏------------------------------------
 onInit((vueFlowInstance) => {
   vueFlowInstance.fitView()
@@ -88,11 +113,6 @@ onInit((vueFlowInstance) => {
 
 onNodeDragStop(({event, nodes, node}) => {
   console.log('Node Drag Stop', {event, nodes, node})
-})
-
-
-onConnect((connection) => {
-  addEdges(connection)
 })
 
 
