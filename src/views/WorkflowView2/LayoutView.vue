@@ -1,6 +1,4 @@
 <script setup>
-import LeftView from "@/views/WorkflowView/LeftView.vue";
-import RightView from "@/views/WorkflowView/RightView.vue";
 import '@vue-flow/core/dist/style.css';
 import '@vue-flow/core/dist/theme-default.css';
 import {useCounterStore} from '@/stores/counter'
@@ -8,40 +6,25 @@ import {useCounterStore} from '@/stores/counter'
 const counter = useCounterStore()
 localStorage.setItem('selectedKey', "2");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
-import {ref, onMounted} from 'vue'
-import {VueFlow, Panel, useVueFlow} from '@vue-flow/core'
-import {Background} from '@vue-flow/background'
-import {ControlButton, Controls} from '@vue-flow/controls'
-import {MiniMap} from '@vue-flow/minimap'
-import Icon from "@ant-design/icons-vue";
-import SaveRestoreControls from './Controls.vue'
+import {ref} from 'vue'
+import {VueFlow, useVueFlow} from '@vue-flow/core'
+import DropzoneBackground from './DropzoneBackground.vue'
+import Sidebar from './Sidebar.vue'
+import useDragAndDrop from './useDnD'
+import useDn
+const {onConnect, addEdges} = useVueFlow()
 
+const {onDragOver, onDrop, onDragLeave, isDragOver} = useDragAndDrop()
 
-import CustomNode from './CustomNode.vue'
+const nodes = ref([])
 
-const nodes = ref([
-  {
-    id: '1',
-    data: {label: 'Node 1'},
-    // this will create the node-type `custom`
-    type: 'custom',
-    position: {x: 50, y: 50},
-  },
-  {
-    id: '2',
-    data: {label: 'Node 1'},
-    // this will create the node-type `custom`
-    type: 'custom',
-    position: {x: 50, y: 50},
-  }
-])
+onConnect(addEdges)
 </script>
 
 <template>
-  <VueFlow :nodes="nodes">
-    <SaveRestoreControls />
-    <template #node-custom="customNodeProps">
-      <CustomNode v-bind="customNodeProps"/>
-    </template>
-  </VueFlow>
+  <div class="dnd-flow" @drop="onDrop">
+    <VueFlow :nodes="nodes" @dragover="onDragOver" @dragleave="onDragLeave">
+    </VueFlow>
+    <Sidebar/>
+  </div>
 </template>

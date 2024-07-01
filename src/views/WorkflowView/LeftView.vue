@@ -2,35 +2,22 @@
 import Icon from "@ant-design/icons-vue";
 import {useCounterStore} from '@/stores/counter'
 import {ref} from "vue";
-import { Panel, VueFlow, useVueFlow } from '@vue-flow/core'
+import {Panel, VueFlow, useVueFlow} from '@vue-flow/core'
 
 
 const counter = useCounterStore()
-const initialNodes = ref([
-  {
-    id: '1',
-    position: { x: 50, y: 50 },
-    data: { label: 'Node 1' },
-  }
-])
-const { addNodes } = useVueFlow()
 
-function generateRandomNode() {
-  return {
-    id: Math.random().toString(),
-    position: { x: Math.random() * 500, y: Math.random() * 500 },
-    label: 'Random Node',
-  }
+
+const add_ai_node = () => {
+  const id = Date.now().toString()
+  counter.nodes.push({
+    id: id,
+    position: {x: 150, y: 50},
+    data: {label: `Node ${id}`,},
+  })
 }
-
-function onAddNode() {
-  // add a single node to the graph
-  addNodes(generateRandomNode())
-}
-
-function onAddNodes() {
-  // add multiple nodes to the graph
-  addNodes(Array.from({ length: 10 }, generateRandomNode))
+const test_move = () => {
+  console.log(counter.nodes)
 }
 </script>
 
@@ -40,7 +27,7 @@ function onAddNodes() {
   </div>
   <div class="div1-content">
     <span style="font-size: 16px;margin-top: 2vh">文本输出</span>
-    <div class="div1-t1" @click="onAddNode">
+    <div class="div1-t1" @click="add_ai_node">
       <icon :style="{ color: '#000000'}">
         <template #component>
           <svg t="1719753473385" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +40,7 @@ function onAddNodes() {
       </icon>
       <span style="margin-left: 1vh">AI 对话</span>
     </div>
-    <div class="div1-t1">
+    <div class="div1-t1" @click="test_move">
       <icon :style="{ color: '#000000'}">
         <template #component>
           <svg t="1719754481120" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -119,6 +106,7 @@ function onAddNodes() {
     padding: 1vh;
     border-radius: 5px;
     margin-top: 1vh;
+    cursor: pointer;
 
     &:hover {
       background: #f2f4f6;
