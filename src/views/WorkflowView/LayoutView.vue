@@ -18,6 +18,7 @@ import BasicIcon from "@/views/WorkflowView/BasicView/BasicIcon.vue";
 import SaveRestoreControls from '@/views/WorkflowView/SaveUtilsView/Controls.vue'
 import "@/views/WorkflowView/BasicView/main.css"
 
+
 // ------------------------------------变量初始化------------------------------------
 const dark = ref(true) // 主题
 let selectedNode = ref(null) // 选择节点
@@ -39,33 +40,31 @@ const {
 } = useVueFlow();
 
 onConnect(addEdges)
-if (localStorage.getItem("vue-flow--save-dark") == "true") {
+if (localStorage.getItem("flow_dark") == "true") {
   dark.value = true
 } else {
   dark.value = false
 }
-if (localStorage.getItem("vue-flow--save-restore")?.length > 0) {
-  counter.nodes = JSON.parse(localStorage.getItem("vue-flow--save-restore")).nodes
+if (localStorage.getItem("flow_data")?.length > 0) {
+  counter.flow_data = JSON.parse(localStorage.getItem("flow_data"))
 }
-
 // ------------------------------------移动node------------------------------------
 const handleNodesChange = (changes) => { // node移动变化
   changes.forEach(change => {
     if (change.type === 'position' && change.position) {
-      const nodeIndex = counter.nodes.findIndex(n => n.id === change.id);
+      const nodeIndex = counter.flow_data.nodes.findIndex(n => n.id === change.id);
       if (nodeIndex !== -1) {
-        counter.nodes[nodeIndex].position = change.position;
+        counter.flow_data.nodes[nodeIndex].position = change.position;
       }
     }
   });
 };
 onNodesChange(handleNodesChange);
 
-
 watch(
-    () => counter.nodes,
+    () => counter.flow_data,
     (newNodes) => {
-      localStorage.setItem("vue-flow--save-restore", JSON.stringify(toObject()))
+      localStorage.setItem("flow_data", JSON.stringify(toObject()))
     },
     {deep: true}
 );
@@ -75,13 +74,17 @@ const handleNodeClick = (event) => {
   selectedNode.value = event.node.id;
 };
 
+// ------------------------------------连接node------------------------------------
+const handleConnect = () => {
+  localStorage.setItem("flow_data", JSON.stringify(toObject()))
+}
+
 // ------------------------------------删除node------------------------------------
 const deleteNode = (nodeId) => {
   // 从VueFlow中删除节点
   removeNodes([nodeId]);
   // 从counter.nodes中删除节点
-  counter.nodes = counter.nodes.filter(node => node.id !== nodeId);
-  console.log(counter.nodes)
+  counter.flow_data.nodes = counter.flow_data.nodes.filter(node => node.id !== nodeId);
 };
 
 // 监听键盘事件
@@ -112,12 +115,11 @@ onInit((vueFlowInstance) => {
 
 
 onNodeDragStop(({event, nodes, node}) => {
-  console.log('Node Drag Stop', {event, nodes, node})
 })
 
 
 function updatePos() {
-  counter.nodes = counter.nodes.map((node) => {
+  counter.flow_data.nodes = counter.flow_data.nodes.map((node) => {
     return {
       ...node,
       position: {
@@ -130,7 +132,6 @@ function updatePos() {
 
 
 function logToObject() {
-  console.log(toObject())
 }
 
 
@@ -140,7 +141,7 @@ function resetTransform() {
 
 function toggleDarkMode() {
   dark.value = !dark.value
-  localStorage.setItem("vue-flow--save-dark", dark.value.toString())
+  localStorage.setItem("flow_dark", dark.value.toString())
 }
 
 // ------------------------------------缩放比例------------------------------------
@@ -156,13 +157,15 @@ function toggleDarkMode() {
   </div>
   <VueFlow
       class="basic-flow"
-      :nodes="counter.nodes"
-      :edges="counter.edges"
+      :nodes="counter.flow_data.nodes"
+      :edges="counter.flow_data.edges"
       :class="{ dark }"
       :default-viewport="{ zoom: 1.5 }"
       :min-zoom="0.2"
       :max-zoom="10"
-      @node-click="handleNodeClick">
+      @node-click="handleNodeClick"
+      @connect="handleConnect">
+
     <Background/>
     <SaveRestoreControls/>
     <MiniMap/>

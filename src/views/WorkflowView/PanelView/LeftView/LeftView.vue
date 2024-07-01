@@ -10,14 +10,14 @@ const counter = useCounterStore()
 
 const add_ai_node = () => {
   const id = Date.now().toString()
-  counter.nodes.push({
+  counter.flow_data.nodes.push({
     id: id,
     position: {x: 150, y: 50},
     data: {label: `Node ${id}`,},
   })
 }
 const test_move = () => {
-  console.log(counter.nodes)
+  console.log(counter.flow_data)
 }
 </script>
 

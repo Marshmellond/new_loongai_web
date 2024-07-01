@@ -11,7 +11,7 @@ function onSave() {
 }
 
 function onRestore() {
-  let flow_down = JSON.parse(localStorage.getItem("vue-flow--save-restore"));
+  let flow_down = JSON.parse(localStorage.getItem("flow_data"));
 
   // 创建 Blob 对象
   let blob = new Blob([JSON.stringify(flow_down)], {type: "application/json"});
@@ -22,7 +22,7 @@ function onRestore() {
   // 创建并显示下载链接
   let a = document.createElement("a");
   a.href = url;
-  a.download = "flow_down.json"; // 设置下载文件名
+  a.download = `${Date.now().toString()}.json`; // 设置下载文件名
   document.body.appendChild(a);
   a.click(); // 触发下载
 
