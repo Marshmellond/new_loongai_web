@@ -6,37 +6,53 @@ const counter = useCounterStore()
 localStorage.setItem('selectedKey', "2");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 
-import LeftView from "@/views/WorkflowView/PanelView/LeftView/LeftView.vue";
-import RightView from "@/views/WorkflowView/PanelView/RightView/RightView.vue";
 import '@vue-flow/core/dist/style.css';
 import '@vue-flow/core/dist/theme-default.css';
+import LeftView from "@/views/WorkflowView/PanelView/LeftView/LeftView.vue";
+import RightView from "@/views/WorkflowView/PanelView/RightView/RightView.vue";
 import {VueFlow, Panel, useVueFlow} from '@vue-flow/core'
 import {Background} from '@vue-flow/background'
 import {ControlButton, Controls} from '@vue-flow/controls'
 import {MiniMap} from '@vue-flow/minimap'
-import Icon from "@ant-design/icons-vue";
 import BasicIcon from "@/views/WorkflowView/BasicView/BasicIcon.vue";
 import SaveRestoreControls from '@/views/WorkflowView/SaveUtilsView/Controls.vue'
 import "@/views/WorkflowView/BasicView/main.css"
 
 counter.nodes = JSON.parse(localStorage.getItem("vue-flow--save-restore")).nodes
-console.log(counter.nodes)
 // ------------------------------------变量初始化------------------------------------
+const dark = ref(true) // 主题
+let selectedNode = ref(null) // 选择节点
 const {
   onConnect,
   addEdges,
   onNodesChange,
-  getNodes,
-  removeNodes,
-  addNodes,
   onInit,
   onNodeDragStop,
   setViewport,
-  toObject
+  getViewport,
+  toObject,
+  getNodes,
+  removeNodes,
+  addNodes,
+  onEdgesChange,
+  applyNodeChanges,
+  applyEdgeChanges,
 } = useVueFlow();
-onConnect(addEdges)
-let selectedNode = ref(null)
 
+onConnect(addEdges)
+
+const initialize_variable = () => {
+  if (localStorage.getItem("vue-flow--save-dark") == "true") {
+    dark.value = true
+  } else {
+    dark.value = false
+  }
+  if (JSON.parse(localStorage.getItem("vue-flow--save-restore")) != null) {
+    counter.nodes = JSON.parse(localStorage.getItem("vue-flow--save-restore")).nodes
+  }
+
+}
+onMounted(initialize_variable)
 
 // ------------------------------------移动node------------------------------------
 const handleNodesChange = (changes) => { // node移动变化
@@ -103,8 +119,11 @@ function resetTransform() {
 }
 
 function toggleDarkMode() {
-  counter.dark = !counter.dark
+  dark.value = !dark.value
+  localStorage.setItem("vue-flow--save-dark", dark.value.toString())
 }
+
+// ------------------------------------缩放比例------------------------------------
 
 </script>
 
@@ -119,29 +138,29 @@ function toggleDarkMode() {
       class="basic-flow"
       :nodes="counter.nodes"
       :edges="counter.edges"
-      :class="counter.dark"
+      :class="{ dark }"
       :default-viewport="{ zoom: 1.5 }"
       :min-zoom="0.2"
-      :max-zoom="4"
+      :max-zoom="10"
       @node-click="handleNodeClick">
-    <SaveRestoreControls/>
     <Background/>
+    <SaveRestoreControls/>
     <MiniMap/>
     <Controls position="top-left">
-      <ControlButton title="Reset Transform" @click="resetTransform">
+      <ControlButton title="重置变换" @click="resetTransform">
         <BasicIcon name="reset"/>
       </ControlButton>
 
-      <ControlButton title="Shuffle Node Positions" @click="updatePos">
+      <ControlButton title="无序排列节点位置" @click="updatePos">
         <BasicIcon name="update"/>
       </ControlButton>
 
-      <ControlButton title="Toggle Dark Mode" @click="toggleDarkMode">
-        <BasicIcon v-if="counter.dark" name="sun"/>
+      <ControlButton title="切换主题" @click="toggleDarkMode">
+        <BasicIcon v-if="dark" name="sun"/>
         <BasicIcon v-else name="moon"/>
       </ControlButton>
 
-      <ControlButton title="Log `toObject`" @click="logToObject">
+      <ControlButton title="日志`" @click="logToObject">
         <BasicIcon name="log"/>
       </ControlButton>
     </Controls>

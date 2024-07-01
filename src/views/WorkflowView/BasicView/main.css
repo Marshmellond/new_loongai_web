@@ -10,21 +10,7 @@
     left: 10vw;
 }
 
-html,
-body,
-#app {
-    margin: 0;
-    height: 100%;
-}
 
-#app {
-    text-transform: uppercase;
-    font-family: 'JetBrains Mono', monospace;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-}
 
 .vue-flow__minimap {
     transform: scale(75%);
