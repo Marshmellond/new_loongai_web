@@ -9,12 +9,18 @@ const counter = useCounterStore()
 
 
 const add_ai_node = () => {
-  const id = Date.now().toString()
-  counter.flow_data.nodes.push({
-    id: id,
-    position: {x: 150, y: 50},
-    data: {label: `Node ${id}`,},
-  })
+  const newNode = {
+    id: Date.now().toString(),
+    data: {
+      label: 'AI Node',
+      a: 'Parameter A',
+      b: 'Parameter B',
+      c: 'Parameter C' // 添加第三个参数
+    },
+    type: 'ai', // 节点类型
+    position: {x: Math.random() * 400, y: Math.random() * 400},
+  };
+  counter.flow_data.nodes.push(newNode);
 }
 const test_move = () => {
   console.log(counter.flow_data)

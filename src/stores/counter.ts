@@ -57,7 +57,24 @@ export const useCounterStore = defineStore('counter', () => {
     const chat_rec_title = ref("") // 对面页面显示页面对话记录选择
 
     // ------------------工作流页面------------------
-    const flow_data = ref({"nodes": [], "edges": [], "position": []}) // 页面数据
+    const flow_data = ref({
+        "nodes": [{
+            id: `start_${Date.now().toString()}`,
+            data: {
+                label: '',
+            },
+            type: 'start', // 节点类型
+            position: {x: 500, y: 500},
+        }, {
+            id: `end_${Date.now().toString()}`,
+            data: {
+                label: '',
+            },
+            type: 'end', // 节点类型
+            position: {x: 800, y: 500},
+        }], "edges": [], "position": []
+    }) // 页面数据
+    const select_modal_node = ref("") // 节点编辑面板选择
     return {
         selectedKeys,
         recording,
@@ -112,5 +129,6 @@ export const useCounterStore = defineStore('counter', () => {
         edit_temp_select_red_id,
         chat_rec_title,
         flow_data,
+        select_modal_node,
     }
 })

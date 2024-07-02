@@ -10,6 +10,10 @@ import '@vue-flow/core/dist/style.css';
 import '@vue-flow/core/dist/theme-default.css';
 import LeftView from "@/views/WorkflowView/PanelView/LeftView/LeftView.vue";
 import RightView from "@/views/WorkflowView/PanelView/RightView/RightView.vue";
+import StartNodeView from "@/views/WorkflowView/CustomNodeView/StartNodeView.vue";
+import StartEditView from "@/views/WorkflowView/ModalNodeView/StartEditView.vue";
+import AiNodeView from "@/views/WorkflowView/CustomNodeView/AiNodeView.vue";
+import EndNodeView from "@/views/WorkflowView/CustomNodeView/EndNodeView.vue";
 import {VueFlow, Panel, useVueFlow} from '@vue-flow/core'
 import {Background} from '@vue-flow/background'
 import {ControlButton, Controls} from '@vue-flow/controls'
@@ -45,8 +49,16 @@ if (localStorage.getItem("flow_dark") == "true") {
 } else {
   dark.value = false
 }
-if (localStorage.getItem("flow_data")?.length > 0) {
-  counter.flow_data = JSON.parse(localStorage.getItem("flow_data"))
+let local_flow_data = localStorage.getItem("flow_data")
+if (local_flow_data?.length > 0) {
+  try {
+    let json_flow_data = JSON.parse(localStorage.getItem("flow_data"))
+    if (json_flow_data.nodes.length > 0) {
+      counter.flow_data = json_flow_data
+    }
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 // ------------------------------------移动node------------------------------------
@@ -169,6 +181,7 @@ function toggleDarkMode() {
   <div class="div2">
     <RightView></RightView>
   </div>
+  <StartEditView class="div3" v-if="counter.select_modal_node=='start_edit'"></StartEditView>
   <VueFlow
       class="basic-flow"
       :nodes="counter.flow_data.nodes"
@@ -180,7 +193,15 @@ function toggleDarkMode() {
       @node-click="handleNodeClick"
       @edge-click="handleEdgeClick"
       @connect="handleConnect">
-
+    <template #node-ai="nodeProps">
+      <AiNodeView v-bind="nodeProps"/>
+    </template>
+    <template #node-start="nodeProps">
+      <StartNodeView v-bind="nodeProps"/>
+    </template>
+    <template #node-end="nodeProps">
+      <EndNodeView v-bind="nodeProps"/>
+    </template>
     <Background/>
     <SaveRestoreControls/>
     <MiniMap/>
@@ -203,7 +224,6 @@ function toggleDarkMode() {
       </ControlButton>
     </Controls>
   </VueFlow>
-
 </template>
 
 <style scoped lang="less">
@@ -227,5 +247,10 @@ function toggleDarkMode() {
   position: absolute;
   right: 0;
   background: @theme-background-color;
+}
+
+.div3 {
+  position: absolute;
+  z-index: 3000;
 }
 </style>
