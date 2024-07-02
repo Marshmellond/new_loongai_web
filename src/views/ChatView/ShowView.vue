@@ -843,7 +843,7 @@ const delete_message = (id) => {
 
     .div4-microphone-desc {
       position: absolute;
-      top: -4.5vh;
+      top: -5vh;
       left: -0.2vw;
       width: 5vw;
       height: 4vh;
@@ -861,7 +861,7 @@ const delete_message = (id) => {
       align-items: center;
       justify-content: center;
       left: 0.5vw;
-      top: 1vh;
+      top: 2vh;
       width: 2vw;
 
       .div4-microphone1 {
@@ -891,7 +891,7 @@ const delete_message = (id) => {
       justify-content: center;
       position: relative;
       left: 1vw;
-      top: 1vh;
+      top: 2vh;
       padding: 0.3vh 1vh 0.3vh 1vh;
       transition: background-color 0.3s ease;
       border-radius: 5px;
@@ -914,7 +914,7 @@ const delete_message = (id) => {
       align-items: center;
       justify-content: center;
       position: relative;
-      top: 1vh;
+      top: 2vh;
       left: 55.5vw;
       padding: 0.3vh 1.2vh 0.3vh 1.2vh;
       transition: background-color 0.3s ease;
@@ -938,7 +938,7 @@ const delete_message = (id) => {
     .div4-seed-desc {
       position: relative;
       left: 56.5vw;
-      top: 1.7vh;
+      top: 3vh;
       color: #b4b4b4;
     }
 
@@ -948,7 +948,7 @@ const delete_message = (id) => {
       justify-content: center;
       position: relative;
       left: 57vw;
-      top: 1vh;
+      top: 2vh;
       padding: 0.3vh 1.5vh 0.3vh 1.5vh;
       transition: background-color 0.3s ease;
       border-radius: 5px;

@@ -18,10 +18,10 @@ import BasicIcon from "@/views/WorkflowView/BasicView/BasicIcon.vue";
 import SaveRestoreControls from '@/views/WorkflowView/SaveUtilsView/Controls.vue'
 import "@/views/WorkflowView/BasicView/main.css"
 
-
 // ------------------------------------变量初始化------------------------------------
 const dark = ref(true) // 主题
 let selectedNode = ref(null) // 选择节点
+let selectedEdge = ref(null) // 选择边
 const {
   onConnect,
   addEdges,
@@ -48,6 +48,7 @@ if (localStorage.getItem("flow_dark") == "true") {
 if (localStorage.getItem("flow_data")?.length > 0) {
   counter.flow_data = JSON.parse(localStorage.getItem("flow_data"))
 }
+
 // ------------------------------------移动node------------------------------------
 const handleNodesChange = (changes) => { // node移动变化
   changes.forEach(change => {
@@ -74,6 +75,11 @@ const handleNodeClick = (event) => {
   selectedNode.value = event.node.id;
 };
 
+// ------------------------------------选中edge------------------------------------
+const handleEdgeClick = (event) => {
+  selectedEdge.value = event.edge.id;
+};
+
 // ------------------------------------连接node------------------------------------
 const handleConnect = () => {
   localStorage.setItem("flow_data", JSON.stringify(toObject()))
@@ -87,6 +93,13 @@ const deleteNode = (nodeId) => {
   counter.flow_data.nodes = counter.flow_data.nodes.filter(node => node.id !== nodeId);
 };
 
+// ------------------------------------删除edge------------------------------------
+const deleteEdge = (edgeId) => {
+  // 从VueFlow中删除边
+  const updatedEdges = counter.flow_data.edges.filter(edge => edge.id !== edgeId);
+  counter.flow_data.edges = updatedEdges;
+};
+
 // 监听键盘事件
 const handleKeyDown = (event) => {
   if (event.key === 'Backspace' || event.key === 'Delete') {
@@ -94,6 +107,11 @@ const handleKeyDown = (event) => {
     if (selectedNode.value) {
       deleteNode(selectedNode.value);
       selectedNode.value = null;
+    }
+    // 如果有选中的边，则删除它
+    if (selectedEdge.value) {
+      deleteEdge(selectedEdge.value);
+      selectedEdge.value = null;
     }
   }
 };
@@ -113,10 +131,8 @@ onInit((vueFlowInstance) => {
   vueFlowInstance.fitView()
 })
 
-
 onNodeDragStop(({event, nodes, node}) => {
 })
-
 
 function updatePos() {
   counter.flow_data.nodes = counter.flow_data.nodes.map((node) => {
@@ -130,10 +146,8 @@ function updatePos() {
   })
 }
 
-
 function logToObject() {
 }
-
 
 function resetTransform() {
   setViewport({x: 0, y: 0, zoom: 1})
@@ -164,6 +178,7 @@ function toggleDarkMode() {
       :min-zoom="0.2"
       :max-zoom="10"
       @node-click="handleNodeClick"
+      @edge-click="handleEdgeClick"
       @connect="handleConnect">
 
     <Background/>
@@ -183,7 +198,7 @@ function toggleDarkMode() {
         <BasicIcon v-else name="moon"/>
       </ControlButton>
 
-      <ControlButton title="日志`" @click="logToObject">
+      <ControlButton title="日志" @click="logToObject">
         <BasicIcon name="log"/>
       </ControlButton>
     </Controls>
@@ -203,7 +218,6 @@ function toggleDarkMode() {
   background: @theme-background-color;
   border-left: 1px solid @theme-border-color;
 }
-
 
 .div2 {
   display: flex;
