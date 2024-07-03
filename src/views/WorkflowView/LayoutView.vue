@@ -10,10 +10,6 @@ import '@vue-flow/core/dist/style.css';
 import '@vue-flow/core/dist/theme-default.css';
 import LeftView from "@/views/WorkflowView/PanelView/LeftView/LeftView.vue";
 import RightView from "@/views/WorkflowView/PanelView/RightView/RightView.vue";
-import StartNodeView from "@/views/WorkflowView/CustomNodeView/StartNodeView.vue";
-import StartEditView from "@/views/WorkflowView/ModalNodeView/StartEditView.vue";
-import AiNodeView from "@/views/WorkflowView/CustomNodeView/AiNodeView.vue";
-import EndNodeView from "@/views/WorkflowView/CustomNodeView/EndNodeView.vue";
 import {VueFlow, Panel, useVueFlow} from '@vue-flow/core'
 import {Background} from '@vue-flow/background'
 import {ControlButton, Controls} from '@vue-flow/controls'
@@ -21,6 +17,18 @@ import {MiniMap} from '@vue-flow/minimap'
 import BasicIcon from "@/views/WorkflowView/BasicView/BasicIcon.vue";
 import SaveRestoreControls from '@/views/WorkflowView/SaveUtilsView/Controls.vue'
 import "@/views/WorkflowView/BasicView/main.css"
+
+
+// ------------------------------------节点面板引入------------------------------------
+import StartNodeView from "@/views/WorkflowView/CustomNodeView/StartNodeView.vue";
+import AiNodeView from "@/views/WorkflowView/CustomNodeView/AiNodeView.vue";
+import EndNodeView from "@/views/WorkflowView/CustomNodeView/EndNodeView.vue";
+import IFNodeView from "@/views/WorkflowView/CustomNodeView/IFNodeView.vue";
+import ReplyNodeView from "@/views/WorkflowView/CustomNodeView/ReplyNodeView.vue";
+import VarUpdateNodeView from "@/views/WorkflowView/CustomNodeView/VarUpdateNodeView.vue";
+// ------------------------------------节点编辑引入------------------------------------
+import StartEditView from "@/views/WorkflowView/ModalNodeView/StartEditView.vue";
+import {message} from "ant-design-vue";
 
 // ------------------------------------变量初始化------------------------------------
 const dark = ref(true) // 主题
@@ -85,13 +93,30 @@ watch(
 // ------------------------------------选中node------------------------------------
 const handleNodeClick = (event) => {
   selectedNode.value = event.node.id;
+  counter.flow_data.nodes = counter.flow_data.nodes.map(n => ({
+    ...n,
+    data: {
+      ...n.data,
+      isSelected: n.id === event.node.id
+    }
+  }));
 };
 
+// ------------------------------------点击空白背景取消选中node------------------------------------
+const handlePaneClick = () => {
+  selectedNode.value = null;
+  counter.flow_data.nodes = counter.flow_data.nodes.map(n => ({
+    ...n,
+    data: {
+      ...n.data,
+      isSelected: false
+    }
+  }));
+};
 // ------------------------------------选中edge------------------------------------
 const handleEdgeClick = (event) => {
   selectedEdge.value = event.edge.id;
 };
-
 // ------------------------------------连接node------------------------------------
 const handleConnect = () => {
   localStorage.setItem("flow_data", JSON.stringify(toObject()))
@@ -99,6 +124,7 @@ const handleConnect = () => {
 
 // ------------------------------------删除node------------------------------------
 const deleteNode = (nodeId) => {
+  console.log("被删了卧槽")
   // 从VueFlow中删除节点
   removeNodes([nodeId]);
   // 从counter.nodes中删除节点
@@ -117,6 +143,11 @@ const handleKeyDown = (event) => {
   if (event.key === 'Backspace' || event.key === 'Delete') {
     // 如果有选中的节点，则删除它
     if (selectedNode.value) {
+      if (selectedNode.value.startsWith("start")) {
+        message.warn("开始节点不可删除")
+        event.preventDefault();
+        return
+      }
       deleteNode(selectedNode.value);
       selectedNode.value = null;
     }
@@ -191,7 +222,10 @@ function toggleDarkMode() {
       :min-zoom="0.2"
       :max-zoom="10"
       @node-click="handleNodeClick"
+      @node-drag-start="handleNodeClick"
+      @pane-click="handlePaneClick"
       @edge-click="handleEdgeClick"
+      :delete-key-code="null"
       @connect="handleConnect">
     <template #node-ai="nodeProps">
       <AiNodeView v-bind="nodeProps"/>
@@ -201,6 +235,15 @@ function toggleDarkMode() {
     </template>
     <template #node-end="nodeProps">
       <EndNodeView v-bind="nodeProps"/>
+    </template>
+    <template #node-if="nodeProps">
+      <IFNodeView v-bind="nodeProps"/>
+    </template>
+    <template #node-reply="nodeProps">
+      <ReplyNodeView v-bind="nodeProps"/>
+    </template>
+    <template #node-var="nodeProps">
+      <VarUpdateNodeView v-bind="nodeProps"/>
     </template>
     <Background/>
     <SaveRestoreControls/>

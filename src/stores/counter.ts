@@ -61,20 +61,28 @@ export const useCounterStore = defineStore('counter', () => {
         "nodes": [{
             id: `start_${Date.now().toString()}`,
             data: {
-                label: '',
+                variable: [
+                    {
+                        id: "0",
+                        name: "输入内容",
+                        label: "content",
+                        value: "你是谁",
+                        max_len: "40",
+                        type: "String",
+                        must: "true"
+                    },
+                    {id: "0", name: "风格", label: "style", value: "写实", max_len: "40", type: "String", must: "false"},
+                    {id: "0", name: "画质", label: "hz", value: "4k", max_len: "40", type: "String", must: "true"},
+                    {id: "0", name: "运动感", label: "yd", value: "强劲", max_len: "40", type: "String", must: "false"},
+                ],
+                isSelected: false,
             },
             type: 'start', // 节点类型
             position: {x: 500, y: 500},
-        }, {
-            id: `end_${Date.now().toString()}`,
-            data: {
-                label: '',
-            },
-            type: 'end', // 节点类型
-            position: {x: 800, y: 500},
-        }], "edges": [], "position": []
+        }], "edges": [], "position": [],
     }) // 页面数据
     const select_modal_node = ref("") // 节点编辑面板选择
+    const start_edit_open = ref(false) // 开始节点编辑按钮开启
     return {
         selectedKeys,
         recording,
@@ -130,5 +138,6 @@ export const useCounterStore = defineStore('counter', () => {
         chat_rec_title,
         flow_data,
         select_modal_node,
+        start_edit_open,
     }
 })
