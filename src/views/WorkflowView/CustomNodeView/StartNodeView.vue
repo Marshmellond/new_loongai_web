@@ -21,7 +21,7 @@ const show_edit = () => {
         <icon :style="{ color: '#000000'}">
           <template #component>
             <svg t="1719928349868" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                 p-id="6773" width="14" height="14">
+                 p-id="6773" width="18" height="18">
               <path
                   d="M946.5 505L560.1 118.8l-25.9-25.9c-12.3-12.2-32.1-12.2-44.4 0L77.5 505c-12.3 12.3-18.9 28.6-18.8 46 0.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8 12.1-12.1 18.7-28.2 18.7-45.3 0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204z m217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7 23.1 23.1L882 542.3h-96.1z"
                   p-id="6774" fill="#ffffff"></path>
@@ -67,7 +67,6 @@ const show_edit = () => {
     align-items: center;
     width: 100%;
     height: 3vh;
-    overflow: hidden;
     margin-bottom: 1vh;
 
     .div2-ico-label {
@@ -123,14 +122,15 @@ const show_edit = () => {
     justify-content: center;
     background: #296ffd;
     border-radius: 7px;
-    width: 1.25vw;
-    height: 2.5vh;
+    width: 1.5vw;
+    height: 3vh;
     margin-right: 0.3vw;
   }
 
   .div0-title {
     font-weight: 900;
-    margin-right: 4.5vw;
+    font-size: 18px;
+    margin-right: 8vw;
   }
 
   .div0-edit {
@@ -140,9 +140,9 @@ const show_edit = () => {
     color: white;
     background: #296ffd;
     border-radius: 7px;
-    width: 1.25vw;
-    height: 2.5vh;
-    font-size: 12px;
+    width: 1.5vw;
+    height: 3vh;
+    font-size: 15px;
   }
 }
 
@@ -150,8 +150,8 @@ const show_edit = () => {
   background: #fdfdfd;
   padding: 1vh;
   border-radius: 5px;
-  width: 15vw;
-  height: 45vh;
+  min-width: 15vw;
+  min-height: 45vh;
 }
 
 .selected {

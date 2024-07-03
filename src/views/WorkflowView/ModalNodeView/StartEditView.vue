@@ -5,6 +5,31 @@ import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
 const handleOk = () => {
+  counter.start_edit_open = false
+}
+const add_variable1 = () => {
+  counter.select_variable_data = "添加变量"
+  counter.variable_data = {
+    id: `variable_${Date.now().toString()}`,
+    name: "",
+    label: "",
+    value: "",
+    max_len: "42",
+    type: "String",
+    must: true
+  }
+  counter.select_modal_node2 = true
+  counter.start_edit_open2 = true
+}
+const add_variable2 = (id) => {
+  counter.select_variable_data = "编辑变量"
+  counter.variable_data = id
+  counter.variable_data = counter.flow_data.nodes[0].data.variable.filter((item) => {
+    return item.id == id
+  })
+  counter.variable_data = counter.variable_data [0]
+  counter.select_modal_node2 = true
+  counter.start_edit_open2 = true
 }
 </script>
 
@@ -12,10 +37,10 @@ const handleOk = () => {
   <a-modal v-model:open="counter.start_edit_open" title="开始" @ok="handleOk" okText="保存" cancelText="关闭">
     <div class="div1">
       <span class="div1-title">全局变量</span>
-      <PlusOutlined class="div1-ico"/>
+      <PlusOutlined class="div1-ico" @click="add_variable1"/>
     </div>
     <div class="div2"
-         v-for="(item) in counter.flow_data.nodes[0].data.variable" :key="item[0]">
+         v-for="(item) in counter.flow_data.nodes[0].data.variable" :key="item.id">
       <icon :style="{ color: '#4381fd'}" class="div2-ico-label">
         <template #component>
           <svg t="1719996910739" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -26,11 +51,11 @@ const handleOk = () => {
           </svg>
         </template>
       </icon>
+      <span class="div2-txt-must" v-if="item.must=='true'">*</span>
       <span class="div2-txt-label">{{ item.label }}</span>
       <span class="div2-txt-name">{{ item.name }}</span>
-      <span class="div2-txt-must" v-if="item.must=='true'">必填</span>
       <span class="div2-txt-type">{{ item.type }}</span>
-      <icon :style="{ color: '#4381fd'}" class="div2-ico-edit">
+      <icon :style="{ color: '#4381fd'}" class="div2-ico-edit" @click="add_variable2(item.id)">
         <template #component>
           <svg t="1720003009290" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
                p-id="2655" width="16" height="16">
@@ -70,21 +95,23 @@ const handleOk = () => {
     left: 0.2vw;
   }
 
+  .div2-txt-must {
+    position: absolute;
+    left: 2.5vw;
+    color: red;
+    font-weight: 700;
+  }
+
   .div2-txt-label {
     position: relative;
-    left: 0.5vw;
+    left: 0.7vw;
   }
 
   .div2-txt-name {
     position: relative;
-    left: 1vw;
+    left: 1.2vw;
   }
 
-
-  .div2-txt-must {
-    position: absolute;
-    left: 18vw;
-  }
 
   .div2-txt-type {
     position: absolute;

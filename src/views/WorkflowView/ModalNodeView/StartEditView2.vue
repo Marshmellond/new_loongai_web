@@ -1,0 +1,77 @@
+<script setup lang="ts">
+import {ref, onMounted, onUnmounted, watch} from 'vue'
+import Icon, {PlusOutlined} from "@ant-design/icons-vue";
+import {useCounterStore} from '@/stores/counter'
+
+const counter = useCounterStore()
+const must = ref(false)
+const save_variable_data1 = () => {
+  counter.flow_data.nodes[0].data.variable.push(counter.variable_data)
+  counter.start_edit_open2 = false
+}
+const save_variable_data2 = () => {
+  counter.start_edit_open2 = false
+}
+const handleOk = () => {
+  if (counter.select_variable_data == "添加变量") {
+    save_variable_data1()
+  } else {
+    save_variable_data2()
+  }
+
+}
+</script>
+
+<template>
+  <a-modal v-model:open="counter.start_edit_open2" title="编辑变量" @ok="handleOk" okText="保存" cancelText="关闭"
+           width="20%">
+    <div class="div1">
+      <span class="div1-title">变量类型</span>
+      <div class="div1-type" :class="{'selected':counter.variable_data.type=='String'}">文本</div>
+    </div>
+    <div class="div2">
+      <span class="div2-title">显示名称</span>
+      <br/>
+      <a-input v-model:value="counter.variable_data.name" autofocus placeholder="请输入"/>
+    </div>
+    <div class="div2">
+      <span class="div2-title">变量名称</span>
+      <br/>
+      <a-input v-model:value="counter.variable_data.label" autofocus placeholder="请输入"/>
+    </div>
+    <div class="div2">
+      <span class="div2-title">最大长度</span>
+      <br/>
+      <a-input v-model:value="counter.variable_data.max_len" autofocus placeholder="请输入"/>
+    </div>
+    <div class="div3">
+      <span class="div2-title">必填</span>
+      <br/>
+      <a-switch v-model:checked="counter.variable_data.must"/>
+    </div>
+  </a-modal>
+</template>
+:class="{'selected': data.isSelected}"
+<style scoped lang="less">
+.div2 {
+  margin-bottom: 1vh;
+}
+
+.div1 {
+  margin-bottom: 1vh;
+
+  .div1-type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    background: #f3f6fd;
+    width: 8vw;
+    height: 6vh;
+  }
+}
+
+.selected {
+  border: 1px solid #518afd;
+}
+</style>

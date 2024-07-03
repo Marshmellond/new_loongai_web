@@ -28,6 +28,7 @@ import ReplyNodeView from "@/views/WorkflowView/CustomNodeView/ReplyNodeView.vue
 import VarUpdateNodeView from "@/views/WorkflowView/CustomNodeView/VarUpdateNodeView.vue";
 // ------------------------------------节点编辑引入------------------------------------
 import StartEditView from "@/views/WorkflowView/ModalNodeView/StartEditView.vue";
+import StartEditView2 from "@/views/WorkflowView/ModalNodeView/StartEditView2.vue";
 import {message} from "ant-design-vue";
 
 // ------------------------------------变量初始化------------------------------------
@@ -213,6 +214,7 @@ function toggleDarkMode() {
     <RightView></RightView>
   </div>
   <StartEditView class="div3" v-if="counter.select_modal_node=='start_edit'"></StartEditView>
+  <StartEditView2 class="div4" v-if="counter.select_modal_node2"></StartEditView2>
   <VueFlow
       class="basic-flow"
       :nodes="counter.flow_data.nodes"
@@ -295,5 +297,10 @@ function toggleDarkMode() {
 .div3 {
   position: absolute;
   z-index: 3000;
+}
+
+.div4 {
+  position: absolute;
+  z-index: 4000;
 }
 </style>

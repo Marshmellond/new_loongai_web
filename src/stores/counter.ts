@@ -69,11 +69,19 @@ export const useCounterStore = defineStore('counter', () => {
                         value: "你是谁",
                         max_len: "40",
                         type: "String",
-                        must: "true"
+                        must: true
                     },
-                    {id: "0", name: "风格", label: "style", value: "写实", max_len: "40", type: "String", must: "false"},
-                    {id: "0", name: "画质", label: "hz", value: "4k", max_len: "40", type: "String", must: "true"},
-                    {id: "0", name: "运动感", label: "yd", value: "强劲", max_len: "40", type: "String", must: "false"},
+                    {
+                        id: "1",
+                        name: "风格",
+                        label: "style",
+                        value: "写实",
+                        max_len: "40",
+                        type: "String",
+                        must: false
+                    },
+                    {id: "2", name: "画质", label: "hz", value: "4k", max_len: "40", type: "String", must: "true"},
+                    {id: "3", name: "运动感", label: "yd", value: "强劲", max_len: "40", type: "String", must: false},
                 ],
                 isSelected: false,
             },
@@ -82,7 +90,11 @@ export const useCounterStore = defineStore('counter', () => {
         }], "edges": [], "position": [],
     }) // 页面数据
     const select_modal_node = ref("") // 节点编辑面板选择
+    const select_modal_node2 = ref(false) // 节点编辑面板选择2
+    const variable_data = ref() // 节点编辑面板选择2 变量临时存储
+    const select_variable_data = ref() // 节点编辑面板选择2 添加或修改
     const start_edit_open = ref(false) // 开始节点编辑按钮开启
+    const start_edit_open2 = ref(false) // 开始节点编辑按钮开启2
     return {
         selectedKeys,
         recording,
@@ -138,6 +150,10 @@ export const useCounterStore = defineStore('counter', () => {
         chat_rec_title,
         flow_data,
         select_modal_node,
+        select_modal_node2,
+        variable_data,
+        select_variable_data,
         start_edit_open,
+        start_edit_open2,
     }
 })
