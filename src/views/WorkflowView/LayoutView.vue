@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, onMounted, onUnmounted, watch} from 'vue'
+import {ref, onMounted, onUnmounted, watch, nextTick, reactive} from 'vue'
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
@@ -27,11 +27,11 @@ import VarUpdateNodeView from "@/views/WorkflowView/CustomNodeView/VarUpdateNode
 // ------------------------------------节点编辑引入------------------------------------
 import StartEditView from "@/views/WorkflowView/ModalNodeView/StartEditView.vue";
 import StartEditView2 from "@/views/WorkflowView/ModalNodeView/StartEditView2.vue";
+import AiEditView from "@/views/WorkflowView/ModalNodeView/AiEditView.vue";
 import {message} from "ant-design-vue";
 
 // ------------------------------------变量初始化------------------------------------
 const dark = ref(true) // 主题
-let selectedEdge = ref(null) // 选择边
 const {
   onConnect,
   addEdges,
@@ -49,9 +49,6 @@ const {
   applyEdgeChanges,
 } = useVueFlow();
 
-onConnect((connection) => {
-  addEdges(connection)
-})
 
 if (localStorage.getItem("flow_dark") == "true") {
   dark.value = true
@@ -91,8 +88,31 @@ watch(
     {deep: true}
 );
 
+const handleConnect = () => {
+  localStorage.setItem("flow_data", JSON.stringify(toObject()))
+}
+// ------------------------------------点击空白背景取消选中node------------------------------------
+const handlePaneClickNode = () => {
+  counter.selectedNode = null;
+  counter.selectedEdge = null;
+  counter.flow_data.nodes = counter.flow_data.nodes.map(n => ({
+    ...n,
+    data: {
+      ...n.data,
+      isSelected: false
+    }
+  }));
+  counter.flow_data.edges = counter.flow_data.edges.map(e => ({
+    ...e,
+    style: {
+      stroke: '#9fbcfc',
+      strokeWidth: 4,
+    }
+  }));
+};
 // ------------------------------------选中node------------------------------------
 const handleNodeClick = (event) => {
+  handlePaneClickNode()
   counter.selectedNode = event.node.id;
   counter.flow_data.nodes = counter.flow_data.nodes.map(n => ({
     ...n,
@@ -103,40 +123,58 @@ const handleNodeClick = (event) => {
   }));
 };
 
-// ------------------------------------点击空白背景取消选中node------------------------------------
-const handlePaneClick = () => {
-  counter.selectedNode = null;
-  counter.flow_data.nodes = counter.flow_data.nodes.map(n => ({
-    ...n,
-    data: {
-      ...n.data,
-      isSelected: false
-    }
-  }));
-};
 // ------------------------------------选中edge------------------------------------
 const handleEdgeClick = (event) => {
-  selectedEdge.value = event.edge.id;
+  handlePaneClickNode()
+  counter.selectedEdge = event.edge.id;
+  for (let i = 0; i < counter.flow_data.edges.length; i++) {
+    if (counter.flow_data.edges[i].id == counter.selectedEdge) {
+      counter.flow_data.edges[i] = {
+        ...counter.flow_data.edges[i],
+        style: {
+          stroke: '#336ffd',
+          strokeWidth: 5
+        }
+      }
+    }
+  }
 };
-// ------------------------------------连接node------------------------------------
-const handleConnect = () => {
-  localStorage.setItem("flow_data", JSON.stringify(toObject()))
-}
 
+// ------------------------------------添加edge------------------------------------
+onConnect((connection) => {
+  connection.id = `vueflow__edge-${connection.source}-${connection.target}`
+  connection.style = {
+    stroke: '#9fbcfc',
+    strokeWidth: 4,
+  }
+  let add_connection_edge = ref(true) // 判断重新添加
+  for (let i = 0; i < counter.flow_data.edges.length; i++) {
+    let flow_temp_data = counter.flow_data.edges[i].id.replace("vueflow__edge-", "").split("-")
+    if ((flow_temp_data[0] === connection.source && flow_temp_data[1] === connection.target) || (flow_temp_data[0] === connection.target && flow_temp_data[1] === connection.source)) {
+      add_connection_edge.value = false
+    }
+  }
+  if (connection.source === connection.target) {
+    message.warn("连接对象错误")
+  } else if (!add_connection_edge.value) {
+    message.warn("请勿重复连接节点")
+  } else {
+    counter.flow_data.edges.push(reactive(connection))
+  }
+})
 // ------------------------------------删除node------------------------------------
 const deleteNode = (nodeId) => {
-  console.log("被删了卧槽")
-  // 从VueFlow中删除节点
   removeNodes([nodeId]);
-  // 从counter.nodes中删除节点
   counter.flow_data.nodes = counter.flow_data.nodes.filter(node => node.id !== nodeId);
+  counter.flow_data.edges = counter.flow_data.edges.filter((edge) => {
+    let flow_temp_data = edge.id.replace("vueflow__edge-", "").split("-");
+    return flow_temp_data[0] !== nodeId && flow_temp_data[1] !== nodeId;
+  });
 };
 
 // ------------------------------------删除edge------------------------------------
 const deleteEdge = (edgeId) => {
-  // 从VueFlow中删除边
-  const updatedEdges = counter.flow_data.edges.filter(edge => edge.id !== edgeId);
-  counter.flow_data.edges = updatedEdges;
+  counter.flow_data.edges = counter.flow_data.edges.filter(edge => edge.id !== edgeId);
 };
 
 // 监听键盘事件
@@ -154,9 +192,9 @@ const handleKeyDown = (event) => {
         counter.selectedNode = null;
       }
       // 如果有选中的边，则删除它
-      if (selectedEdge.value) {
-        deleteEdge(selectedEdge.value);
-        selectedEdge.value = null;
+      if (counter.selectedEdge) {
+        deleteEdge(counter.selectedEdge);
+        counter.selectedEdge = null;
       }
     }
   }
@@ -215,8 +253,10 @@ function toggleDarkMode() {
   <div class="div2">
     <RightView></RightView>
   </div>
+
   <StartEditView class="div3" v-if="counter.select_modal_node=='start_edit'"></StartEditView>
   <StartEditView2 class="div4" v-if="counter.select_modal_node2"></StartEditView2>
+  <AiEditView class="div3" v-if="counter.select_modal_node=='ai_edit'"></AiEditView>
   <VueFlow
       class="basic-flow"
       :nodes="counter.flow_data.nodes"
@@ -227,7 +267,7 @@ function toggleDarkMode() {
       :max-zoom="10"
       @node-click="handleNodeClick"
       @node-drag-start="handleNodeClick"
-      @pane-click="handlePaneClick"
+      @pane-click="handlePaneClickNode"
       @edge-click="handleEdgeClick"
       :delete-key-code="null"
       @connect="handleConnect">
@@ -303,6 +343,6 @@ function toggleDarkMode() {
 
 .div4 {
   position: absolute;
-  z-index: 4000;
+  z-index: 4000 !important;
 }
 </style>

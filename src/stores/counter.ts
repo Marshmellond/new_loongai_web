@@ -89,7 +89,8 @@ export const useCounterStore = defineStore('counter', () => {
             position: {x: 500, y: 500},
         }], "edges": [], "position": [],
     }) // 页面数据
-    const selectedNode = ref(null) // 选择节点
+    const selectedNode = ref(null) // 选择node
+    const selectedEdge = ref(null) // 选择edge
     const edit_start = ref(true) // 是否打开编辑面板
     const select_modal_node = ref("") // 节点编辑面板选择
     const select_modal_node2 = ref(false) // 节点编辑面板选择2
@@ -97,6 +98,8 @@ export const useCounterStore = defineStore('counter', () => {
     const select_variable_data = ref() // 节点编辑面板选择2 添加或修改
     const start_edit_open = ref(false) // 开始节点编辑按钮开启
     const start_edit_open2 = ref(false) // 开始节点编辑按钮开启2
+    const ai_edit_open = ref(false) // Ai节点编辑按钮开启
+    const ai_node_data = ref({}) //Ai节点选中的数据
     return {
         selectedKeys,
         recording,
@@ -155,9 +158,12 @@ export const useCounterStore = defineStore('counter', () => {
         edit_start,
         select_modal_node,
         select_modal_node2,
+        selectedEdge,
         variable_data,
         select_variable_data,
         start_edit_open,
         start_edit_open2,
+        ai_edit_open,
+        ai_node_data,
     }
 })

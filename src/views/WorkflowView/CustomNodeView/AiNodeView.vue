@@ -1,3 +1,20 @@
+<script setup>
+import {Position, Handle} from '@vue-flow/core';
+import Icon, {FormOutlined} from "@ant-design/icons-vue";
+import {ref, onMounted, onUnmounted, watch} from 'vue'
+import {useCounterStore} from '@/stores/counter'
+
+const counter = useCounterStore()
+const props = defineProps(['data']);
+const show_edit = () => {
+  counter.ai_node_data = counter.flow_data.nodes.filter(node => node.id === counter.selectedNode)
+  console.log(counter.flow_data.nodes)
+  console.log(counter.selectedNode)
+  console.log(counter.ai_node_data)
+  counter.select_modal_node = 'ai_edit'
+  counter.ai_edit_open = true
+}
+</script>
 <template>
   <div class="ai-node" :class="{'selected': data.isSelected}">
     <Handle type="source" position="left" id="left" class="div-Handle"/>
@@ -51,15 +68,6 @@
   </div>
 </template>
 
-<script setup>
-import {Position, Handle} from '@vue-flow/core';
-import Icon, {FormOutlined} from "@ant-design/icons-vue";
-import {ref, onMounted, onUnmounted, watch} from 'vue'
-import {useCounterStore} from '@/stores/counter'
-
-const counter = useCounterStore()
-const props = defineProps(['data']);
-</script>
 
 <style scoped>
 .div2-panel {

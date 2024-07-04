@@ -12,7 +12,10 @@ const add_ai_node = () => {
   const newNode = {
     id: `ai_${Date.now().toString()}`,
     data: {
-      label: '',
+      edit_mod: "",
+      edit_mod_view: "gpt-3.5-turbo",
+      app_mod: "",
+      app_mod_view: "无",
       isSelected: false,
     },
     type: 'ai', // 节点类型
@@ -70,7 +73,7 @@ const add_var_node = () => {
 }
 
 const add_test_node = () => {
-  console.log(counter.flow_data)
+  console.log(counter.flow_data.edges)
 }
 </script>
 
