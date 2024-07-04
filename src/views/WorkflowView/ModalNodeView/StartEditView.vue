@@ -7,6 +7,9 @@ const counter = useCounterStore()
 const handleOk = () => {
   counter.start_edit_open = false
 }
+watch(() => counter.start_edit_open, () => {
+  counter.edit_start = !counter.start_edit_open
+})
 const add_variable1 = () => {
   counter.select_variable_data = "添加变量"
   counter.variable_data = {
@@ -27,9 +30,12 @@ const add_variable2 = (id) => {
   counter.variable_data = counter.flow_data.nodes[0].data.variable.filter((item) => {
     return item.id == id
   })
-  counter.variable_data = counter.variable_data [0]
+  counter.variable_data = counter.variable_data[0]
   counter.select_modal_node2 = true
   counter.start_edit_open2 = true
+}
+const delete_variable = (id) => {
+  counter.flow_data.nodes[0].data.variable = counter.flow_data.nodes[0].data.variable.filter(variable => variable.id != id)
 }
 </script>
 
@@ -51,7 +57,7 @@ const add_variable2 = (id) => {
           </svg>
         </template>
       </icon>
-      <span class="div2-txt-must" v-if="item.must=='true'">*</span>
+      <span class="div2-txt-must" v-if="item.must">*</span>
       <span class="div2-txt-label">{{ item.label }}</span>
       <span class="div2-txt-name">{{ item.name }}</span>
       <span class="div2-txt-type">{{ item.type }}</span>
@@ -65,7 +71,7 @@ const add_variable2 = (id) => {
           </svg>
         </template>
       </icon>
-      <icon :style="{ color: '#4381fd'}" class="div2-ico-delete">
+      <icon :style="{ color: '#4381fd'}" class="div2-ico-delete" @click="delete_variable(item.id)">
         <template #component>
           <svg t="1720003065029" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
                p-id="3968" width="16" height="16">
@@ -97,7 +103,7 @@ const add_variable2 = (id) => {
 
   .div2-txt-must {
     position: absolute;
-    left: 2.5vw;
+    left: 2.45vw;
     color: red;
     font-weight: 700;
   }

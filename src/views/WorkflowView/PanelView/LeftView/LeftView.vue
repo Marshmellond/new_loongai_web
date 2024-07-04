@@ -16,7 +16,7 @@ const add_ai_node = () => {
       isSelected: false,
     },
     type: 'ai', // 节点类型
-    position: {x: 800, y: 500},
+    position: {x: 900, y: 500},
   };
   counter.flow_data.nodes.push(newNode);
 }
@@ -28,7 +28,7 @@ const add_reply_node = () => {
       isSelected: false,
     },
     type: 'reply', // 节点类型
-    position: {x: 800, y: 500},
+    position: {x: 1200, y: 500},
   };
   counter.flow_data.nodes.push(newNode);
 }
@@ -40,7 +40,7 @@ const add_end_node = () => {
       isSelected: false,
     },
     type: 'end', // 节点类型
-    position: {x: 800, y: 500},
+    position: {x: 1500, y: 500},
   };
   counter.flow_data.nodes.push(newNode);
 }
@@ -52,7 +52,7 @@ const add_if_node = () => {
       isSelected: false,
     },
     type: 'if', // 节点类型
-    position: {x: 800, y: 500},
+    position: {x: 900, y: 200},
   };
   counter.flow_data.nodes.push(newNode);
 }
@@ -64,7 +64,7 @@ const add_var_node = () => {
       isSelected: false,
     },
     type: 'var', // 节点类型
-    position: {x: 800, y: 500},
+    position: {x: 1200, y: 200},
   };
   counter.flow_data.nodes.push(newNode);
 }

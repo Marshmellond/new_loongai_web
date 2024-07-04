@@ -1,7 +1,7 @@
 <template>
   <div class="if-node" :class="{'selected': data.isSelected}">
-    <Handle type="target" :position="Position.Left"/>
-    <Handle type="target" :position="Position.Right"/>
+    <Handle type="source" position="left" id="left" class="div-Handle"/>
+    <Handle type="source" position="right" id="right" class="div-Handle"/>
     <div class="div1">
       <div class="div1-ico">
         <icon :style="{ color: '#000000'}">
@@ -32,6 +32,14 @@ const props = defineProps(['data']);
 </script>
 
 <style scoped>
+.div-Handle {
+  width: 0.8vw;
+  height: 1.6vh;
+  background-color: #ffffff;
+  border: solid #007bff;
+  border-radius: 50%;
+}
+
 .selected {
   border: 1px solid #336ffd;
 }

@@ -6,11 +6,14 @@ import {useCounterStore} from '@/stores/counter'
 const counter = useCounterStore()
 const must = ref(false)
 const save_variable_data1 = () => {
+  console.log(counter.variable_data.must)
   counter.flow_data.nodes[0].data.variable.push(counter.variable_data)
   counter.start_edit_open2 = false
 }
 const save_variable_data2 = () => {
   counter.start_edit_open2 = false
+  let flow_data_index = counter.flow_data.nodes[0].data.variable.findIndex(variable => variable.id === counter.variable_data.id)
+  counter.flow_data.nodes[0].data.variable[flow_data_index] = counter.variable_data
 }
 const handleOk = () => {
   if (counter.select_variable_data == "添加变量") {
@@ -18,7 +21,6 @@ const handleOk = () => {
   } else {
     save_variable_data2()
   }
-
 }
 </script>
 
@@ -51,7 +53,6 @@ const handleOk = () => {
     </div>
   </a-modal>
 </template>
-:class="{'selected': data.isSelected}"
 <style scoped lang="less">
 .div2 {
   margin-bottom: 1vh;

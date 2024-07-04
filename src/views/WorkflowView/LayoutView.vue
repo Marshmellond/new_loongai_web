@@ -6,8 +6,6 @@ const counter = useCounterStore()
 localStorage.setItem('selectedKey', "2");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 
-import '@vue-flow/core/dist/style.css';
-import '@vue-flow/core/dist/theme-default.css';
 import LeftView from "@/views/WorkflowView/PanelView/LeftView/LeftView.vue";
 import RightView from "@/views/WorkflowView/PanelView/RightView/RightView.vue";
 import {VueFlow, Panel, useVueFlow} from '@vue-flow/core'
@@ -33,7 +31,6 @@ import {message} from "ant-design-vue";
 
 // ------------------------------------变量初始化------------------------------------
 const dark = ref(true) // 主题
-let selectedNode = ref(null) // 选择节点
 let selectedEdge = ref(null) // 选择边
 const {
   onConnect,
@@ -52,7 +49,10 @@ const {
   applyEdgeChanges,
 } = useVueFlow();
 
-onConnect(addEdges)
+onConnect((connection) => {
+  addEdges(connection)
+})
+
 if (localStorage.getItem("flow_dark") == "true") {
   dark.value = true
 } else {
@@ -93,7 +93,7 @@ watch(
 
 // ------------------------------------选中node------------------------------------
 const handleNodeClick = (event) => {
-  selectedNode.value = event.node.id;
+  counter.selectedNode = event.node.id;
   counter.flow_data.nodes = counter.flow_data.nodes.map(n => ({
     ...n,
     data: {
@@ -105,7 +105,7 @@ const handleNodeClick = (event) => {
 
 // ------------------------------------点击空白背景取消选中node------------------------------------
 const handlePaneClick = () => {
-  selectedNode.value = null;
+  counter.selectedNode = null;
   counter.flow_data.nodes = counter.flow_data.nodes.map(n => ({
     ...n,
     data: {
@@ -141,21 +141,23 @@ const deleteEdge = (edgeId) => {
 
 // 监听键盘事件
 const handleKeyDown = (event) => {
-  if (event.key === 'Backspace' || event.key === 'Delete') {
-    // 如果有选中的节点，则删除它
-    if (selectedNode.value) {
-      if (selectedNode.value.startsWith("start")) {
-        message.warn("开始节点不可删除")
-        event.preventDefault();
-        return
+  if (counter.edit_start) {
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+      // 如果有选中的节点，则删除它
+      if (counter.selectedNode) {
+        if (counter.selectedNode.startsWith("start")) {
+          message.warn("开始节点不可删除")
+          event.preventDefault();
+          return
+        }
+        deleteNode(counter.selectedNode);
+        counter.selectedNode = null;
       }
-      deleteNode(selectedNode.value);
-      selectedNode.value = null;
-    }
-    // 如果有选中的边，则删除它
-    if (selectedEdge.value) {
-      deleteEdge(selectedEdge.value);
-      selectedEdge.value = null;
+      // 如果有选中的边，则删除它
+      if (selectedEdge.value) {
+        deleteEdge(selectedEdge.value);
+        selectedEdge.value = null;
+      }
     }
   }
 };

@@ -1,15 +1,14 @@
-@import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.38.2/dist/style.css';
-@import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.38.2/dist/theme-default.css';
-@import 'https://cdn.jsdelivr.net/npm/@vue-flow/controls@latest/dist/style.css';
-@import 'https://cdn.jsdelivr.net/npm/@vue-flow/minimap@latest/dist/style.css';
-@import 'https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css';
+@import "@/views/WorkflowView/BasicView/css/core_style.css";
+@import "@/views/WorkflowView/BasicView/css/core_theme-default.css";
+@import "@/views/WorkflowView/BasicView/css/controls_style.css";
+@import "@/views/WorkflowView/BasicView/css/minimap_style.css";
+@import "@/views/WorkflowView/BasicView/css/node_resizer_style.css";
 
 .basic-flow {
     position: relative;
     width: 74.3vw;
     left: 10vw;
 }
-
 
 
 .vue-flow__minimap {

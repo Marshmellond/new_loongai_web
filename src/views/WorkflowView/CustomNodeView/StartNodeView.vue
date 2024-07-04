@@ -7,6 +7,7 @@ import {Position, Handle} from '@vue-flow/core';
 import Icon, {FormOutlined, PlusOutlined} from "@ant-design/icons-vue";
 
 const props = defineProps(['data']);
+
 const show_edit = () => {
   counter.select_modal_node = 'start_edit'
   counter.start_edit_open = true
@@ -15,7 +16,7 @@ const show_edit = () => {
 
 <template>
   <div class="start-node" :class="{'selected': data.isSelected}">
-    <Handle type="target" :position="Position.Right"/>
+    <Handle type="source" position="right" id="right" class="div-Handle"/>
     <div class="div0">
       <div class="div0-ico">
         <icon :style="{ color: '#000000'}">
@@ -33,9 +34,20 @@ const show_edit = () => {
       <FormOutlined class="div0-edit" @click="show_edit"/>
     </div>
     <div class="div1">
+      <icon :style="{ color: '#4381fd'}" class="div1-ico">
+        <template #component>
+          <svg t="1720073288376" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+               p-id="7701" width="16" height="16">
+            <path
+                d="M558.6 960.2h-157c-27.5 0-50-22.5-50-50v-795c0-27.5 22.5-50 50-50h157.1c27.5 0 50 22.5 50 50v795.1c-0.1 27.4-22.6 49.9-50.1 49.9z"
+                p-id="7702" fill="#4381fd"></path>
+          </svg>
+        </template>
+      </icon>
       <span class="div1-title">全局变量</span>
     </div>
     <div class="div2-panel">
+
       <div class="div2"
            v-for="(item) in counter.flow_data.nodes[0].data.variable" :key="item[0]">
         <icon :style="{ color: '#4381fd'}" class="div2-ico-label">
@@ -48,7 +60,7 @@ const show_edit = () => {
             </svg>
           </template>
         </icon>
-        <span class="div2-txt-must" v-if="item.must=='true'">*</span>
+        <span class="div2-txt-must" v-if="item.must">*</span>
         <span class="div2-txt-label">{{ item.label }}</span>
         <span class="div2-txt-name">{{ item.name }}</span>
         <span class="div2-txt-type">{{ item.type }}</span>
@@ -58,6 +70,32 @@ const show_edit = () => {
 </template>
 
 <style scoped lang="less">
+.div-Handle {
+  width: 0.8vw;
+  height: 1.6vh;
+  background-color: #ffffff;
+  border: solid #007bff;
+  border-radius: 50%;
+}
+
+.div1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1vh;
+  margin-top: 2vh;
+  font-weight: 600;
+
+  .div1-ico {
+    margin-top: 1vh;
+  }
+
+  .div1-title {
+    font-size: 15px;
+    margin-top: 1vh;
+  }
+}
+
 .div2-panel {
   background: #f0f2f5;
   border-radius: 5px;
@@ -76,7 +114,7 @@ const show_edit = () => {
 
     .div2-txt-must {
       position: absolute;
-      left: 1.7vw;
+      left: 1.65vw;
       color: red;
       font-weight: 700;
     }
@@ -100,15 +138,6 @@ const show_edit = () => {
   }
 }
 
-.div1 {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 1vh;
-  margin-top: 2vh;
-  font-weight: 600;
-}
-
 
 .div0 {
   display: flex;
@@ -130,7 +159,7 @@ const show_edit = () => {
   .div0-title {
     font-weight: 900;
     font-size: 18px;
-    margin-right: 8vw;
+    margin-right: 8.6vw;
   }
 
   .div0-edit {
@@ -146,6 +175,10 @@ const show_edit = () => {
   }
 }
 
+.selected {
+  border: 1px solid #336ffd;
+}
+
 .start-node {
   background: #fdfdfd;
   padding: 1vh;
@@ -154,7 +187,5 @@ const show_edit = () => {
   min-height: 45vh;
 }
 
-.selected {
-  border: 1px solid #336ffd;
-}
+
 </style>

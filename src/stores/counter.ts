@@ -89,6 +89,8 @@ export const useCounterStore = defineStore('counter', () => {
             position: {x: 500, y: 500},
         }], "edges": [], "position": [],
     }) // 页面数据
+    const selectedNode = ref(null) // 选择节点
+    const edit_start = ref(true) // 是否打开编辑面板
     const select_modal_node = ref("") // 节点编辑面板选择
     const select_modal_node2 = ref(false) // 节点编辑面板选择2
     const variable_data = ref() // 节点编辑面板选择2 变量临时存储
@@ -149,6 +151,8 @@ export const useCounterStore = defineStore('counter', () => {
         edit_temp_select_red_id,
         chat_rec_title,
         flow_data,
+        selectedNode,
+        edit_start,
         select_modal_node,
         select_modal_node2,
         variable_data,

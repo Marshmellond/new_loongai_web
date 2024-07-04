@@ -18,7 +18,7 @@ import '/src/voice-utils/utilJS/crypto-js.js'; //鉴权的引用地址
 import '/src/voice-utils/utilJS/index.umd.js'; // 调用Web Speech API 的依赖，应该是官方的写的工具类
 const btnText = ref("开始录音");
 const btnStatus = ref("UNDEFINED"); // "UNDEFINED" "CONNECTING" "OPEN" "CLOSING" "CLOSED"
-const recorder = new RecorderManager('/src/voice-SaveUtilsView/dist')
+const recorder = new RecorderManager('/src/voice-utils/voice_dist')
 const APPID = "20c0ca0e"; // TODO 你的讯飞模型APPID
 const API_SECRET = "ODkwZWUzZjc3NmNmMTc0ZTA3ZTI2Y2I3"; // TODO 你的讯飞模型API_SECRET
 const API_KEY = "0966746747f331913453687203fad7ae"; // TODO 你的讯飞模型API_KEY

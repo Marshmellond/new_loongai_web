@@ -1,6 +1,6 @@
 <template>
   <div class="end-node" :class="{'selected': data.isSelected}">
-    <Handle type="target" :position="Position.Left"/>
+    <Handle type="source" position="left" id="left" class="div-Handle"/>
     <div class="div1">
       <div class="div1-ico">
         <icon :style="{ color: '#000000'}">
@@ -31,6 +31,14 @@ const props = defineProps(['data']);
 </script>
 
 <style scoped>
+.div-Handle {
+  width: 0.8vw;
+  height: 1.6vh;
+  background-color: #ffffff;
+  border: solid #007bff;
+  border-radius: 50%;
+}
+
 .div2 {
   display: flex;
   flex-direction: row;
@@ -50,7 +58,7 @@ const props = defineProps(['data']);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #296ffd;
+    background: #f58f09;
     border-radius: 7px;
     width: 1.25vw;
     height: 2.5vh;
