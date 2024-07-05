@@ -28,6 +28,7 @@ import VarUpdateNodeView from "@/views/WorkflowView/CustomNodeView/VarUpdateNode
 import StartEditView from "@/views/WorkflowView/ModalNodeView/StartEditView.vue";
 import StartEditView2 from "@/views/WorkflowView/ModalNodeView/StartEditView2.vue";
 import AiEditView from "@/views/WorkflowView/ModalNodeView/AiEditView.vue";
+import EndEditView from "@/views/WorkflowView/ModalNodeView/EndEditView.vue";
 import {message} from "ant-design-vue";
 
 // ------------------------------------变量初始化------------------------------------
@@ -48,6 +49,24 @@ const {
   applyNodeChanges,
   applyEdgeChanges,
 } = useVueFlow();
+
+
+const get_ai_mode_data = () => {
+  const url = "/api/workflow/get_ai_mode_data"
+  fetch(url).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      counter.edit_mod_options = data["data"]["edit_mod_options"]
+      counter.edit_app_options = data["data"]["edit_app_options"]
+      counter.edit_mod_img_options = data["data"]["edit_mod_img_options"]
+      counter.edit_app_img_options = data["data"]["edit_app_img_options"]
+    }
+  })
+}
+get_ai_mode_data()
 
 
 if (localStorage.getItem("flow_dark") == "true") {
@@ -156,6 +175,8 @@ onConnect((connection) => {
   }
   if (connection.source === connection.target) {
     message.warn("连接对象错误")
+  } else if ((connection.sourceHandle !== "right") || (connection.targetHandle !== "left")) {
+    message.warn("连接方向错误")
   } else if (!add_connection_edge.value) {
     message.warn("请勿重复连接节点")
   } else {
@@ -257,6 +278,7 @@ function toggleDarkMode() {
   <StartEditView class="div3" v-if="counter.select_modal_node=='start_edit'"></StartEditView>
   <StartEditView2 class="div4" v-if="counter.select_modal_node2"></StartEditView2>
   <AiEditView class="div3" v-if="counter.select_modal_node=='ai_edit'"></AiEditView>
+  <EndEditView class="div3" v-if="counter.select_modal_node=='end_edit'"></EndEditView>
   <VueFlow
       class="basic-flow"
       :nodes="counter.flow_data.nodes"
@@ -329,7 +351,7 @@ function toggleDarkMode() {
 .div2 {
   display: flex;
   flex-direction: column;
-  width: 10vw;
+  width: 14.3vw;
   height: 95.5vh;
   position: absolute;
   right: 0;

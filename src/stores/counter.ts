@@ -71,18 +71,8 @@ export const useCounterStore = defineStore('counter', () => {
                         type: "String",
                         must: true
                     },
-                    {
-                        id: "1",
-                        name: "风格",
-                        label: "style",
-                        value: "写实",
-                        max_len: "40",
-                        type: "String",
-                        must: false
-                    },
-                    {id: "2", name: "画质", label: "hz", value: "4k", max_len: "40", type: "String", must: "true"},
-                    {id: "3", name: "运动感", label: "yd", value: "强劲", max_len: "40", type: "String", must: false},
                 ],
+                order: 1,
                 isSelected: false,
             },
             type: 'start', // 节点类型
@@ -99,7 +89,12 @@ export const useCounterStore = defineStore('counter', () => {
     const start_edit_open = ref(false) // 开始节点编辑按钮开启
     const start_edit_open2 = ref(false) // 开始节点编辑按钮开启2
     const ai_edit_open = ref(false) // Ai节点编辑按钮开启
-    const ai_node_data = ref({}) //Ai节点选中的数据
+    const end_edit_open = ref(false) // 结束节点编辑按钮开启
+    const ai_node_data = ref({}) // Ai节点选中的数据
+    const end_node_data = ref({}) // 结束节点选中的数据
+    const edit_mod_img_options = ref([]) // 模型头像
+    const edit_app_img_options = ref([]) // 应用头像
+    const input_options = ref([]) // Ai节点选择变量
     return {
         selectedKeys,
         recording,
@@ -164,6 +159,11 @@ export const useCounterStore = defineStore('counter', () => {
         start_edit_open,
         start_edit_open2,
         ai_edit_open,
+        end_edit_open,
         ai_node_data,
+        end_node_data,
+        edit_mod_img_options,
+        edit_app_img_options,
+        input_options,
     }
 })

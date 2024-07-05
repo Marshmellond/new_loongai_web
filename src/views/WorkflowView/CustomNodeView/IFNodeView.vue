@@ -15,7 +15,7 @@
           </template>
         </icon>
       </div>
-      <span class="div1-title">判断器</span>
+      <span class="div1-title">判断器{{data.order}}</span>
       <FormOutlined class="div1-edit" @click="show_edit"/>
     </div>
     <div class="div2">

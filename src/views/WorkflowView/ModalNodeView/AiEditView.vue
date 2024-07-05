@@ -5,26 +5,66 @@ import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
 const handleOk = () => {
+  if (counter.ai_node_data.data.edit_mod === undefined) {
+    counter.ai_node_data.data.edit_mod = [
+      "openai",
+      0
+    ]
+    counter.ai_node_data.data.edit_mod_view = "gpt-3.5-turbo"
+  } else {
+    let mod_label = counter.ai_node_data.data.edit_mod[0]
+    let mod_index = counter.ai_node_data.data.edit_mod[1]
+    counter.ai_node_data.data.edit_mod_view = counter.edit_mod_options.filter(item => item.label === mod_label)[0].children[mod_index].label
+  }
+  if (counter.ai_node_data.data.app_mod === undefined) {
+    counter.ai_node_data.data.app_mod = [
+      "无"
+    ]
+    counter.ai_node_data.data.app_mod_view = "无"
+    counter.ai_node_data.data.app_mod_img = "http://127.0.0.1:8000/img/head?path=model&name=null.png"
+  } else {
+    let app_label = counter.ai_node_data.data.app_mod[0]
+    if (app_label == "无") {
+      counter.ai_node_data.data.app_mod_view = "无"
+      counter.ai_node_data.data.app_mod_img = "http://127.0.0.1:8000/img/head?path=model&name=null.png"
+    } else {
+      let app_index = counter.ai_node_data.data.app_mod[1]
+      counter.ai_node_data.data.app_mod_view = counter.edit_app_options.filter(item => item.label === app_label)[0].children.filter(item => item.value == app_index)[0].label
+      counter.ai_node_data.data.app_mod_img = counter.edit_app_img_options.filter(item => item.name === app_index)[0].img
+    }
+  }
+  counter.ai_node_data.data.edit_mod_img = counter.edit_mod_img_options.filter(item => item.name === counter.ai_node_data.data.edit_mod[0])[0].img
+  console.log()
+  if (counter.ai_node_data.data.input == undefined) {
+    counter.ai_node_data.data.input = ""
+  } else {
+    counter.ai_node_data.data.input = counter.ai_node_data.data.input[0]
+  }
   counter.ai_edit_open = false
 }
 watch(() => counter.ai_edit_open, () => {
   counter.edit_start = !counter.ai_edit_open
 })
-
-const nmsl = () =>{
-  console.log(counter.ai_node_data)
-}
 </script>
 
 <template>
-  <a-modal v-model:open="counter.ai_edit_open" title="AI 对话" @ok="handleOk" okText="保存" cancelText="关闭">
+  <a-modal v-model:open="counter.ai_edit_open" title="AI对话" @ok="handleOk" okText="保存" cancelText="关闭">
     <div class="div1">
-      <span class="div1-title" @click="nmsl">模型</span>
-      <a-cascader :options="counter.edit_mod_options"
-                  :placeholder="111"/>
-      <!--      <span class="div1-title" style="margin-top: 1vh">应用</span>-->
-      <!--      <a-cascader v-model:value="counter.ai_node_data.data.app_mod" :options="counter.edit_app_options"-->
-      <!--                  :placeholder="counter.ai_node_data.data.app_mod_view"/>-->
+      <span class="div1-title">模型</span>
+      <a-cascader v-model:value="counter.ai_node_data.data.edit_mod" :options="counter.edit_mod_options"
+                  :placeholder="counter.ai_node_data.data.edit_mod_view"/>
+      <span class="div1-title" style="margin-top: 1vh">应用</span>
+      <a-cascader v-model:value="counter.ai_node_data.data.app_mod" :options="counter.edit_app_options"
+                  :placeholder="counter.ai_node_data.data.app_mod_view"/>
+      <span class="div1-title" style="margin-top: 1vh">提示词</span>
+      <a-textarea
+          v-model:value="counter.ai_node_data.data.system"
+          placeholder="输入消息内容"
+          :autoSize="{ minRows: 5, maxRows: 5}"
+          style="width: 100%"
+          :allowClear="true"/>
+      <span class="div1-title" style="margin-top: 1vh">输入变量</span>
+      <a-cascader v-model:value="counter.ai_node_data.data.input" :options="counter.input_options"/>
     </div>
   </a-modal>
 </template>

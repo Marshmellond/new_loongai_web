@@ -6,13 +6,48 @@ import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
 const props = defineProps(['data']);
+
 const show_edit = () => {
-  counter.ai_node_data = counter.flow_data.nodes.filter(node => node.id === counter.selectedNode)
-  console.log(counter.flow_data.nodes)
-  console.log(counter.selectedNode)
-  console.log(counter.ai_node_data)
-  counter.select_modal_node = 'ai_edit'
-  counter.ai_edit_open = true
+  setTimeout(() => {
+    counter.ai_node_data = counter.flow_data.nodes.filter(node => node.id === counter.selectedNode)
+    counter.ai_node_data = counter.ai_node_data[0]
+    counter.select_modal_node = 'ai_edit'
+    counter.input_options = []
+    for (let i of counter.flow_data.nodes[0].data.variable) {
+      counter.input_options.push({value: i.name, label: i.name})
+    }
+
+
+    let temp_edges = [];
+
+    function func_add_edge(nodeId) {
+      // 遍历所有边，寻找与当前节点相关的边
+      for (let i = 0; i < counter.flow_data.edges.length; i++) {
+        let edge = counter.flow_data.edges[i];
+        // 检查目标节点和目标句柄是否匹配
+        if (edge.target === nodeId && edge.targetHandle === "left") {
+          // 检查源节点是否以"ai"开头
+          if (edge.source.split("_")[0] === "ai") {
+            // 将源节点添加到临时数组中
+            temp_edges.push(edge.source);
+            // 递归调用，处理新的源节点
+            func_add_edge(edge.source);
+          }
+        }
+      }
+    }
+
+    func_add_edge(counter.selectedNode);
+    for (let i = 0; i < counter.flow_data.nodes.length; i++) {
+      if (temp_edges.includes(counter.flow_data.nodes[i].id)) {
+        counter.input_options.push({
+          value: counter.flow_data.nodes[i].data.print,
+          label: counter.flow_data.nodes[i].data.print
+        })
+      }
+    }
+    counter.ai_edit_open = true
+  }, 100)
 }
 </script>
 <template>
@@ -32,65 +67,170 @@ const show_edit = () => {
           </template>
         </icon>
       </div>
-      <span class="div0-title">AI 对话</span>
+      <span class="div0-title">AI对话{{ data.order }}</span>
       <FormOutlined class="div0-edit" @click="show_edit"/>
     </div>
-    <div class="div1">
-      <icon :style="{ color: '#4381fd'}" class="div1-ico">
-        <template #component>
-          <svg t="1720073288376" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-               p-id="7701" width="16" height="16">
-            <path
-                d="M558.6 960.2h-157c-27.5 0-50-22.5-50-50v-795c0-27.5 22.5-50 50-50h157.1c27.5 0 50 22.5 50 50v795.1c-0.1 27.4-22.6 49.9-50.1 49.9z"
-                p-id="7702" fill="#4381fd"></path>
-          </svg>
-        </template>
-      </icon>
-      <span class="div1-title">模型</span>
-    </div>
-    <div class="div2-panel">
-      <div class="div2-top">
-        <div>
-          <icon :style="{ color: '#4381fd'}" class="div2-top-ico">
-            <template #component>
-              <svg t="1720084901033" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                   xmlns="http://www.w3.org/2000/svg" p-id="4065" width="16" height="16">
-                <path
-                    d="M85.301337 259.231596v679.787027h853.269342V259.295588H85.301337zM792.604924 174.186227H1023.872016V1024H0V174.186227h231.267092L155.308586 42.746657 229.091364 0.127984 329.750781 174.186227h364.370454l100.595425-174.186227 73.84677 42.618673-75.958506 131.567554zM383.952006 385.99975v401.485814l341.269341-200.742907L383.952006 386.063742z"
-                    fill="#262626" p-id="4066"></path>
-              </svg>
-            </template>
-          </icon>
-          <span>gpt3.5-tuo</span>
-        </div>
+
+    <div class="div1" style="margin-top: 2vh;">
+      <div class="div1-1">
+        <icon :style="{ color: '#4381fd'}" class="div1-1-ico">
+          <template #component>
+            <svg t="1720073288376" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="7701" width="16" height="16">
+              <path
+                  d="M558.6 960.2h-157c-27.5 0-50-22.5-50-50v-795c0-27.5 22.5-50 50-50h157.1c27.5 0 50 22.5 50 50v795.1c-0.1 27.4-22.6 49.9-50.1 49.9z"
+                  p-id="7702" fill="#4381fd"></path>
+            </svg>
+          </template>
+        </icon>
+        <span class="div1-1-title">模型</span>
+      </div>
+      <div class="div1-2">
+        <a-avatar shape="square" class="div1-2-ico">
+          <template #icon>
+            <img :src="data.edit_mod_img" alt="">
+          </template>
+        </a-avatar>
+        <span class="div1-2-title">{{ data.edit_mod_view }}</span>
       </div>
     </div>
+
+    <div class="div1">
+      <div class="div1-1">
+        <icon :style="{ color: '#4381fd'}" class="div1-1-ico">
+          <template #component>
+            <svg t="1720073288376" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="7701" width="16" height="16">
+              <path
+                  d="M558.6 960.2h-157c-27.5 0-50-22.5-50-50v-795c0-27.5 22.5-50 50-50h157.1c27.5 0 50 22.5 50 50v795.1c-0.1 27.4-22.6 49.9-50.1 49.9z"
+                  p-id="7702" fill="#4381fd"></path>
+            </svg>
+          </template>
+        </icon>
+        <span class="div1-1-title">应用</span>
+      </div>
+      <div class="div1-2">
+        <a-avatar shape="square" class="div1-2-ico">
+          <template #icon>
+            <img :src="data.app_mod_img" alt="">
+          </template>
+        </a-avatar>
+        <span class="div1-2-title">{{ data.app_mod_view }}</span>
+      </div>
+    </div>
+
+    <div class="div1">
+      <div class="div1-1">
+        <icon :style="{ color: '#4381fd'}" class="div1-1-ico">
+          <template #component>
+            <svg t="1720073288376" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="7701" width="16" height="16">
+              <path
+                  d="M558.6 960.2h-157c-27.5 0-50-22.5-50-50v-795c0-27.5 22.5-50 50-50h157.1c27.5 0 50 22.5 50 50v795.1c-0.1 27.4-22.6 49.9-50.1 49.9z"
+                  p-id="7702" fill="#4381fd"></path>
+            </svg>
+          </template>
+        </icon>
+        <span class="div1-1-title">提示词</span>
+      </div>
+      <div class="div1-2">
+        <span class="div1-2-title">{{ data.system }}</span>
+      </div>
+    </div>
+
+    <div class="div1">
+      <div class="div1-1">
+        <icon :style="{ color: '#4381fd'}" class="div1-1-ico">
+          <template #component>
+            <svg t="1720073288376" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="7701" width="16" height="16">
+              <path
+                  d="M558.6 960.2h-157c-27.5 0-50-22.5-50-50v-795c0-27.5 22.5-50 50-50h157.1c27.5 0 50 22.5 50 50v795.1c-0.1 27.4-22.6 49.9-50.1 49.9z"
+                  p-id="7702" fill="#4381fd"></path>
+            </svg>
+          </template>
+        </icon>
+        <span class="div1-1-title">输入变量</span>
+      </div>
+      <div class="div1-2">
+        <span class="div1-2-title" style="margin-left: 0">{{ data.input }}</span>
+      </div>
+    </div>
+
+    <div class="div1">
+      <div class="div1-1">
+        <icon :style="{ color: '#4381fd'}" class="div1-1-ico">
+          <template #component>
+            <svg t="1720073288376" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="7701" width="16" height="16">
+              <path
+                  d="M558.6 960.2h-157c-27.5 0-50-22.5-50-50v-795c0-27.5 22.5-50 50-50h157.1c27.5 0 50 22.5 50 50v795.1c-0.1 27.4-22.6 49.9-50.1 49.9z"
+                  p-id="7702" fill="#4381fd"></path>
+            </svg>
+          </template>
+        </icon>
+        <span class="div1-1-title">输出</span>
+      </div>
+      <div class="div1-2">
+        <span class="div1-2-title" style="margin-left: 0">{{ data.print }}</span>
+        <span class="div1-2-title2">string</span>
+      </div>
+    </div>
+
+
   </div>
 </template>
 
 
-<style scoped>
-.div2-panel {
-  background: #f0f2f5;
-  border-radius: 5px;
-}
+<style scoped lang="less">
+
 
 .div1 {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 1vh;
-  margin-top: 2vh;
+  flex-direction: column;
   font-weight: 600;
 
-  .div1-ico {
-    margin-top: 1vh;
+  .div1-1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .div1-1-ico {
+      margin-top: 1vh;
+    }
+
+    .div1-1-title {
+      font-size: 15px;
+      margin-top: 1vh;
+    }
   }
 
-  .div1-title {
-    font-size: 15px;
-    margin-top: 1vh;
+  .div1-2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid @theme-border-color;
+    padding: 0.4vh;
+    margin-top: 0.5vh;
+    min-height: 4vh;
+    min-width: 14vw;
+    max-width: 14vw;
+
+    .div1-2-ico {
+      background-color: #e8e4e4;
+    }
+
+    .div1-2-title {
+      margin-left: 0.5vw;
+    }
+
+    .div1-2-title2 {
+      position: absolute;
+      margin-left: 11vw;
+    }
   }
+
 }
 
 .div-Handle {

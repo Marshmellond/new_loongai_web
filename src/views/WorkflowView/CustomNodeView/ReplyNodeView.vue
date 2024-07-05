@@ -15,7 +15,7 @@
           </template>
         </icon>
       </div>
-      <span class="div1-title">指定回复</span>
+      <span class="div1-title">指定回复{{data.order}}</span>
       <FormOutlined class="div1-edit" @click="show_edit"/>
     </div>
     <div class="div2">

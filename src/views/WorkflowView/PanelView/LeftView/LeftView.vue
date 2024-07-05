@@ -12,10 +12,21 @@ const add_ai_node = () => {
   const newNode = {
     id: `ai_${Date.now().toString()}`,
     data: {
-      edit_mod: "",
+      edit_mod: [
+        "openai",
+        0
+      ],
       edit_mod_view: "gpt-3.5-turbo",
-      app_mod: "",
+      edit_mod_img: "http://127.0.0.1:8000/img/head?path=api&name=openai.png",
+      app_mod: [
+        "无"
+      ],
       app_mod_view: "无",
+      app_mod_img: "http://127.0.0.1:8000/img/head?path=model&name=null.png",
+      system: "",
+      input: "",
+      print: `AI回复内容${counter.flow_data.nodes.length + 1}`,
+      order: counter.flow_data.nodes.length + 1,
       isSelected: false,
     },
     type: 'ai', // 节点类型
@@ -28,6 +39,7 @@ const add_reply_node = () => {
     id: `reply_${Date.now().toString()}`,
     data: {
       label: '',
+      order: counter.flow_data.nodes.length + 1,
       isSelected: false,
     },
     type: 'reply', // 节点类型
@@ -39,7 +51,8 @@ const add_end_node = () => {
   const newNode = {
     id: `end_${Date.now().toString()}`,
     data: {
-      label: '',
+      variable_print:[],
+      order: counter.flow_data.nodes.length + 1,
       isSelected: false,
     },
     type: 'end', // 节点类型
@@ -51,7 +64,7 @@ const add_if_node = () => {
   const newNode = {
     id: `if_${Date.now().toString()}`,
     data: {
-      label: '',
+      order: counter.flow_data.nodes.length + 1,
       isSelected: false,
     },
     type: 'if', // 节点类型
@@ -63,7 +76,7 @@ const add_var_node = () => {
   const newNode = {
     id: `var_${Date.now().toString()}`,
     data: {
-      label: '',
+      order: counter.flow_data.nodes.length + 1,
       isSelected: false,
     },
     type: 'var', // 节点类型
