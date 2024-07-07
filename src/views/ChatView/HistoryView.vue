@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref} from 'vue';
-import {PlusOutlined, CoffeeOutlined, FormOutlined, MoreOutlined} from '@ant-design/icons-vue';
+import {PlusOutlined, CoffeeOutlined, FormOutlined, MoreOutlined, DeleteOutlined} from '@ant-design/icons-vue';
 import {useCounterStore} from '@/stores/counter'
 import {onMounted} from "vue";
 import {message} from "ant-design-vue";
@@ -66,7 +66,7 @@ const handleOk = () => {
     }
   }).then((data) => {
     if (data["code"] == 1) {
-      get_rec_data()
+      get_rec_data(false)
       const get_show_data = () => {
         let body = {
           chat_rec_id: chat_rec_id,
@@ -179,15 +179,19 @@ const delete_record = (id: string) => {
     if (res.ok) {
       return res.json()
     }
-  }).then(() => {
-    counter.chat_api = ""
-    counter.chat_img_head = ""
-    counter.chat_mod_img_head = ""
-    if (counter.selected_item == id) {
-      get_rec_data(true)
-    } else {
-      get_rec_data(false)
+  }).then((data) => {
+    if (data["code"] == 1) {
+      counter.chat_api = ""
+      counter.chat_img_head = ""
+      counter.chat_mod_img_head = ""
+      if (counter.selected_item == id) {
+        get_rec_data(true)
+      } else {
+        get_rec_data(false)
+      }
+      message.success("对话信息删除成功")
     }
+
   })
   if (counter.recording.length === 0) {
     localStorage.setItem('chat_selected_item', "");
@@ -214,6 +218,7 @@ const add_record = () => {
     }
   }).then(() => {
     get_rec_data(true)
+    message.success("新增对话成功")
   })
 }
 // ---------------end---------------
@@ -251,20 +256,7 @@ const add_record = () => {
           <div class="ant-div2">
             <span class="ant-time">{{ item[2] }}</span>
             <FormOutlined class="ant-edit" @click="show_edit(item)"/>
-
-            <a-dropdown placement="bottom">
-              <MoreOutlined class="ant-utils"/>
-              <template #overlay>
-                <a-menu>
-                  <a-menu-item>
-                    置顶对话
-                  </a-menu-item>
-                  <a-menu-item @click="delete_record(item[0])">
-                    删除对话
-                  </a-menu-item>
-                </a-menu>
-              </template>
-            </a-dropdown>
+            <DeleteOutlined class="ant-utils" @click="delete_record(item[0])"/>
             <a-modal v-model:open="open" title="对话信息" @ok="handleOk" okText="保存" cancelText="关闭">
               <div class="edit-title">名称</div>
               <a-input v-model:value="counter.edit_name"/>

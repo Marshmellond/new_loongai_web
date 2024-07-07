@@ -1,8 +1,8 @@
-@import "@/views/WorkflowView/BasicView/css/core_style.css";
-@import "@/views/WorkflowView/BasicView/css/core_theme-default.css";
-@import "@/views/WorkflowView/BasicView/css/controls_style.css";
-@import "@/views/WorkflowView/BasicView/css/minimap_style.css";
-@import "@/views/WorkflowView/BasicView/css/node_resizer_style.css";
+@import "@/views/WorkflowView/css/min_css/core_style.css";
+@import "@/views/WorkflowView/css/min_css/core_theme-default.css";
+@import "@/views/WorkflowView/css/min_css/controls_style.css";
+@import "@/views/WorkflowView/css/min_css/minimap_style.css";
+@import "@/views/WorkflowView/css/min_css/node_resizer_style.css";
 
 .basic-flow {
     position: relative;

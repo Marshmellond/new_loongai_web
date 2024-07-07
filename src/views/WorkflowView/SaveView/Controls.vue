@@ -4,7 +4,7 @@ import Icon from './Icon.vue'
 import {message} from "ant-design-vue";
 
 
-const {nodes, addNodes, dimensions, toObject, fromObject} = useVueFlow()
+const {nodes} = useVueFlow()
 
 function onSave() {
   message.success("保存到历史列表成功")
@@ -12,24 +12,15 @@ function onSave() {
 
 function onRestore() {
   let flow_down = JSON.parse(localStorage.getItem("flow_data"));
-
-  // 创建 Blob 对象
   let blob = new Blob([JSON.stringify(flow_down)], {type: "application/json"});
-
-  // 创建下载链接
   let url = URL.createObjectURL(blob);
-
-  // 创建并显示下载链接
   let a = document.createElement("a");
   a.href = url;
-  a.download = `${Date.now().toString()}.json`; // 设置下载文件名
+  a.download = `${Date.now().toString()}.json`;
   document.body.appendChild(a);
-  a.click(); // 触发下载
-
-  // 清理
+  a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url); // 释放 URL 对象
-
+  URL.revokeObjectURL(url);
   message.success("流程文件下载完毕");
 }
 

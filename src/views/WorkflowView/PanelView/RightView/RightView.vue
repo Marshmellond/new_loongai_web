@@ -30,6 +30,7 @@ const counter = useCounterStore()
   </a-tabs>
 </template>
 <style scoped lang="less">
+
 .div3 {
   height: 84vh;
   overflow: auto;

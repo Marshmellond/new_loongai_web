@@ -429,11 +429,14 @@ const delete_record = () => {
     if (res.ok) {
       return res.json()
     }
-  }).then(() => {
-    counter.chat_api = ""
-    counter.chat_img_head = ""
-    counter.chat_mod_img_head = ""
-    get_rec_data(true)
+  }).then((data) => {
+    if (data["code"] == 1) {
+      counter.chat_api = ""
+      counter.chat_img_head = ""
+      counter.chat_mod_img_head = ""
+      get_rec_data(true)
+      message.success("对话信息删除成功")
+    }
   })
   if (counter.recording.length === 0) {
     localStorage.setItem('chat_selected_item', "");

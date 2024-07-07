@@ -3,6 +3,7 @@ import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
 import {PlusOutlined} from "@ant-design/icons-vue";
+import {message} from "ant-design-vue";
 
 const get_rec_data = () => {
   const url = "/api/chat/get_rec_data"
@@ -34,6 +35,7 @@ const add_record = () => {
     }
   }).then(() => {
     get_rec_data()
+    message.success("新增对话成功")
   })
 }
 </script>
@@ -56,7 +58,7 @@ const add_record = () => {
 .div1 {
   width: 100%;
   height: 95.5vh;
-  background-color: @theme-background-color;
+  background-color: @theme-background-color2;
   border-left: 1px solid @theme-border-color;
   overflow: hidden;
   display: flex;

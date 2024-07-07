@@ -57,28 +57,9 @@ export const useCounterStore = defineStore('counter', () => {
     const chat_rec_title = ref("") // 对面页面显示页面对话记录选择
 
     // ------------------工作流页面------------------
-    const flow_data = ref({
-        "nodes": [{
-            id: `start_${Date.now().toString()}`,
-            data: {
-                variable: [
-                    {
-                        id: "0",
-                        name: "输入内容",
-                        label: "content",
-                        value: "",
-                        max_len: "40",
-                        type: "String",
-                        must: true
-                    },
-                ],
-                order: 1,
-                isSelected: false,
-            },
-            type: 'start', // 节点类型
-            position: {x: 500, y: 500},
-        }], "edges": [], "position": [],
-    }) // 页面数据
+    const flow_data = ref() // 页面数据
+    const flow_data_list = ref([]) // 历史记录
+    const flow_data_select = ref("") //对话选择
     const selectedNode = ref(null) // 选择node
     const selectedEdge = ref(null) // 选择edge
     const edit_start = ref(true) // 是否打开编辑面板
@@ -96,6 +77,7 @@ export const useCounterStore = defineStore('counter', () => {
     const edit_app_img_options = ref([]) // 应用头像
     const input_options = ref([]) // Ai节点选择变量
     const right_select_key = ref("1") // 运行界面标签页选择
+    const flow_data_status = ref(false) //工作流页面显示
     return {
         selectedKeys,
         recording,
@@ -150,6 +132,8 @@ export const useCounterStore = defineStore('counter', () => {
         edit_temp_select_red_id,
         chat_rec_title,
         flow_data,
+        flow_data_list,
+        flow_data_select,
         selectedNode,
         edit_start,
         select_modal_node,
@@ -167,5 +151,6 @@ export const useCounterStore = defineStore('counter', () => {
         edit_app_img_options,
         input_options,
         right_select_key,
+        flow_data_status,
     }
 })

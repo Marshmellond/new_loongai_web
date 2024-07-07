@@ -10,11 +10,10 @@ import LeftView from "@/views/WorkflowView/PanelView/LeftView/LeftView.vue";
 import RightView from "@/views/WorkflowView/PanelView/RightView/RightView.vue";
 import {VueFlow, Panel, useVueFlow} from '@vue-flow/core'
 import {Background} from '@vue-flow/background'
-import {ControlButton, Controls} from '@vue-flow/controls'
+import {Controls} from '@vue-flow/controls'
 import {MiniMap} from '@vue-flow/minimap'
-import BasicIcon from "@/views/WorkflowView/BasicView/BasicIcon.vue";
-import SaveRestoreControls from '@/views/WorkflowView/SaveUtilsView/Controls.vue'
-import "@/views/WorkflowView/BasicView/main.css"
+import SaveRestoreControls from '@/views/WorkflowView/SaveView/Controls.vue'
+import "@/views/WorkflowView/css/main.css"
 
 
 // ------------------------------------节点面板引入------------------------------------
@@ -30,15 +29,13 @@ import StartEditView2 from "@/views/WorkflowView/ModalNodeView/StartEditView2.vu
 import AiEditView from "@/views/WorkflowView/ModalNodeView/AiEditView.vue";
 import EndEditView from "@/views/WorkflowView/ModalNodeView/EndEditView.vue";
 import {message} from "ant-design-vue";
+import {PlusOutlined} from "@ant-design/icons-vue";
 
 // ------------------------------------变量初始化------------------------------------
-const dark = ref(true) // 主题
 const {
   onConnect,
   addEdges,
   onNodesChange,
-  onInit,
-  onNodeDragStop,
   setViewport,
   getViewport,
   toObject,
@@ -50,7 +47,55 @@ const {
   applyEdgeChanges,
 } = useVueFlow();
 
-
+const get_flow_data = () => {
+  const url2 = "/api/workflow/get_flow_data"
+  let body = {
+    flow_data_select: counter.flow_data_select,
+  }
+  fetch(url2, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      let flow_data = data["data"]["flow_data"]
+      counter.flow_data = JSON.parse(flow_data)
+      console.log(counter.flow_data)
+      localStorage.setItem("flow_data", flow_data)
+      counter.flow_data_status = true
+    }
+  })
+}
+const get_flow_data_list = (status: Boolean) => {
+  counter.flow_data_status = false
+  const url = "/api/workflow/get_flow_data_list"
+  fetch(url).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      counter.flow_data_list = data["data"]["flow_data_list"]
+    }
+    if (counter.flow_data_list.length !== 0) {
+      if (status) {
+        localStorage.setItem('flow_data_select', counter.flow_data_list[0][0]);
+        counter.flow_data_select = counter.flow_data_list[0][0]
+      }
+      if (counter.flow_data_select !== "") {
+        get_flow_data()
+      }
+    } else {
+      localStorage.setItem('flow_data_select', "");
+      counter.flow_data_select = "";
+    }
+  })
+}
 const get_ai_mode_data = () => {
   const url = "/api/workflow/get_ai_mode_data"
   fetch(url).then((res) => {
@@ -68,23 +113,17 @@ const get_ai_mode_data = () => {
 }
 get_ai_mode_data()
 
-
-if (localStorage.getItem("flow_dark") == "true") {
-  dark.value = true
-} else {
-  dark.value = false
-}
-let local_flow_data = localStorage.getItem("flow_data")
-if (local_flow_data?.length > 0) {
-  try {
-    let json_flow_data = JSON.parse(localStorage.getItem("flow_data"))
-    if (json_flow_data.nodes.length > 0) {
-      counter.flow_data = json_flow_data
-    }
-  } catch (e) {
-    console.log(e)
-  }
-}
+// let local_flow_data = localStorage.getItem("flow_data")
+// if (local_flow_data?.length > 0) {
+//   try {
+//     let json_flow_data = JSON.parse(localStorage.getItem("flow_data"))
+//     if (json_flow_data.nodes.length > 0) {
+//       counter.flow_data = json_flow_data
+//     }
+//   } catch (e) {
+//     console.log(e)
+//   }
+// }
 
 // ------------------------------------移动node------------------------------------
 const handleNodesChange = (changes) => { // node移动变化
@@ -231,50 +270,69 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown);
 });
 
-// ------------------------------------左上角基本的工具栏------------------------------------
-onInit((vueFlowInstance) => {
-  vueFlowInstance.fitView()
-})
-
-onNodeDragStop(({event, nodes, node}) => {
-})
-
-function updatePos() {
-  counter.flow_data.nodes = counter.flow_data.nodes.map((node) => {
-    return {
-      ...node,
-      position: {
-        x: Math.random() * 400,
-        y: Math.random() * 400,
+// ------------------------------------新增工作流------------------------------------
+const on_add_flow_data = () => {
+  const flow_data = {
+    "nodes": [{
+      id: `start_${Date.now().toString()}`,
+      data: {
+        variable: [
+          {
+            id: "0",
+            name: "输入内容",
+            label: "content",
+            value: "",
+            max_len: "40",
+            type: "String",
+            must: true
+          },
+        ],
+        order: 1,
+        flow_name: "",
+        flow_order: "",
+        flow_create_time: "",
+        isSelected: false,
       },
+      type: 'start', // 节点类型
+      position: {x: 500, y: 500},
+    }], "edges": [], "position": [],
+  }
+  const url = "/api/workflow/add_flow_data"
+  let body = {
+    flow_data: JSON.stringify(flow_data),
+  }
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      get_flow_data_list(true)
+      message.success("新增工作流成功")
     }
   })
 }
-
-function logToObject() {
-}
-
-function resetTransform() {
-  setViewport({x: 0, y: 0, zoom: 1})
-}
-
-function toggleDarkMode() {
-  dark.value = !dark.value
-  localStorage.setItem("flow_dark", dark.value.toString())
-}
-
-// ------------------------------------缩放比例------------------------------------
-
 </script>
 
 <template>
   <div class="div1">
     <LeftView></LeftView>
   </div>
-  <div class="div2">
-    <RightView></RightView>
+    <div class="div2" v-if="counter.flow_data_status">
+      <RightView></RightView>
+    </div>
+  <div class="basic-blank" v-if="counter.flow_data_list.length===0">
+    <span class="basic-blank-title1">AI工作流</span>
+    <a-button type="primary" size="large" class="ant-button1" @click="on_add_flow_data" style="margin-left: 0.2vw">
+      <PlusOutlined style="color: black"/>
+      <span class="basic-blank-title2">新建工作流</span>
+    </a-button>
   </div>
-
   <StartEditView class="div3" v-if="counter.select_modal_node=='start_edit'"></StartEditView>
   <StartEditView2 class="div4" v-if="counter.select_modal_node2"></StartEditView2>
   <AiEditView class="div3" v-if="counter.select_modal_node=='ai_edit'"></AiEditView>
@@ -282,8 +340,8 @@ function toggleDarkMode() {
   <VueFlow
       class="basic-flow"
       :nodes="counter.flow_data.nodes"
+      v-if="counter.flow_data_status"
       :edges="counter.flow_data.edges"
-      :class="{ dark }"
       :default-viewport="{ zoom: 1.5 }"
       :min-zoom="0.2"
       :max-zoom="10"
@@ -315,27 +373,47 @@ function toggleDarkMode() {
     <SaveRestoreControls/>
     <MiniMap/>
     <Controls position="top-left">
-      <ControlButton title="重置变换" @click="resetTransform">
-        <BasicIcon name="reset"/>
-      </ControlButton>
-
-      <ControlButton title="无序排列节点位置" @click="updatePos">
-        <BasicIcon name="update"/>
-      </ControlButton>
-
-      <ControlButton title="切换主题" @click="toggleDarkMode">
-        <BasicIcon v-if="dark" name="sun"/>
-        <BasicIcon v-else name="moon"/>
-      </ControlButton>
-
-      <ControlButton title="日志" @click="logToObject">
-        <BasicIcon name="log"/>
-      </ControlButton>
     </Controls>
   </VueFlow>
 </template>
 
 <style scoped lang="less">
+.basic-blank {
+  position: relative;
+  width: 84.3vw;
+  left: 10vw;
+  height: 95.5vh;
+  background: @theme-background-color2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .basic-blank-title1 {
+    color: black;
+    font-size: 32px;
+    margin-bottom: 2vh;
+  }
+
+  .ant-button1 {
+    position: relative;
+    width: 15%;
+    background: #fdfdfd;
+    border: 1px solid #e4e4e4;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: #f0f0f0;
+    }
+
+    .basic-blank-title2 {
+      color: black;
+    }
+  }
+}
 
 .div1 {
   display: flex;
@@ -346,6 +424,7 @@ function toggleDarkMode() {
   position: absolute;
   background: @theme-background-color;
   border-left: 1px solid @theme-border-color;
+  border-right: 1px solid @theme-border-color;
 }
 
 .div2 {
@@ -356,6 +435,7 @@ function toggleDarkMode() {
   position: absolute;
   overflow: hidden;
   right: 0;
+  border-left: 1px solid @theme-border-color;
   background: @theme-background-color;
 }
 
