@@ -354,6 +354,7 @@ function toggleDarkMode() {
   width: 14.3vw;
   height: 95.5vh;
   position: absolute;
+  overflow: hidden;
   right: 0;
   background: @theme-background-color;
 }

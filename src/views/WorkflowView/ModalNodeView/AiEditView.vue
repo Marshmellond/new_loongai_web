@@ -48,7 +48,7 @@ watch(() => counter.ai_edit_open, () => {
 </script>
 
 <template>
-  <a-modal v-model:open="counter.ai_edit_open" title="AI对话" @ok="handleOk" okText="保存" cancelText="关闭">
+  <a-modal v-model:open="counter.ai_edit_open" :title="`AI对话${counter.ai_node_data.data.order}`" @ok="handleOk" okText="保存" cancelText="关闭">
     <div class="div1">
       <span class="div1-title">模型</span>
       <a-cascader v-model:value="counter.ai_node_data.data.edit_mod" :options="counter.edit_mod_options"

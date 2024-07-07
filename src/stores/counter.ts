@@ -66,7 +66,7 @@ export const useCounterStore = defineStore('counter', () => {
                         id: "0",
                         name: "输入内容",
                         label: "content",
-                        value: "你是谁",
+                        value: "",
                         max_len: "40",
                         type: "String",
                         must: true
@@ -95,6 +95,7 @@ export const useCounterStore = defineStore('counter', () => {
     const edit_mod_img_options = ref([]) // 模型头像
     const edit_app_img_options = ref([]) // 应用头像
     const input_options = ref([]) // Ai节点选择变量
+    const right_select_key = ref("1") // 运行界面标签页选择
     return {
         selectedKeys,
         recording,
@@ -165,5 +166,6 @@ export const useCounterStore = defineStore('counter', () => {
         edit_mod_img_options,
         edit_app_img_options,
         input_options,
+        right_select_key,
     }
 })

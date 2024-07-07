@@ -1,18 +1,54 @@
 <script setup lang="ts">
 
 import Icon, {PlusOutlined} from "@ant-design/icons-vue";
+import {ref, onMounted, onUnmounted, watch} from 'vue'
+import {Input, Button, Typography, message} from 'ant-design-vue';
+import {useCounterStore} from '@/stores/counter'
+
+const counter = useCounterStore()
+
+const seed_meg = () => {
+  console.log(counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content)
+  const url = "/api/workflow/seed"
+  let body = {
+    flow_data: JSON.stringify(counter.flow_data),
+  }
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      for (let i = 0; i < counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content.length; i++) {
+        counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content[i]["value"] = data["data"][counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content[i]["name"]]
+      }
+      console.log(counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content)
+    }
+  })
+}
+const on_generate = () => {
+  if (counter.flow_data.nodes.filter(item => item.type === 'end').length === 0) {
+    message.warn("没有结束节点")
+  } else {
+    seed_meg()
+    counter.right_select_key = "2"
+    message.success("发送成功")
+  }
+}
 </script>
 
 <template>
   <div class="div1">
-    <span>来源</span>
-    <a-input style="margin-top: 1vh"></a-input>
-    <span>风格</span>
-    <a-input style="margin-top: 1vh"></a-input>
-    <span>标题数量</span>
-    <a-input style="margin-top: 1vh"></a-input>
-    <span>内容长度</span>
-    <a-input style="margin-top: 1vh"></a-input>
+    <div class="div1-2"
+         v-for="(item) in counter.flow_data.nodes[0].data.variable" :key="item.id">
+      <span style="margin-left: 0.2vw;font-size: 15px;font-weight: 900">{{ item.name }}</span>
+      <a-input style="margin-top: 0.5vh;margin-bottom: 1vh" v-model:value="item.value"></a-input>
+    </div>
   </div>
   <div class="div2">
     <a-button type="primary" size="large" class="ant-button1" @click="on_generate">
@@ -48,7 +84,6 @@ import Icon, {PlusOutlined} from "@ant-design/icons-vue";
   align-items: center;
   justify-content: center;
   padding: 1vh;
-  overflow: auto;
 
   .ant-button1 {
     width: 80%;

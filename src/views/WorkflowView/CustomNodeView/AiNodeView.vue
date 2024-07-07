@@ -173,7 +173,7 @@ const show_edit = () => {
       </div>
       <div class="div1-2">
         <span class="div1-2-title" style="margin-left: 0">{{ data.print }}</span>
-        <span class="div1-2-title2">string</span>
+        <span class="div1-2-title2">String</span>
       </div>
     </div>
 

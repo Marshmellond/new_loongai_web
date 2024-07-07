@@ -51,7 +51,8 @@ const add_end_node = () => {
   const newNode = {
     id: `end_${Date.now().toString()}`,
     data: {
-      variable_print:[],
+      variable_print: [],
+      variable_content: [],
       order: counter.flow_data.nodes.length + 1,
       isSelected: false,
     },

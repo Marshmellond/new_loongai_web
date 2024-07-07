@@ -23,7 +23,6 @@ const onFinish = (values: any) => {
     username: values.username,
     password: values.password
   }
-  console.log(body)
   fetch(url, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
