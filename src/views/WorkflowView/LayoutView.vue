@@ -46,7 +46,61 @@ const {
   applyNodeChanges,
   applyEdgeChanges,
 } = useVueFlow();
+// ------------------------------------初始化模型列表------------------------------------
+const get_ai_mode_data = () => {
+  const url = "/api/workflow/get_ai_mode_data"
+  fetch(url).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      counter.edit_mod_options = data["data"]["edit_mod_options"]
+      counter.edit_app_options = data["data"]["edit_app_options"]
+      counter.edit_mod_img_options = data["data"]["edit_mod_img_options"]
+      counter.edit_app_img_options = data["data"]["edit_app_img_options"]
+    }
+  })
+}
+get_ai_mode_data()
+// ------------------------------------获取localStorage数据------------------------------------
+const get_local_flow_data = () => {
+  let local_flow_data = localStorage.getItem("flow_data")
+  if (local_flow_data?.length > 0) {
+    try {
+      let json_flow_data = JSON.parse(local_flow_data)
+      if (json_flow_data.nodes.length > 0) {
+        counter.flow_data = json_flow_data
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+}
 
+// ------------------------------------上传工作流数据至数据库------------------------------------
+const set_flow_data = () => {
+  const url2 = "/api/workflow/set_flow_data"
+  let body = {
+    flow_data_select: counter.flow_data_select,
+    flow_data: JSON.stringify(counter.flow_data)
+  }
+  fetch(url2, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      message.success("上传工作流数据至数据库成功")
+    }
+  })
+}
+// ------------------------------------获取工作流数据------------------------------------
 const get_flow_data = () => {
   const url2 = "/api/workflow/get_flow_data"
   let body = {
@@ -65,13 +119,13 @@ const get_flow_data = () => {
     if (data["code"] == 1) {
       let flow_data = data["data"]["flow_data"]
       counter.flow_data = JSON.parse(flow_data)
-      console.log(counter.flow_data)
       localStorage.setItem("flow_data", flow_data)
       counter.flow_data_status = true
     }
   })
 }
-const get_flow_data_list = (status: Boolean) => {
+// ------------------------------------获取工作流列表------------------------------------
+const get_flow_data_list = (flow_data_select_status: Boolean = false, get_flow_data_status: Boolean = false) => {
   counter.flow_data_status = false
   const url = "/api/workflow/get_flow_data_list"
   fetch(url).then((res) => {
@@ -83,12 +137,16 @@ const get_flow_data_list = (status: Boolean) => {
       counter.flow_data_list = data["data"]["flow_data_list"]
     }
     if (counter.flow_data_list.length !== 0) {
-      if (status) {
+      if (flow_data_select_status) {
         localStorage.setItem('flow_data_select', counter.flow_data_list[0][0]);
         counter.flow_data_select = counter.flow_data_list[0][0]
       }
-      if (counter.flow_data_select !== "") {
-        get_flow_data()
+      if (get_flow_data_status) {
+        if (counter.flow_data_select !== "") {
+          get_flow_data()
+        }
+      } else {
+        get_local_flow_data()
       }
     } else {
       localStorage.setItem('flow_data_select', "");
@@ -96,35 +154,55 @@ const get_flow_data_list = (status: Boolean) => {
     }
   })
 }
-const get_ai_mode_data = () => {
-  const url = "/api/workflow/get_ai_mode_data"
-  fetch(url).then((res) => {
+
+// ------------------------------------新增工作流------------------------------------
+const on_add_flow_data = () => {
+  const flow_data = {
+    "nodes": [{
+      id: `start_${Date.now().toString()}`,
+      data: {
+        variable: [
+          {
+            id: "0",
+            name: "输入内容",
+            label: "content",
+            value: "",
+            max_len: "40",
+            type: "String",
+            must: true
+          },
+        ],
+        order: 1,
+        flow_name: "",
+        flow_order: "",
+        flow_create_time: "",
+        isSelected: false,
+      },
+      type: 'start', // 节点类型
+      position: {x: 500, y: 500},
+    }], "edges": [], "position": [],
+  }
+  const url = "/api/workflow/add_flow_data"
+  let body = {
+    flow_data: JSON.stringify(flow_data),
+  }
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
     if (res.ok) {
       return res.json()
     }
   }).then((data) => {
     if (data["code"] == 1) {
-      counter.edit_mod_options = data["data"]["edit_mod_options"]
-      counter.edit_app_options = data["data"]["edit_app_options"]
-      counter.edit_mod_img_options = data["data"]["edit_mod_img_options"]
-      counter.edit_app_img_options = data["data"]["edit_app_img_options"]
+      set_flow_data()
+      get_flow_data_list(true, true)
+      message.success("新增工作流成功")
     }
   })
 }
-get_ai_mode_data()
-
-// let local_flow_data = localStorage.getItem("flow_data")
-// if (local_flow_data?.length > 0) {
-//   try {
-//     let json_flow_data = JSON.parse(localStorage.getItem("flow_data"))
-//     if (json_flow_data.nodes.length > 0) {
-//       counter.flow_data = json_flow_data
-//     }
-//   } catch (e) {
-//     console.log(e)
-//   }
-// }
-
 // ------------------------------------移动node------------------------------------
 const handleNodesChange = (changes) => { // node移动变化
   changes.forEach(change => {
@@ -270,62 +348,15 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown);
 });
 
-// ------------------------------------新增工作流------------------------------------
-const on_add_flow_data = () => {
-  const flow_data = {
-    "nodes": [{
-      id: `start_${Date.now().toString()}`,
-      data: {
-        variable: [
-          {
-            id: "0",
-            name: "输入内容",
-            label: "content",
-            value: "",
-            max_len: "40",
-            type: "String",
-            must: true
-          },
-        ],
-        order: 1,
-        flow_name: "",
-        flow_order: "",
-        flow_create_time: "",
-        isSelected: false,
-      },
-      type: 'start', // 节点类型
-      position: {x: 500, y: 500},
-    }], "edges": [], "position": [],
-  }
-  const url = "/api/workflow/add_flow_data"
-  let body = {
-    flow_data: JSON.stringify(flow_data),
-  }
-  fetch(url, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(body),
-    credentials: "include"
-  }).then((res) => {
-    if (res.ok) {
-      return res.json()
-    }
-  }).then((data) => {
-    if (data["code"] == 1) {
-      get_flow_data_list(true)
-      message.success("新增工作流成功")
-    }
-  })
-}
 </script>
 
 <template>
   <div class="div1">
     <LeftView></LeftView>
   </div>
-    <div class="div2" v-if="counter.flow_data_status">
-      <RightView></RightView>
-    </div>
+  <div class="div2" v-if="counter.flow_data_status">
+    <RightView></RightView>
+  </div>
   <div class="basic-blank" v-if="counter.flow_data_list.length===0">
     <span class="basic-blank-title1">AI工作流</span>
     <a-button type="primary" size="large" class="ant-button1" @click="on_add_flow_data" style="margin-left: 0.2vw">
@@ -342,7 +373,7 @@ const on_add_flow_data = () => {
       :nodes="counter.flow_data.nodes"
       v-if="counter.flow_data_status"
       :edges="counter.flow_data.edges"
-      :default-viewport="{ zoom: 1.5 }"
+      :default-viewport="{ x: 0, y: 0, zoom: 1 }"
       :min-zoom="0.2"
       :max-zoom="10"
       @node-click="handleNodeClick"

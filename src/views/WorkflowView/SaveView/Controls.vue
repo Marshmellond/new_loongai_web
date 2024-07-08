@@ -2,12 +2,32 @@
 import {Panel, useVueFlow} from '@vue-flow/core'
 import Icon from './Icon.vue'
 import {message} from "ant-design-vue";
+import {useCounterStore} from '@/stores/counter'
 
+const counter = useCounterStore()
 
 const {nodes} = useVueFlow()
-
-function onSave() {
-  message.success("保存到历史列表成功")
+// ------------------------------------上传工作流数据至数据库------------------------------------
+const set_flow_data = () => {
+  const url2 = "/api/workflow/set_flow_data"
+  let body = {
+    flow_data_select: counter.flow_data_select,
+    flow_data: JSON.stringify(counter.flow_data)
+  }
+  fetch(url2, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      message.success("上传工作流数据至数据库成功")
+    }
+  })
 }
 
 function onRestore() {
@@ -16,7 +36,7 @@ function onRestore() {
   let url = URL.createObjectURL(blob);
   let a = document.createElement("a");
   a.href = url;
-  a.download = `${Date.now().toString()}.json`;
+  a.download = `loongai_workflow_${Date.now().toString()}.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -29,7 +49,7 @@ function onRestore() {
 <template>
   <Panel position="top-right">
     <div class="buttons">
-      <button title="save graph" @click="onSave" class="div-button">
+      <button title="save graph" @click="set_flow_data" class="div-button">
         <Icon name="save"/>
       </button>
       <button title="restore graph" @click="onRestore" class="div-button" style="margin-left: 0.2vh">

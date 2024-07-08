@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Icon, {CoffeeOutlined, DeleteOutlined, FormOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {useCounterStore} from '@/stores/counter'
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import {Panel, VueFlow, useVueFlow} from '@vue-flow/core'
 import {message, type UploadProps} from "ant-design-vue";
 
@@ -9,7 +9,47 @@ const counter = useCounterStore()
 const open = ref<boolean>(false);
 const edit_name = ref("")
 const edit_id = ref("")
+// ------------------------------------变量初始化------------------------------------
 counter.flow_data_select = localStorage.getItem("flow_data_select");
+
+// ------------------------------------获取localStorage数据------------------------------------
+const get_local_flow_data = () => {
+  let local_flow_data = localStorage.getItem("flow_data")
+  if (local_flow_data?.length > 0) {
+    try {
+      let json_flow_data = JSON.parse(local_flow_data)
+      if (json_flow_data.nodes.length > 0) {
+        counter.flow_data = json_flow_data
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+}
+
+// ------------------------------------上传工作流数据至数据库------------------------------------
+const set_flow_data = () => {
+  const url2 = "/api/workflow/set_flow_data"
+  let body = {
+    flow_data_select: counter.flow_data_select,
+    flow_data: JSON.stringify(counter.flow_data)
+  }
+  fetch(url2, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      message.success("上传工作流数据至数据库成功")
+    }
+  })
+}
+// ------------------------------------获取工作流数据------------------------------------
 const get_flow_data = () => {
   const url2 = "/api/workflow/get_flow_data"
   let body = {
@@ -28,13 +68,13 @@ const get_flow_data = () => {
     if (data["code"] == 1) {
       let flow_data = data["data"]["flow_data"]
       counter.flow_data = JSON.parse(flow_data)
-      console.log(counter.flow_data)
       localStorage.setItem("flow_data", flow_data)
       counter.flow_data_status = true
     }
   })
 }
-const get_flow_data_list = (status: Boolean) => {
+// ------------------------------------获取工作流列表------------------------------------
+const get_flow_data_list = (flow_data_select_status: Boolean = false, get_flow_data_status: Boolean = false) => {
   counter.flow_data_status = false
   const url = "/api/workflow/get_flow_data_list"
   fetch(url).then((res) => {
@@ -46,12 +86,16 @@ const get_flow_data_list = (status: Boolean) => {
       counter.flow_data_list = data["data"]["flow_data_list"]
     }
     if (counter.flow_data_list.length !== 0) {
-      if (status) {
+      if (flow_data_select_status) {
         localStorage.setItem('flow_data_select', counter.flow_data_list[0][0]);
         counter.flow_data_select = counter.flow_data_list[0][0]
       }
-      if (counter.flow_data_select !== "") {
-        get_flow_data()
+      if (get_flow_data_status) {
+        if (counter.flow_data_select !== "") {
+          get_flow_data()
+        }
+      } else {
+        get_local_flow_data()
       }
     } else {
       localStorage.setItem('flow_data_select', "");
@@ -59,7 +103,9 @@ const get_flow_data_list = (status: Boolean) => {
     }
   })
 }
-get_flow_data_list(false)
+get_flow_data_list(false, true)
+// ------------------------------------新增工作流------------------------------------
+
 const on_add_flow_data = () => {
   const flow_data = {
     "nodes": [{
@@ -83,7 +129,39 @@ const on_add_flow_data = () => {
         isSelected: false,
       },
       type: 'start', // 节点类型
-      position: {x: 500, y: 500},
+      position: {x: 100, y: 400},
+    }, {
+      id: `end_${Date.now().toString()}`,
+      data: {
+        variable_print: [],
+        variable_content: [],
+        order: counter.flow_data.nodes.length + 1,
+        isSelected: false,
+      },
+      type: 'end', // 节点类型
+      position: {x: 900, y: 420},
+    }, {
+      id: `ai_${Date.now().toString()}`,
+      data: {
+        edit_mod: [
+          "openai",
+          0
+        ],
+        edit_mod_view: "gpt-3.5-turbo",
+        edit_mod_img: "http://127.0.0.1:8000/img/head?path=api&name=openai.png",
+        app_mod: [
+          "无"
+        ],
+        app_mod_view: "无",
+        app_mod_img: "http://127.0.0.1:8000/img/head?path=model&name=null.png",
+        system: "",
+        input: "",
+        print: `AI回复内容${counter.flow_data.nodes.length + 1}`,
+        order: counter.flow_data.nodes.length + 1,
+        isSelected: false,
+      },
+      type: 'ai', // 节点类型
+      position: {x: 500, y: 250},
     }], "edges": [], "position": [],
   }
   const url = "/api/workflow/add_flow_data"
@@ -101,16 +179,81 @@ const on_add_flow_data = () => {
     }
   }).then((data) => {
     if (data["code"] == 1) {
-      get_flow_data_list(true)
-      counter.flow_data = data["data"]["flow_data"]
+      set_flow_data()
+      get_flow_data_list(true, true)
       message.success("新增工作流成功")
     }
   })
 }
+
+// ------------------------------------导入工作流------------------------------------
 const on_import_flow_data = () => {
-
 }
+// ------------------------------------选择工作流------------------------------------
+const selectItem = (id: string) => {
+  set_flow_data()
+  counter.flow_data_select = id;
+  localStorage.setItem('flow_data_select', id);
+  get_flow_data()
+};
 
+// ------------------------------------修改工作流------------------------------------
+const show_edit = (item) => {
+  open.value = true
+  edit_id.value = item[0].toString()
+  edit_name.value = item[1]
+}
+const handleOk = () => {
+  const url = "/api/workflow/alter_flow_name"
+  let body = {
+    flow_id: edit_id.value,
+    flow_name: edit_name.value,
+  }
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      set_flow_data()
+      get_flow_data_list(false, true)
+      message.success("工作流信息更新成功")
+    }
+  })
+  open.value = false
+  edit_id.value = ""
+  edit_name.value = ""
+}
+// ------------------------------------删除工作流------------------------------------
+
+const delete_record = (id) => {
+  const url = "/api/workflow/delete_flow_name"
+  let body = {
+    flow_id: id,
+  }
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      set_flow_data()
+      get_flow_data_list(true, true)
+      message.success("工作流删除成功")
+    }
+  })
+};
+// ------------------------------------AI对话节点------------------------------------
 const add_ai_node = () => {
   const newNode = {
     id: `ai_${Date.now().toString()}`,
@@ -137,6 +280,7 @@ const add_ai_node = () => {
   };
   counter.flow_data.nodes.push(newNode);
 }
+// ------------------------------------问题分类器节点------------------------------------
 const add_reply_node = () => {
   const newNode = {
     id: `reply_${Date.now().toString()}`,
@@ -150,20 +294,7 @@ const add_reply_node = () => {
   };
   counter.flow_data.nodes.push(newNode);
 }
-const add_end_node = () => {
-  const newNode = {
-    id: `end_${Date.now().toString()}`,
-    data: {
-      variable_print: [],
-      variable_content: [],
-      order: counter.flow_data.nodes.length + 1,
-      isSelected: false,
-    },
-    type: 'end', // 节点类型
-    position: {x: 1500, y: 500},
-  };
-  counter.flow_data.nodes.push(newNode);
-}
+// ------------------------------------判断器节点------------------------------------
 const add_if_node = () => {
   const newNode = {
     id: `if_${Date.now().toString()}`,
@@ -176,6 +307,7 @@ const add_if_node = () => {
   };
   counter.flow_data.nodes.push(newNode);
 }
+// ------------------------------------变量更新节点------------------------------------
 const add_var_node = () => {
   const newNode = {
     id: `var_${Date.now().toString()}`,
@@ -188,71 +320,6 @@ const add_var_node = () => {
   };
   counter.flow_data.nodes.push(newNode);
 }
-// ---------------选择对话---------------
-const selectItem = (id: string) => {
-  counter.flow_data_select = id;
-  localStorage.setItem('flow_data_select', id);
-  get_flow_data()
-};
-
-// ---------------修改对话---------------
-const show_edit = (item) => {
-  open.value = true
-  edit_id.value = item[0].toString()
-  edit_name.value = item[1]
-}
-const handleOk = () => {
-  const url = "/api/workflow/alter_flow_name"
-  let body = {
-    flow_id: edit_id.value,
-    flow_name: edit_name.value,
-  }
-  fetch(url, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(body),
-    credentials: "include"
-  }).then((res) => {
-    if (res.ok) {
-      return res.json()
-    }
-  }).then((data) => {
-    if (data["code"] == 1) {
-      get_flow_data_list(false)
-      message.success("工作流信息更新成功")
-    }
-  })
-  open.value = false
-  edit_id.value = ""
-  edit_name.value = ""
-}
-// ---------------删除对话---------------
-
-const delete_record = (id) => {
-  const url = "/api/workflow/delete_flow_name"
-  let body = {
-    flow_id: id,
-  }
-  fetch(url, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(body),
-    credentials: "include"
-  }).then((res) => {
-    if (res.ok) {
-      return res.json()
-    }
-  }).then((data) => {
-    if (data["code"] == 1) {
-      if (counter.flow_data_select == id) {
-        get_flow_data_list(true)
-      } else {
-        get_flow_data_list(false)
-      }
-      message.success("工作流删除成功")
-    }
-  })
-};
 </script>
 
 <template>
@@ -309,41 +376,6 @@ const delete_record = (id) => {
         </template>
       </icon>
       <span style="margin-left: 1vh">问题分类器</span>
-    </div>
-    <div class="div1-t1" @click="add_end_node">
-      <icon :style="{ color: '#000000'}">
-        <template #component>
-          <svg t="1720336099924" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-               p-id="10814" width="32" height="32">
-            <path
-                d="M512 81.92C274.432 81.92 81.92 274.432 81.92 512s192.512 430.08 430.08 430.08 430.08-192.512 430.08-430.08S749.568 81.92 512 81.92z"
-                fill="#FF6F08" p-id="10815"></path>
-            <path
-                d="M512 983.04C251.904 983.04 40.96 772.096 40.96 512S251.904 40.96 512 40.96s471.04 210.944 471.04 471.04-210.944 471.04-471.04 471.04z m0-901.12C274.432 81.92 81.92 274.432 81.92 512s192.512 430.08 430.08 430.08 430.08-192.512 430.08-430.08S749.568 81.92 512 81.92z"
-                fill="#ffffff" p-id="10816" data-spm-anchor-id="a313x.search_index.0.i10.4ed63a810dnio2"
-                class="selected"></path>
-            <path
-                d="M512 143.36C309.248 143.36 143.36 309.248 143.36 512s165.888 368.64 368.64 368.64 368.64-165.888 368.64-368.64S714.752 143.36 512 143.36z"
-                fill="#FF8936" p-id="10817"></path>
-            <path
-                d="M813.056 319.488c-6.144 0-12.288-2.048-16.384-8.192-14.336-20.48-30.72-38.912-49.152-55.296-8.192-8.192-8.192-20.48-2.048-28.672 8.192-8.192 20.48-8.192 28.672-2.048 20.48 18.432 38.912 38.912 55.296 61.44 6.144 10.24 4.096 22.528-4.096 28.672-4.096 2.048-8.192 4.096-12.288 4.096z m-112.64-104.448c-4.096 0-8.192 0-10.24-2.048C636.928 180.224 575.488 163.84 512 163.84c-12.288 0-20.48-8.192-20.48-20.48s8.192-20.48 20.48-20.48c69.632 0 139.264 18.432 198.656 55.296 10.24 6.144 12.288 18.432 6.144 28.672-2.048 6.144-8.192 8.192-16.384 8.192z"
-                fill="#FFEBDD" p-id="10818"></path>
-            <path
-                d="M491.52 296.96c0-8.192 2.048-16.384 8.192-22.528 6.144-6.144 12.288-10.24 20.48-10.24s16.384 4.096 22.528 10.24c8.192 6.144 10.24 14.336 10.24 22.528v184.32c0 8.192-2.048 16.384-8.192 22.528-6.144 6.144-12.288 8.192-22.528 8.192-8.192 0-16.384-2.048-20.48-8.192-6.144-6.144-8.192-12.288-8.192-22.528v-184.32H491.52z"
-                fill="#FFD4B5" p-id="10819"></path>
-            <path
-                d="M739.328 614.4c-12.288 28.672-28.672 53.248-51.2 73.728-20.48 20.48-47.104 36.864-73.728 49.152-28.672 12.288-59.392 18.432-92.16 18.432s-63.488-6.144-92.16-18.432c-28.672-12.288-53.248-28.672-75.776-49.152-20.48-20.48-38.912-45.056-51.2-73.728-10.24-26.624-16.384-57.344-16.384-90.112 0-18.432 2.048-36.864 6.144-53.248 4.096-18.432 10.24-34.816 18.432-51.2s18.432-30.72 30.72-45.056c12.288-14.336 24.576-26.624 40.96-36.864 6.144-6.144 14.336-8.192 24.576-6.144 8.192 2.048 16.384 6.144 22.528 12.288 4.096 8.192 6.144 16.384 4.096 24.576 0 8.192-4.096 16.384-12.288 22.528-22.528 16.384-38.912 34.816-51.2 59.392-12.288 22.528-18.432 49.152-18.432 75.776 0 22.528 4.096 45.056 12.288 65.536 8.192 20.48 20.48 38.912 36.864 53.248 14.336 14.336 32.768 26.624 53.248 36.864 20.48 8.192 43.008 14.336 65.536 14.336s45.056-4.096 65.536-14.336c20.48-8.192 38.912-20.48 53.248-36.864 14.336-14.336 26.624-32.768 36.864-53.248 8.192-20.48 14.336-40.96 14.336-65.536 0-26.624-6.144-53.248-18.432-77.824-12.288-24.576-30.72-43.008-53.248-59.392-8.192-6.144-12.288-12.288-14.336-20.48-2.048-8.192 0-16.384 6.144-24.576 6.144-8.192 12.288-12.288 22.528-12.288 8.192-2.048 18.432 0 24.576 6.144 16.384 10.24 30.72 24.576 43.008 36.864 12.288 14.336 22.528 28.672 30.72 45.056 8.192 16.384 16.384 32.768 20.48 51.2 4.096 18.432 6.144 36.864 6.144 55.296 0 30.72-6.144 61.44-18.432 88.064z"
-                fill="#FFD4B5" p-id="10820"></path>
-            <path
-                d="M471.04 276.48c0-8.192 2.048-16.384 8.192-22.528 6.144-6.144 12.288-10.24 20.48-10.24s16.384 4.096 22.528 10.24c8.192 6.144 10.24 14.336 10.24 22.528v184.32c0 8.192-2.048 16.384-8.192 22.528-6.144 6.144-12.288 8.192-22.528 8.192-8.192 0-16.384-2.048-20.48-8.192-6.144-6.144-8.192-12.288-8.192-22.528v-184.32H471.04z"
-                fill="#FFFFFF" p-id="10821"></path>
-            <path
-                d="M718.848 593.92c-12.288 28.672-28.672 53.248-51.2 73.728-20.48 20.48-47.104 36.864-73.728 49.152-28.672 12.288-59.392 18.432-92.16 18.432s-63.488-6.144-92.16-18.432c-28.672-12.288-53.248-28.672-75.776-49.152-20.48-20.48-38.912-45.056-51.2-73.728-10.24-26.624-16.384-57.344-16.384-90.112 0-18.432 2.048-36.864 6.144-53.248 4.096-18.432 10.24-34.816 18.432-51.2s18.432-30.72 30.72-45.056c12.288-14.336 24.576-26.624 40.96-36.864 6.144-6.144 14.336-8.192 24.576-6.144 8.192 2.048 16.384 6.144 22.528 12.288 4.096 8.192 6.144 16.384 4.096 24.576 0 8.192-4.096 16.384-12.288 22.528-22.528 16.384-38.912 34.816-51.2 59.392-12.288 22.528-18.432 49.152-18.432 75.776 0 22.528 4.096 45.056 12.288 65.536 8.192 20.48 20.48 38.912 36.864 53.248 14.336 14.336 32.768 26.624 53.248 36.864 20.48 8.192 43.008 14.336 65.536 14.336s45.056-4.096 65.536-14.336c20.48-8.192 38.912-20.48 53.248-36.864 14.336-14.336 26.624-32.768 36.864-53.248 8.192-20.48 14.336-40.96 14.336-65.536 0-26.624-6.144-53.248-18.432-77.824-12.288-24.576-30.72-43.008-53.248-59.392-8.192-6.144-12.288-12.288-14.336-20.48-2.048-8.192 0-16.384 6.144-24.576 6.144-8.192 12.288-12.288 22.528-12.288 8.192-2.048 18.432 0 24.576 6.144 16.384 10.24 30.72 24.576 43.008 36.864 12.288 14.336 22.528 28.672 30.72 45.056 8.192 16.384 16.384 32.768 20.48 51.2 4.096 18.432 6.144 36.864 6.144 55.296 0 30.72-6.144 61.44-18.432 88.064z"
-                fill="#FFFFFF" p-id="10822"></path>
-          </svg>
-        </template>
-      </icon>
-      <span style="margin-left: 1vh">结束</span>
     </div>
     <span style="font-size: 16px;margin-top: 2vh">工具</span>
     <div class="div1-t1" @click="add_if_node">
@@ -539,6 +571,7 @@ const delete_record = (id) => {
 .div1-content {
   display: flex;
   flex-direction: column;
+  height: 45vh;
   padding: 0.01vh 1vh 1vh 1vh;
 
   .div1-t1 {
