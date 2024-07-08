@@ -4,7 +4,7 @@ import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
 import {Position, Handle} from '@vue-flow/core';
-import Icon, {FormOutlined, PlusOutlined} from "@ant-design/icons-vue";
+import Icon, {DeleteOutlined, FormOutlined, PlusOutlined} from "@ant-design/icons-vue";
 
 const props = defineProps(['data']);
 

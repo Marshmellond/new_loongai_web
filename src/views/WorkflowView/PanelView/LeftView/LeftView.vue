@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import Icon, {CoffeeOutlined, DeleteOutlined, FormOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {useCounterStore} from '@/stores/counter'
-import {ref, watch} from "vue";
+import {ref, watch, onMounted, onUnmounted} from "vue";
+import {useRouter} from 'vue-router';
+
 import {Panel, VueFlow, useVueFlow} from '@vue-flow/core'
 import {message, type UploadProps} from "ant-design-vue";
 
+const router = useRouter();
 const counter = useCounterStore()
 const open = ref<boolean>(false);
 const edit_name = ref("")
@@ -104,9 +107,30 @@ const get_flow_data_list = (flow_data_select_status: Boolean = false, get_flow_d
   })
 }
 get_flow_data_list(false, true)
+// ------------------------------------切换路由页面自动保存------------------------------------
+router.beforeEach((to, from, next) => {
+  if (from.name === 'workflow') { // 替换为你的路由名称
+    set_flow_data();
+  }
+  next();
+});
+
+// ------------------------------------刷新网页自动保存------------------------------------
+function handleBeforeUnload() {
+  set_flow_data()
+}
+
+onMounted(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload);
+});
 // ------------------------------------新增工作流------------------------------------
 
 const on_add_flow_data = () => {
+  const ai_id = `ai_${Date.now().toString()}`
   const flow_data = {
     "nodes": [{
       id: `start_${Date.now().toString()}`,
@@ -141,7 +165,7 @@ const on_add_flow_data = () => {
       type: 'end', // 节点类型
       position: {x: 900, y: 420},
     }, {
-      id: `ai_${Date.now().toString()}`,
+      id: ai_id,
       data: {
         edit_mod: [
           "openai",
@@ -159,11 +183,14 @@ const on_add_flow_data = () => {
         print: `AI回复内容${counter.flow_data.nodes.length + 1}`,
         order: counter.flow_data.nodes.length + 1,
         isSelected: false,
+        id: ai_id,
       },
       type: 'ai', // 节点类型
       position: {x: 500, y: 250},
     }], "edges": [], "position": [],
   }
+
+
   const url = "/api/workflow/add_flow_data"
   let body = {
     flow_data: JSON.stringify(flow_data),
@@ -255,8 +282,9 @@ const delete_record = (id) => {
 };
 // ------------------------------------AI对话节点------------------------------------
 const add_ai_node = () => {
+  const ai_id = `ai_${Date.now().toString()}`
   const newNode = {
-    id: `ai_${Date.now().toString()}`,
+    id: ai_id,
     data: {
       edit_mod: [
         "openai",
@@ -274,6 +302,7 @@ const add_ai_node = () => {
       print: `AI回复内容${counter.flow_data.nodes.length + 1}`,
       order: counter.flow_data.nodes.length + 1,
       isSelected: false,
+      id: ai_id,
     },
     type: 'ai', // 节点类型
     position: {x: 900, y: 500},

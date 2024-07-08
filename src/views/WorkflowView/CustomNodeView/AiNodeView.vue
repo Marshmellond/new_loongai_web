@@ -1,12 +1,25 @@
 <script setup>
-import {Position, Handle} from '@vue-flow/core';
-import Icon, {FormOutlined} from "@ant-design/icons-vue";
+import {Position, Handle, useVueFlow} from '@vue-flow/core';
+import Icon, {DeleteOutlined, FormOutlined} from "@ant-design/icons-vue";
 import {ref, onMounted, onUnmounted, watch} from 'vue'
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
 const props = defineProps(['data']);
-
+const {
+  onConnect,
+  addEdges,
+  onNodesChange,
+  setViewport,
+  getViewport,
+  toObject,
+  getNodes,
+  removeNodes,
+  addNodes,
+  onEdgesChange,
+  applyNodeChanges,
+  applyEdgeChanges,
+} = useVueFlow();
 const show_edit = () => {
   setTimeout(() => {
     counter.ai_node_data = counter.flow_data.nodes.filter(node => node.id === counter.selectedNode)
@@ -49,6 +62,19 @@ const show_edit = () => {
     counter.ai_edit_open = true
   }, 100)
 }
+// ------------------------------------删除node------------------------------------
+const deleteNode = (nodeId) => {
+  counter.flow_data.nodes = counter.flow_data.nodes.filter(node => node.id !== nodeId);
+  counter.flow_data.edges = counter.flow_data.edges.filter((edge) => {
+    let flow_temp_data = edge.id.replace("vueflow__edge-", "").split("-");
+    return flow_temp_data[0] !== nodeId && flow_temp_data[1] !== nodeId;
+  });
+  localStorage.setItem("flow_data", flow_data)
+};
+// ------------------------------------删除edge------------------------------------
+const deleteEdge = (edgeId) => {
+  counter.flow_data.edges = counter.flow_data.edges.filter(edge => edge.id !== edgeId);
+};
 </script>
 <template>
   <div class="ai-node" :class="{'selected': data.isSelected}">
@@ -68,7 +94,8 @@ const show_edit = () => {
         </icon>
       </div>
       <span class="div0-title">AI对话{{ data.order }}</span>
-      <FormOutlined class="div0-edit" @click="show_edit"/>
+      <DeleteOutlined class="div0-edit1" @click="deleteNode(data.id)"/>
+      <FormOutlined class="div0-edit2" @click="show_edit"/>
     </div>
 
     <div class="div1" style="margin-top: 2vh;">
@@ -262,10 +289,23 @@ const show_edit = () => {
   .div0-title {
     font-weight: 900;
     font-size: 18px;
-    margin-right: 7.2vw;
+    margin-right: 5vw;
   }
 
-  .div0-edit {
+  .div0-edit1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: #fc2c54;
+    border-radius: 7px;
+    width: 1.5vw;
+    height: 3vh;
+    font-size: 15px;
+    margin-right: 0.5vw;
+  }
+
+  .div0-edit2 {
     display: flex;
     align-items: center;
     justify-content: center;

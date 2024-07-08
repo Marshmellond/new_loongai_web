@@ -154,7 +154,6 @@ const get_flow_data_list = (flow_data_select_status: Boolean = false, get_flow_d
     }
   })
 }
-
 // ------------------------------------新增工作流------------------------------------
 const on_add_flow_data = () => {
   const flow_data = {
@@ -300,53 +299,7 @@ onConnect((connection) => {
     counter.flow_data.edges.push(reactive(connection))
   }
 })
-// ------------------------------------删除node------------------------------------
-const deleteNode = (nodeId) => {
-  removeNodes([nodeId]);
-  counter.flow_data.nodes = counter.flow_data.nodes.filter(node => node.id !== nodeId);
-  counter.flow_data.edges = counter.flow_data.edges.filter((edge) => {
-    let flow_temp_data = edge.id.replace("vueflow__edge-", "").split("-");
-    return flow_temp_data[0] !== nodeId && flow_temp_data[1] !== nodeId;
-  });
-};
 
-// ------------------------------------删除edge------------------------------------
-const deleteEdge = (edgeId) => {
-  counter.flow_data.edges = counter.flow_data.edges.filter(edge => edge.id !== edgeId);
-};
-
-// 监听键盘事件
-const handleKeyDown = (event) => {
-  if (counter.edit_start) {
-    if (event.key === 'Backspace' || event.key === 'Delete') {
-      // 如果有选中的节点，则删除它
-      if (counter.selectedNode) {
-        if (counter.selectedNode.startsWith("start")) {
-          message.warn("开始节点不可删除")
-          event.preventDefault();
-          return
-        }
-        deleteNode(counter.selectedNode);
-        counter.selectedNode = null;
-      }
-      // 如果有选中的边，则删除它
-      if (counter.selectedEdge) {
-        deleteEdge(counter.selectedEdge);
-        counter.selectedEdge = null;
-      }
-    }
-  }
-};
-
-// 在组件挂载时添加键盘事件监听器
-onMounted(() => {
-  window.addEventListener('keydown', handleKeyDown);
-});
-
-// 在组件卸载时移除键盘事件监听器
-onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeyDown);
-});
 
 </script>
 
