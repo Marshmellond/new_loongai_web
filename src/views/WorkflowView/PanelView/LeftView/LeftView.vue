@@ -127,6 +127,68 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('beforeunload', handleBeforeUnload);
 });
+
+// ------------------------------------AI节点最大增加ID------------------------------------
+const flow_add_ai_max_id = () => {
+  counter.flow_add_ai_max_id = 0
+  let ai_flow_data = counter.flow_data.nodes.filter(item => item.type === 'ai')
+  if (ai_flow_data.length !== 0) {
+    for (let i = 0; i < ai_flow_data.length; i++) {
+      if (ai_flow_data[i].data.order > counter.flow_add_ai_max_id) {
+        counter.flow_add_ai_max_id = ai_flow_data[i].data.order
+      }
+    }
+  }
+}
+// ------------------------------------问题分类器节点最大增加ID------------------------------------
+const flow_add_reply_max_id = () => {
+  counter.flow_add_reply_max_id = 0
+  let reply_flow_data = counter.flow_data.nodes.filter(item => item.type === 'reply')
+  if (reply_flow_data.length !== 0) {
+    for (let i = 0; i < reply_flow_data.length; i++) {
+      if (reply_flow_data[i].data.order > counter.flow_add_reply_max_id) {
+        counter.flow_add_reply_max_id = reply_flow_data[i].data.order
+      }
+    }
+  }
+}
+// ------------------------------------判断器节点最大增加ID------------------------------------
+const flow_add_if_max_id = () => {
+  counter.flow_add_if_max_id = 0
+  let if_flow_data = counter.flow_data.nodes.filter(item => item.type === 'if')
+  if (if_flow_data.length !== 0) {
+    for (let i = 0; i < if_flow_data.length; i++) {
+      if (if_flow_data[i].data.order > counter.flow_add_if_max_id) {
+        counter.flow_add_if_max_id = if_flow_data[i].data.order
+      }
+    }
+  }
+}
+// ------------------------------------变量更新节点最大增加ID------------------------------------
+const flow_add_var_max_id = () => {
+  counter.flow_add_var_max_id = 0
+  let var_flow_data = counter.flow_data.nodes.filter(item => item.type === 'var')
+  if (var_flow_data.length !== 0) {
+    for (let i = 0; i < var_flow_data.length; i++) {
+      if (var_flow_data[i].data.order > counter.flow_add_var_max_id) {
+        counter.flow_add_var_max_id = var_flow_data[i].data.order
+      }
+    }
+  }
+}
+// ------------------------------------注释节点最大增加ID------------------------------------
+const flow_add_note_max_id = () => {
+  counter.flow_add_note_max_id = 0
+  let note_flow_data = counter.flow_data.nodes.filter(item => item.type === 'note')
+  if (note_flow_data.length !== 0) {
+    for (let i = 0; i < note_flow_data.length; i++) {
+      if (note_flow_data[i].data.order > counter.flow_add_note_max_id) {
+        counter.flow_add_note_max_id = note_flow_data[i].data.order
+      }
+    }
+  }
+}
+
 // ------------------------------------新增工作流------------------------------------
 
 const on_add_flow_data = () => {
@@ -146,7 +208,6 @@ const on_add_flow_data = () => {
             must: true
           },
         ],
-        order: 1,
         flow_name: "",
         flow_order: "",
         flow_create_time: "",
@@ -159,7 +220,6 @@ const on_add_flow_data = () => {
       data: {
         variable_print: [],
         variable_content: [],
-        order: counter.flow_data.nodes.length + 1,
         isSelected: false,
       },
       type: 'end', // 节点类型
@@ -180,8 +240,8 @@ const on_add_flow_data = () => {
         app_mod_img: "http://127.0.0.1:8000/img/head?path=model&name=null.png",
         system: "",
         input: "",
-        print: `AI回复内容${counter.flow_data.nodes.length + 1}`,
-        order: counter.flow_data.nodes.length + 1,
+        print: `AI回复内容1`,
+        order: 1,
         isSelected: false,
         id: ai_id,
       },
@@ -283,6 +343,7 @@ const delete_record = (id) => {
 // ------------------------------------AI对话节点------------------------------------
 const add_ai_node = () => {
   const ai_id = `ai_${Date.now().toString()}`
+  flow_add_ai_max_id()
   const newNode = {
     id: ai_id,
     data: {
@@ -299,8 +360,8 @@ const add_ai_node = () => {
       app_mod_img: "http://127.0.0.1:8000/img/head?path=model&name=null.png",
       system: "",
       input: "",
-      print: `AI回复内容${counter.flow_data.nodes.length + 1}`,
-      order: counter.flow_data.nodes.length + 1,
+      print: `AI回复内容${counter.flow_add_ai_max_id + 1}`,
+      order: counter.flow_add_ai_max_id + 1,
       isSelected: false,
       id: ai_id,
     },
@@ -311,12 +372,22 @@ const add_ai_node = () => {
 }
 // ------------------------------------问题分类器节点------------------------------------
 const add_reply_node = () => {
+  const reply_id = `reply_${Date.now().toString()}`
+  flow_add_reply_max_id()
   const newNode = {
-    id: `reply_${Date.now().toString()}`,
+    id: reply_id,
     data: {
-      label: '',
-      order: counter.flow_data.nodes.length + 1,
+      edit_mod: [
+        "openai",
+        0
+      ],
+      edit_mod_view: "gpt-3.5-turbo",
+      edit_mod_img: "http://127.0.0.1:8000/img/head?path=api&name=openai.png",
+      input: "",
+      question: [],
+      order: counter.flow_add_reply_max_id + 1,
       isSelected: false,
+      id: reply_id,
     },
     type: 'reply', // 节点类型
     position: {x: 1200, y: 500},
@@ -325,11 +396,15 @@ const add_reply_node = () => {
 }
 // ------------------------------------判断器节点------------------------------------
 const add_if_node = () => {
+  const if_id = `if_${Date.now().toString()}`
+  flow_add_if_max_id()
   const newNode = {
-    id: `if_${Date.now().toString()}`,
+    id: if_id,
     data: {
-      order: counter.flow_data.nodes.length + 1,
+      order: counter.flow_add_if_max_id + 1,
+      condition: [{id:1,var:"输入内容",dit:"等于",value:"就这内容"},{id:2,var:"输入内容2",dit:"等于",value:"就这内容2"},{id:3,var:"输入内容3",dit:"等于",value:"就这内容3"}],
       isSelected: false,
+      id: if_id,
     },
     type: 'if', // 节点类型
     position: {x: 900, y: 200},
@@ -338,14 +413,36 @@ const add_if_node = () => {
 }
 // ------------------------------------变量更新节点------------------------------------
 const add_var_node = () => {
+  const var_id = `var_${Date.now().toString()}`
+  flow_add_var_max_id()
   const newNode = {
-    id: `var_${Date.now().toString()}`,
+    id: var_id,
     data: {
-      order: counter.flow_data.nodes.length + 1,
+      order: counter.flow_add_var_max_id + 1,
+      input: "",
+      var_update_data: [],
       isSelected: false,
+      id: var_id,
     },
     type: 'var', // 节点类型
     position: {x: 1200, y: 200},
+  };
+  counter.flow_data.nodes.push(newNode);
+}
+// ------------------------------------注释节点------------------------------------
+const add_note_node = () => {
+  const note_id = `note_${Date.now().toString()}`
+  flow_add_note_max_id()
+  const newNode = {
+    id: note_id,
+    data: {
+      order: counter.flow_add_note_max_id + 1,
+      content: "我靠我靠我靠",
+      isSelected: false,
+      id: note_id,
+    },
+    type: 'note', // 节点类型
+    position: {x: 1300, y: 200},
   };
   counter.flow_data.nodes.push(newNode);
 }
@@ -437,7 +534,7 @@ const add_var_node = () => {
       </icon>
       <span style="margin-left: 1vh">变量更新</span>
     </div>
-    <div class="div1-t1" @click="add_var_node">
+    <div class="div1-t1" @click="add_note_node">
       <icon :style="{ color: '#000000'}">
         <template #component>
           <svg t="1720336682929" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -451,7 +548,7 @@ const add_var_node = () => {
           </svg>
         </template>
       </icon>
-      <span style="margin-left: 1vh">注释</span>
+      <span style="margin-left: 1vh">备注</span>
     </div>
   </div>
   <div class="div2">
@@ -646,6 +743,7 @@ const add_var_node = () => {
     background: #fdfdfd;
     border: 1px solid #e4e4e4;
     display: flex;
+    width: 50%;
     flex-direction: row;
     align-items: center;
     justify-content: center;

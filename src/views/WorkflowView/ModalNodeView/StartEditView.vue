@@ -40,7 +40,7 @@ const delete_variable = (id) => {
 </script>
 
 <template>
-  <a-modal v-model:open="counter.start_edit_open" :title="`开始${counter.flow_data.nodes[0].data.order}`" @ok="handleOk" okText="保存" cancelText="关闭">
+  <a-modal v-model:open="counter.start_edit_open" title="开始" @ok="handleOk" okText="保存" cancelText="关闭">
     <div class="div1">
       <span class="div1-title">全局变量</span>
       <PlusOutlined class="div1-ico" @click="add_variable1"/>
@@ -154,6 +154,9 @@ const delete_variable = (id) => {
   align-items: center;
   margin-bottom: 0.5vh;
 
+  .div1-title {
+    margin-left: 0.2vw;
+  }
 
   .div1-ico {
     position: relative;

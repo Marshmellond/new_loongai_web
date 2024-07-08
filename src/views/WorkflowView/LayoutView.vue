@@ -22,12 +22,17 @@ import AiNodeView from "@/views/WorkflowView/CustomNodeView/AiNodeView.vue";
 import EndNodeView from "@/views/WorkflowView/CustomNodeView/EndNodeView.vue";
 import IFNodeView from "@/views/WorkflowView/CustomNodeView/IFNodeView.vue";
 import ReplyNodeView from "@/views/WorkflowView/CustomNodeView/ReplyNodeView.vue";
-import VarUpdateNodeView from "@/views/WorkflowView/CustomNodeView/VarUpdateNodeView.vue";
+import VarNodeView from "@/views/WorkflowView/CustomNodeView/VarNodeView.vue";
+import NoteNodeView from "@/views/WorkflowView/CustomNodeView/NoteNodeView.vue";
 // ------------------------------------节点编辑引入------------------------------------
 import StartEditView from "@/views/WorkflowView/ModalNodeView/StartEditView.vue";
 import StartEditView2 from "@/views/WorkflowView/ModalNodeView/StartEditView2.vue";
 import AiEditView from "@/views/WorkflowView/ModalNodeView/AiEditView.vue";
 import EndEditView from "@/views/WorkflowView/ModalNodeView/EndEditView.vue";
+import ReplyEditView from "@/views/WorkflowView/ModalNodeView/ReplyEditView.vue";
+import NoteEditView from "@/views/WorkflowView/ModalNodeView/NoteEditView.vue";
+import VarEditView from "@/views/WorkflowView/ModalNodeView/VarEditView.vue";
+import IFEditView from "@/views/WorkflowView/ModalNodeView/IFEditView.vue";
 import {message} from "ant-design-vue";
 import {PlusOutlined} from "@ant-design/icons-vue";
 
@@ -155,7 +160,9 @@ const get_flow_data_list = (flow_data_select_status: Boolean = false, get_flow_d
   })
 }
 // ------------------------------------新增工作流------------------------------------
+
 const on_add_flow_data = () => {
+  const ai_id = `ai_${Date.now().toString()}`
   const flow_data = {
     "nodes": [{
       id: `start_${Date.now().toString()}`,
@@ -171,16 +178,49 @@ const on_add_flow_data = () => {
             must: true
           },
         ],
-        order: 1,
         flow_name: "",
         flow_order: "",
         flow_create_time: "",
         isSelected: false,
       },
       type: 'start', // 节点类型
-      position: {x: 500, y: 500},
+      position: {x: 100, y: 400},
+    }, {
+      id: `end_${Date.now().toString()}`,
+      data: {
+        variable_print: [],
+        variable_content: [],
+        isSelected: false,
+      },
+      type: 'end', // 节点类型
+      position: {x: 900, y: 420},
+    }, {
+      id: ai_id,
+      data: {
+        edit_mod: [
+          "openai",
+          0
+        ],
+        edit_mod_view: "gpt-3.5-turbo",
+        edit_mod_img: "http://127.0.0.1:8000/img/head?path=api&name=openai.png",
+        app_mod: [
+          "无"
+        ],
+        app_mod_view: "无",
+        app_mod_img: "http://127.0.0.1:8000/img/head?path=model&name=null.png",
+        system: "",
+        input: "",
+        print: `AI回复内容1`,
+        order: 1,
+        isSelected: false,
+        id: ai_id,
+      },
+      type: 'ai', // 节点类型
+      position: {x: 500, y: 250},
     }], "edges": [], "position": [],
   }
+
+
   const url = "/api/workflow/add_flow_data"
   let body = {
     flow_data: JSON.stringify(flow_data),
@@ -202,6 +242,7 @@ const on_add_flow_data = () => {
     }
   })
 }
+
 // ------------------------------------移动node------------------------------------
 const handleNodesChange = (changes) => { // node移动变化
   changes.forEach(change => {
@@ -291,7 +332,7 @@ onConnect((connection) => {
   }
   if (connection.source === connection.target) {
     message.warn("连接对象错误")
-  } else if ((connection.sourceHandle !== "right") || (connection.targetHandle !== "left")) {
+  } else if ((connection.sourceHandle === "left") || (connection.targetHandle === "right")) {
     message.warn("连接方向错误")
   } else if (!add_connection_edge.value) {
     message.warn("请勿重复连接节点")
@@ -299,7 +340,30 @@ onConnect((connection) => {
     counter.flow_data.edges.push(reactive(connection))
   }
 })
-
+// ------------------------------------删除edge------------------------------------
+const deleteEdge = (edgeId) => {
+  counter.flow_data.edges = counter.flow_data.edges.filter(edge => edge.id !== edgeId);
+};
+// 监听键盘事件
+const handleKeyDown = (event) => {
+  if (counter.edit_start) {
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+      // 如果有选中的边，则删除它
+      if (counter.selectedEdge) {
+        deleteEdge(counter.selectedEdge);
+        counter.selectedEdge = null;
+      }
+    }
+  }
+};
+// 在组件挂载时添加键盘事件监听器
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown);
+});
+// 在组件卸载时移除键盘事件监听器
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown);
+});
 
 </script>
 
@@ -321,6 +385,10 @@ onConnect((connection) => {
   <StartEditView2 class="div4" v-if="counter.select_modal_node2"></StartEditView2>
   <AiEditView class="div3" v-if="counter.select_modal_node=='ai_edit'"></AiEditView>
   <EndEditView class="div3" v-if="counter.select_modal_node=='end_edit'"></EndEditView>
+  <ReplyEditView class="div3" v-if="counter.select_modal_node=='reply_edit'"></ReplyEditView>
+  <NoteEditView class="div3" v-if="counter.select_modal_node=='note_edit'"></NoteEditView>
+  <VarEditView class="div3" v-if="counter.select_modal_node=='var_edit'"></VarEditView>
+  <IFEditView class="div3" v-if="counter.select_modal_node=='if_edit'"></IFEditView>
   <VueFlow
       class="basic-flow"
       :nodes="counter.flow_data.nodes"
@@ -351,7 +419,10 @@ onConnect((connection) => {
       <ReplyNodeView v-bind="nodeProps"/>
     </template>
     <template #node-var="nodeProps">
-      <VarUpdateNodeView v-bind="nodeProps"/>
+      <VarNodeView v-bind="nodeProps"/>
+    </template>
+    <template #node-note="nodeProps">
+      <NoteNodeView v-bind="nodeProps"/>
     </template>
     <Background/>
     <SaveRestoreControls/>

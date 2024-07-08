@@ -349,7 +349,6 @@ const add_record = () => {
       margin-bottom: 2%;
       background: @theme-background-color;
       border-radius: 1px;
-      //border: 1px solid #e4e4e4;
 
       .ant-div {
         display: flex;

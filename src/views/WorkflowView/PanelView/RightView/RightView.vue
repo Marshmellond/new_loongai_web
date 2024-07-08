@@ -13,11 +13,12 @@ const counter = useCounterStore()
   </div>
   <a-tabs v-model:activeKey="counter.right_select_key"
           type="card"
+          :centered="true"
           class="div2">
     <a-tab-pane key="1" tab="输入">
       <InputView></InputView>
     </a-tab-pane>
-    <a-tab-pane :key="`${index+2}`" :tab="`结果${item.data.order}`"
+    <a-tab-pane :key="`${index+2}`" tab="结果"
                 v-for="(item, index) in counter.flow_data.nodes.filter(item => item.type === 'end')"
                 force-render>
       <div class="div3">

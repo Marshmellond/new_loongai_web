@@ -64,7 +64,7 @@ watch(() => counter.ai_edit_open, () => {
           :autoSize="{ minRows: 5, maxRows: 5}"
           style="width: 100%"
           :allowClear="true"/>
-      <span class="div1-title" style="margin-top: 1vh">输入变量</span>
+      <span class="div1-title" style="margin-top: 1vh">用户问题</span>
       <a-cascader v-model:value="counter.ai_node_data.data.input" :options="counter.input_options"/>
     </div>
   </a-modal>
@@ -78,6 +78,7 @@ watch(() => counter.ai_edit_open, () => {
   margin-bottom: 1vh;
 
   .div1-title {
+        margin-left: 0.2vw;
     margin-bottom: 0.2vh;
   }
 }

@@ -22,19 +22,19 @@ const {
 } = useVueFlow();
 // ------------------------------------删除node------------------------------------
 const deleteNode = (nodeId) => {
-
   counter.flow_data.nodes = counter.flow_data.nodes.filter(node => node.id !== nodeId);
   counter.flow_data.edges = counter.flow_data.edges.filter((edge) => {
     let flow_temp_data = edge.id.replace("vueflow__edge-", "").split("-");
     return flow_temp_data[0] !== nodeId && flow_temp_data[1] !== nodeId;
   });
 };
+
 // ------------------------------------编辑node------------------------------------
 const show_edit = () => {
   setTimeout(() => {
-    counter.reply_node_data = counter.flow_data.nodes.filter(node => node.id === counter.selectedNode)
-    counter.reply_node_data = counter.reply_node_data[0]
-    counter.select_modal_node = 'reply_edit'
+    counter.var_node_data = counter.flow_data.nodes.filter(node => node.id === counter.selectedNode)
+    counter.var_node_data = counter.var_node_data[0]
+    counter.select_modal_node = 'var_edit'
     counter.input_options = []
     for (let i of counter.flow_data.nodes[0].data.variable) {
       counter.input_options.push({value: i.name, label: i.name})
@@ -69,18 +69,15 @@ const show_edit = () => {
         })
       }
     }
-    counter.reply_edit_open = true
+    counter.var_edit_open = true
   }, 100)
 }
-
 </script>
 
 <template>
-  <div class="reply-node" :class="{'selected': data.isSelected}">
+  <div class="var-node" :class="{'selected': data.isSelected}">
     <Handle type="source" position="left" id="left" class="div-Handle"/>
-    <div v-for="(item) in data.question" :key="item.id" style="margin-top: 1vh">
-      <Handle type="source" position="right" :id="`right${item.id}`" class="div-Handle" :style="{ top: `${item.percentage}vh` }"/>
-    </div>
+    <Handle type="source" position="right" id="right" class="div-Handle"/>
     <div class="div0">
       <div class="div0-ico">
         <icon :style="{ color: '#000000'}">
@@ -94,7 +91,7 @@ const show_edit = () => {
           </template>
         </icon>
       </div>
-      <span class="div0-title">问题分类器{{ data.order }}</span>
+      <span class="div0-title">变量更新{{ data.order }}</span>
       <DeleteOutlined class="div0-edit1" @click="deleteNode(data.id)"/>
       <FormOutlined class="div0-edit2" @click="show_edit"/>
     </div>
@@ -111,53 +108,14 @@ const show_edit = () => {
             </svg>
           </template>
         </icon>
-        <span class="div1-1-title">模型</span>
+        <span class="div1-1-title">变量列表</span>
       </div>
-      <div class="div1-2">
-        <a-avatar shape="square" class="div1-2-ico">
-          <template #icon>
-            <img :src="data.edit_mod_img" alt="">
-          </template>
-        </a-avatar>
-        <span class="div1-2-title">{{ data.edit_mod_view }}</span>
-      </div>
-    </div>
-
-    <div class="div1">
-      <div class="div1-1">
-        <icon :style="{ color: '#4381fd'}" class="div1-1-ico">
-          <template #component>
-            <svg t="1720073288376" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                 p-id="7701" width="16" height="16">
-              <path
-                  d="M558.6 960.2h-157c-27.5 0-50-22.5-50-50v-795c0-27.5 22.5-50 50-50h157.1c27.5 0 50 22.5 50 50v795.1c-0.1 27.4-22.6 49.9-50.1 49.9z"
-                  p-id="7702" fill="#4381fd"></path>
-            </svg>
-          </template>
-        </icon>
-        <span class="div1-1-title">用户问题</span>
-      </div>
-      <div class="div1-2">
-        <span class="div1-2-title" style="margin-left: 0">{{ data.input }}</span>
-      </div>
-    </div>
-
-    <div class="div1">
-      <div class="div1-1">
-        <icon :style="{ color: '#4381fd'}" class="div1-1-ico">
-          <template #component>
-            <svg t="1720073288376" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                 p-id="7701" width="16" height="16">
-              <path
-                  d="M558.6 960.2h-157c-27.5 0-50-22.5-50-50v-795c0-27.5 22.5-50 50-50h157.1c27.5 0 50 22.5 50 50v795.1c-0.1 27.4-22.6 49.9-50.1 49.9z"
-                  p-id="7702" fill="#4381fd"></path>
-            </svg>
-          </template>
-        </icon>
-        <span class="div1-1-title">分类</span>
-      </div>
-      <div v-for="(item) in data.question" :key="item.id" style="margin-top: 1vh">
-        <span style="margin-left: 0.5vh">分类{{ item.id }}</span>
+      <div v-for="(item) in data.var_update_data" :key="item.id" class="div1-2-div">
+        <span style="margin-left: 0.5vh">变量</span>
+        <div class="div1-2">
+          <span class="div1-2-title" style="margin-left: 0">{{ item.var }}</span>
+        </div>
+        <span style="margin-left: 0.5vh">值</span>
         <div class="div1-2">
           <span class="div1-2-title" style="margin-left: 0">{{ item.value }}</span>
         </div>
@@ -188,29 +146,37 @@ const show_edit = () => {
     }
   }
 
-  .div1-2 {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  .div1-2-div {
+    margin-top: 1vh;
+    background: #f5f6f8;
+    margin-bottom: 1vh;
     border-radius: 5px;
-    border: 1px solid @theme-border-color;
-    padding: 0.4vh;
-    margin-top: 0.5vh;
-    min-height: 4vh;
-    min-width: 14vw;
-    max-width: 14vw;
+    padding: 0.5vh;
 
-    .div1-2-ico {
-      background-color: #e8e4e4;
-    }
+    .div1-2 {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      border-radius: 5px;
+      border: 1px solid @theme-border-color;
+      padding: 0.4vh;
+      margin-top: 0.5vh;
+      min-height: 4vh;
+      min-width: 14vw;
+      max-width: 14vw;
 
-    .div1-2-title {
-      margin-left: 0.5vw;
-    }
+      .div1-2-ico {
+        background-color: #e8e4e4;
+      }
 
-    .div1-2-title2 {
-      position: absolute;
-      margin-left: 11vw;
+      .div1-2-title {
+        margin-left: 0.5vw;
+      }
+
+      .div1-2-title2 {
+        position: absolute;
+        margin-left: 11vw;
+      }
     }
   }
 
@@ -223,6 +189,7 @@ const show_edit = () => {
   border: solid #007bff;
   border-radius: 50%;
 }
+
 
 .div0 {
   display: flex;
@@ -244,7 +211,7 @@ const show_edit = () => {
   .div0-title {
     font-weight: 900;
     font-size: 18px;
-    margin-right: 4vw;
+    margin-right: 5vw;
   }
 
   .div0-edit1 {
@@ -277,11 +244,11 @@ const show_edit = () => {
   border: 1px solid #336ffd;
 }
 
-.reply-node {
+.var-node {
   background: #fdfdfd;
   padding: 1vh;
   border-radius: 5px;
   min-width: 15vw;
-  min-height: 45vh;
+  min-height: 10vh;
 }
 </style>

@@ -71,13 +71,26 @@ export const useCounterStore = defineStore('counter', () => {
     const start_edit_open2 = ref(false) // 开始节点编辑按钮开启2
     const ai_edit_open = ref(false) // Ai节点编辑按钮开启
     const end_edit_open = ref(false) // 结束节点编辑按钮开启
+    const reply_edit_open = ref(false) // 问题分类器节点编辑按钮开启
+    const if_edit_open = ref(false) // 判断器节点编辑按钮开启
+    const var_edit_open = ref(false) // 变量更新节点编辑按钮开启
+    const note_edit_open = ref(false) // 注释节点编辑按钮开启
     const ai_node_data = ref({}) // Ai节点选中的数据
     const end_node_data = ref({}) // 结束节点选中的数据
+    const reply_node_data = ref({}) // 问题分类器节点选中的数据
+    const if_node_data = ref({}) // 判断器节点选中的数据
+    const var_node_data = ref({}) // 变量更新节点选中的数据
+    const note_node_data = ref({}) // 注释节点选中的数据
     const edit_mod_img_options = ref([]) // 模型头像
     const edit_app_img_options = ref([]) // 应用头像
     const input_options = ref([]) // Ai节点选择变量
     const right_select_key = ref("1") // 运行界面标签页选择
     const flow_data_status = ref(false) //工作流页面显示
+    const flow_add_ai_max_id = ref() // AI节点最大增加ID
+    const flow_add_reply_max_id = ref() // 问题分类器节点最大增加ID
+    const flow_add_if_max_id = ref() // 判断器节点最大增加ID
+    const flow_add_var_max_id = ref() // 变量更新节点最大增加ID
+    const flow_add_note_max_id = ref() // 注释节点最大增加ID
     return {
         selectedKeys,
         recording,
@@ -145,12 +158,25 @@ export const useCounterStore = defineStore('counter', () => {
         start_edit_open2,
         ai_edit_open,
         end_edit_open,
+        reply_edit_open,
+        if_edit_open,
+        var_edit_open,
+        note_edit_open,
         ai_node_data,
         end_node_data,
+        reply_node_data,
+        if_node_data,
+        var_node_data,
+        note_node_data,
         edit_mod_img_options,
         edit_app_img_options,
         input_options,
         right_select_key,
         flow_data_status,
+        flow_add_ai_max_id,
+        flow_add_reply_max_id,
+        flow_add_if_max_id,
+        flow_add_var_max_id,
+        flow_add_note_max_id,
     }
 })

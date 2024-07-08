@@ -22,7 +22,7 @@ watch(() => counter.end_node_data.data.variable_print, () => {
 </script>
 
 <template>
-  <a-modal v-model:open="counter.end_edit_open" :title="`结束${counter.end_node_data.data.order}`" @ok="handleOk"
+  <a-modal v-model:open="counter.end_edit_open" title="结束" @ok="handleOk"
            okText="保存" cancelText="关闭">
     <div class="div1">
       <span class="div1-title" style="margin-top: 1vh">输出变量</span>
@@ -43,6 +43,7 @@ watch(() => counter.end_node_data.data.variable_print, () => {
   margin-bottom: 1vh;
 
   .div1-title {
+    margin-left: 0.2vw;
     margin-bottom: 0.2vh;
   }
 }

@@ -1,37 +1,184 @@
+<script setup>
+import {Position, Handle, useVueFlow} from '@vue-flow/core';
+import Icon, {DeleteOutlined, FormOutlined} from "@ant-design/icons-vue";
+import {ref, onMounted, onUnmounted, watch} from 'vue'
+import {useCounterStore} from '@/stores/counter'
+
+const counter = useCounterStore()
+const props = defineProps(['data']);
+const {
+  onConnect,
+  addEdges,
+  onNodesChange,
+  setViewport,
+  getViewport,
+  toObject,
+  getNodes,
+  removeNodes,
+  addNodes,
+  onEdgesChange,
+  applyNodeChanges,
+  applyEdgeChanges,
+} = useVueFlow();
+// ------------------------------------删除node------------------------------------
+const deleteNode = (nodeId) => {
+  counter.flow_data.nodes = counter.flow_data.nodes.filter(node => node.id !== nodeId);
+  counter.flow_data.edges = counter.flow_data.edges.filter((edge) => {
+    let flow_temp_data = edge.id.replace("vueflow__edge-", "").split("-");
+    return flow_temp_data[0] !== nodeId && flow_temp_data[1] !== nodeId;
+  });
+};
+</script>
+
 <template>
   <div class="if-node" :class="{'selected': data.isSelected}">
     <Handle type="source" position="left" id="left" class="div-Handle"/>
-    <Handle type="source" position="right" id="right" class="div-Handle"/>
-    <div class="div1">
-      <div class="div1-ico">
+    <Handle type="source" position="right1" id="right" class="div-Handle" :style="{ top: '50%' }"/>
+    <Handle type="source" position="right2" id="right" class="div-Handle" :style="{ top: '90%' }"/>
+    <div class="div0">
+      <div class="div0-ico">
         <icon :style="{ color: '#000000'}">
           <template #component>
-            <svg t="1719994607716" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                 p-id="16044" width="16" height="16">
+            <svg t="1719928349868" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="6773" width="18" height="18">
               <path
-                  d="M779.733333 64c2.474667 0 4.864 0.768 6.826667 2.176l192.042667 137.173333a11.733333 11.733333 0 0 1 0 19.114667l-192 137.173333A11.733333 11.733333 0 0 1 768 350.08L767.957333 256h-237.994666c-6.826667 0-14.250667 7.466667-15.786667 18.901333l-0.298667 4.48v465.237334c0 12.373333 6.613333 21.248 13.482667 23.04l2.56 0.341333H768L768 674.346667a11.733333 11.733333 0 0 1 18.56-9.557334l192.042667 137.173334a11.733333 11.733333 0 0 1 0 19.114666l-192 137.173334a11.733333 11.733333 0 0 1-18.602667-9.557334L767.957333 853.333333h-237.994666c-54.912 0-97.877333-45.824-101.205334-101.717333l-0.213333-6.997333L428.501333 554.666667H291.370667a128.042667 128.042667 0 1 1 0-85.333334h137.130666V279.381333c0-56.618667 40.789333-104.704 94.677334-108.458666L529.92 170.666667h237.994667L768 75.733333c0-6.485333 5.248-11.733333 11.733333-11.733333z"
-                  fill="#ffffff" p-id="16045"></path>
+                  d="M946.5 505L560.1 118.8l-25.9-25.9c-12.3-12.2-32.1-12.2-44.4 0L77.5 505c-12.3 12.3-18.9 28.6-18.8 46 0.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8 12.1-12.1 18.7-28.2 18.7-45.3 0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204z m217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7 23.1 23.1L882 542.3h-96.1z"
+                  p-id="6774" fill="#ffffff"></path>
             </svg>
           </template>
         </icon>
       </div>
-      <span class="div1-title">判断器{{data.order}}</span>
-      <FormOutlined class="div1-edit" @click="show_edit"/>
+      <span class="div0-title">判断器{{ data.order }}</span>
+      <DeleteOutlined class="div0-edit1" @click="deleteNode(data.id)"/>
+      <FormOutlined class="div0-edit2" @click="show_edit"/>
     </div>
-    <div class="div2">
-      <div>全局变量</div>
+
+    <div class="div1" style="margin-top: 2vh;">
+      <div class="div1-1">
+        <icon :style="{ color: '#4381fd'}" class="div1-1-ico">
+          <template #component>
+            <svg t="1720073288376" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="7701" width="16" height="16">
+              <path
+                  d="M558.6 960.2h-157c-27.5 0-50-22.5-50-50v-795c0-27.5 22.5-50 50-50h157.1c27.5 0 50 22.5 50 50v795.1c-0.1 27.4-22.6 49.9-50.1 49.9z"
+                  p-id="7702" fill="#4381fd"></path>
+            </svg>
+          </template>
+        </icon>
+        <span class="div1-1-title">分类</span>
+      </div>
+      <div class="div2">
+        <div class="div2-1">
+          <span class="div2-1-title1">IF</span>
+          <span class="div2-1-title2">AND</span>
+        </div>
+        <div v-for="(item) in data.condition" :key="item.id">
+          <div class="div2-2">
+            <span class="div2-2-content">{{ item.var }}</span>
+            <span class="div2-2-content">{{ item.dit }}</span>
+            <span class="div2-2-content">{{ item.value }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="div2">
+        <span>ELSE</span>
+      </div>
+      <!--      <div v-for="(item) in data.question" :key="item.id" style="margin-top: 1vh">-->
+      <!--        <span style="margin-left: 0.5vh">分类{{ item.id }}</span>-->
+      <!--        <div class="div1-2">-->
+      <!--          <span class="div1-2-title" style="margin-left: 0">{{ item.value }}</span>-->
+      <!--        </div>-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
 
-<script setup>
-import {Position, Handle} from '@vue-flow/core';
-import Icon, {FormOutlined} from "@ant-design/icons-vue";
+<style scoped lang="less">
+.div2 {
+  background: #f5f6f8;
+  width: 100%;
+  min-height: 10vh;
+  margin-top: 1vh;
+  border-radius: 5px;
+  padding: 1vh;
 
-const props = defineProps(['data']);
-</script>
+  .div2-1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
-<style scoped>
+    .div2-1-title2 {
+      margin-left: 0.5vw;
+      color: #336ffd;
+    }
+
+  }
+
+  .div2-2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 1vh;
+
+
+    .div2-2-content {
+      border: 1px solid @theme-border-color;
+      padding: 0.5vh;
+      margin-right: 1vh;
+      border-radius: 5px;
+    }
+  }
+
+}
+
+.div1 {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+
+  .div1-1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .div1-1-ico {
+      margin-top: 1vh;
+    }
+
+    .div1-1-title {
+      font-size: 15px;
+      margin-top: 1vh;
+    }
+  }
+
+  .div1-2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid @theme-border-color;
+    padding: 0.4vh;
+    margin-top: 0.5vh;
+    min-height: 4vh;
+    min-width: 14vw;
+    max-width: 14vw;
+
+    .div1-2-ico {
+      background-color: #e8e4e4;
+    }
+
+    .div1-2-title {
+      margin-left: 0.5vw;
+    }
+
+    .div1-2-title2 {
+      position: absolute;
+      margin-left: 11vw;
+    }
+  }
+
+}
+
 .div-Handle {
   width: 0.8vw;
   height: 1.6vh;
@@ -40,59 +187,65 @@ const props = defineProps(['data']);
   border-radius: 50%;
 }
 
-.selected {
-  border: 1px solid #336ffd;
-}
 
-.div2 {
-  display: flex;
-  flex-direction: row;
-  margin-top: 1vh;
-  background: #f5f6f8;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.div1 {
+.div0 {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
 
-  .div1-ico {
+  .div0-ico {
     display: flex;
     align-items: center;
     justify-content: center;
     background: #296ffd;
     border-radius: 7px;
-    width: 1.25vw;
-    height: 2.5vh;
+    width: 1.5vw;
+    height: 3vh;
     margin-right: 0.3vw;
   }
 
-  .div1-title {
+  .div0-title {
     font-weight: 900;
-    margin-right: 3.7vw;
+    font-size: 18px;
+    margin-right: 5vw;
   }
 
-  .div1-edit {
+  .div0-edit1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: #fc2c54;
+    border-radius: 7px;
+    width: 1.5vw;
+    height: 3vh;
+    font-size: 15px;
+    margin-right: 0.5vw;
+  }
+
+  .div0-edit2 {
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     background: #296ffd;
     border-radius: 7px;
-    width: 1.25vw;
-    height: 2.5vh;
-    font-size: 12px;
+    width: 1.5vw;
+    height: 3vh;
+    font-size: 15px;
   }
+}
+
+.selected {
+  border: 1px solid #336ffd;
 }
 
 .if-node {
   background: #fdfdfd;
   padding: 1vh;
   border-radius: 5px;
-  width: 10vw;
-  height: 30vh;
+  min-width: 15vw;
+  min-height: 25vh;
 }
 </style>

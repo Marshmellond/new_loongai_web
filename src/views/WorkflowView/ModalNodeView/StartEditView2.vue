@@ -32,22 +32,22 @@ const handleOk = () => {
       <div class="div1-type" :class="{'selected':counter.variable_data.type=='String'}">文本</div>
     </div>
     <div class="div2">
-      <span class="div2-title">显示名称</span>
+      <span class="div1-title">显示名称</span>
       <br/>
       <a-input v-model:value="counter.variable_data.name" autofocus placeholder="请输入"/>
     </div>
     <div class="div2">
-      <span class="div2-title">变量名称</span>
+      <span class="div1-title">变量名称</span>
       <br/>
       <a-input v-model:value="counter.variable_data.label" autofocus placeholder="请输入"/>
     </div>
     <div class="div2">
-      <span class="div2-title">最大长度</span>
+      <span class="div1-title">最大长度</span>
       <br/>
       <a-input v-model:value="counter.variable_data.max_len" autofocus placeholder="请输入"/>
     </div>
     <div class="div3">
-      <span class="div2-title">必填</span>
+      <span class="div1-title">必填</span>
       <br/>
       <a-switch v-model:checked="counter.variable_data.must"/>
     </div>
@@ -60,6 +60,10 @@ const handleOk = () => {
 
 .div1 {
   margin-bottom: 1vh;
+
+  .div1-title {
+    margin-left: 0.2vw;
+  }
 
   .div1-type {
     display: flex;

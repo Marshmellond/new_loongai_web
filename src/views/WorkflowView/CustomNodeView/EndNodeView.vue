@@ -6,6 +6,7 @@ import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
 const props = defineProps(['data']);
+// ------------------------------------编辑node------------------------------------
 const show_edit = () => {
   setTimeout(() => {
     counter.end_node_data = counter.flow_data.nodes.filter(node => node.id === counter.selectedNode)
@@ -67,7 +68,7 @@ const show_edit = () => {
           </template>
         </icon>
       </div>
-      <span class="div0-title">结束{{ data.order }}</span>
+      <span class="div0-title">结束</span>
       <FormOutlined class="div0-edit" @click="show_edit"/>
     </div>
 

@@ -47,7 +47,7 @@ const on_generate = () => {
     <div class="div1-2"
          v-for="(item) in counter.flow_data.nodes[0].data.variable" :key="item.id">
       <span style="margin-left: 0.2vw;font-size: 15px;font-weight: 900">{{ item.name }}</span>
-      <a-input style="margin-top: 0.5vh;margin-bottom: 1vh" v-model:value="item.value"></a-input>
+      <a-textarea style="margin-top: 0.5vh;margin-bottom: 1vh" v-model:value="item.value" auto-size/>
     </div>
   </div>
   <div class="div2">

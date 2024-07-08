@@ -20,6 +20,7 @@ const {
   applyNodeChanges,
   applyEdgeChanges,
 } = useVueFlow();
+// ------------------------------------编辑node------------------------------------
 const show_edit = () => {
   setTimeout(() => {
     counter.ai_node_data = counter.flow_data.nodes.filter(node => node.id === counter.selectedNode)
@@ -69,11 +70,6 @@ const deleteNode = (nodeId) => {
     let flow_temp_data = edge.id.replace("vueflow__edge-", "").split("-");
     return flow_temp_data[0] !== nodeId && flow_temp_data[1] !== nodeId;
   });
-  localStorage.setItem("flow_data", flow_data)
-};
-// ------------------------------------删除edge------------------------------------
-const deleteEdge = (edgeId) => {
-  counter.flow_data.edges = counter.flow_data.edges.filter(edge => edge.id !== edgeId);
 };
 </script>
 <template>
@@ -93,7 +89,7 @@ const deleteEdge = (edgeId) => {
           </template>
         </icon>
       </div>
-      <span class="div0-title">AI对话{{ data.order }}</span>
+      <span class="div0-title">AI对话{{data.order}}</span>
       <DeleteOutlined class="div0-edit1" @click="deleteNode(data.id)"/>
       <FormOutlined class="div0-edit2" @click="show_edit"/>
     </div>
@@ -177,7 +173,7 @@ const deleteEdge = (edgeId) => {
             </svg>
           </template>
         </icon>
-        <span class="div1-1-title">输入变量</span>
+        <span class="div1-1-title">用户问题</span>
       </div>
       <div class="div1-2">
         <span class="div1-2-title" style="margin-left: 0">{{ data.input }}</span>
@@ -196,7 +192,7 @@ const deleteEdge = (edgeId) => {
             </svg>
           </template>
         </icon>
-        <span class="div1-1-title">输出</span>
+        <span class="div1-1-title">输出结果</span>
       </div>
       <div class="div1-2">
         <span class="div1-2-title" style="margin-left: 0">{{ data.print }}</span>
