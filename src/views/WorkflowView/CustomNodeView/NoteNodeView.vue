@@ -111,7 +111,7 @@ const deleteNode = (nodeId) => {
     border: 1px solid @theme-border-color;
     padding: 0.4vh;
     margin-top: 0.5vh;
-    min-height: 4vh;
+    min-height: 10vh;
     min-width: 14vw;
     max-width: 14vw;
 
@@ -121,6 +121,8 @@ const deleteNode = (nodeId) => {
 
     .div1-2-title {
       margin-left: 0.2vw;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .div1-2-title2 {

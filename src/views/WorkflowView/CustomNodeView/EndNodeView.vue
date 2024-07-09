@@ -21,25 +21,18 @@ const show_edit = () => {
     let temp_edges = [];
 
     function func_add_edge(nodeId) {
-      // 遍历所有边，寻找与当前节点相关的边
       for (let i = 0; i < counter.flow_data.edges.length; i++) {
         let edge = counter.flow_data.edges[i];
-        // 检查目标节点和目标句柄是否匹配
         if (edge.target === nodeId && edge.targetHandle === "left") {
-          // 检查源节点是否以"ai"开头
-          if (edge.source.split("_")[0] === "ai") {
-            // 将源节点添加到临时数组中
-            temp_edges.push(edge.source);
-            // 递归调用，处理新的源节点
-            func_add_edge(edge.source);
-          }
+          temp_edges.push(edge.source);
+          func_add_edge(edge.source);
         }
       }
     }
 
     func_add_edge(counter.selectedNode);
     for (let i = 0; i < counter.flow_data.nodes.length; i++) {
-      if (temp_edges.includes(counter.flow_data.nodes[i].id)) {
+      if (temp_edges.includes(counter.flow_data.nodes[i].id) && counter.flow_data.nodes[i].type === "ai") {
         counter.input_options.push({
           value: counter.flow_data.nodes[i].data.print,
           label: counter.flow_data.nodes[i].data.print
@@ -142,6 +135,8 @@ const show_edit = () => {
     max-width: 14vw;
 
     .div1-2-title {
+      white-space: pre-wrap;
+      word-break: break-word;
       position: relative;
       margin-left: 0.2vw;
     }

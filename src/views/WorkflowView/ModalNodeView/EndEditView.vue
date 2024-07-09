@@ -7,9 +7,6 @@ const counter = useCounterStore()
 const handleOk = () => {
   counter.end_edit_open = false
 }
-watch(() => counter.end_edit_open, () => {
-  counter.edit_start = !counter.end_edit_open
-})
 watch(() => counter.end_node_data.data.variable_print, () => {
   counter.end_node_data.data.variable_content = []
   for (let i = 0; i < counter.end_node_data.data.variable_print.length; i++) {
@@ -18,6 +15,10 @@ watch(() => counter.end_node_data.data.variable_print, () => {
       "value": ""
     })
   }
+})
+
+watch(() => counter.end_edit_open, () => {
+  counter.edit_start = !counter.end_edit_open
 })
 </script>
 

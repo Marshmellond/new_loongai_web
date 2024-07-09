@@ -5,6 +5,7 @@ import {useCounterStore} from '@/stores/counter'
 const counter = useCounterStore()
 import {Position, Handle} from '@vue-flow/core';
 import Icon, {DeleteOutlined, FormOutlined, PlusOutlined} from "@ant-design/icons-vue";
+import {message} from "ant-design-vue";
 
 const props = defineProps(['data']);
 

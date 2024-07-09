@@ -13,7 +13,7 @@ watch(() => counter.start_edit_open, () => {
 const add_variable1 = () => {
   counter.select_variable_data = "添加变量"
   counter.variable_data = {
-    id: `variable_${Date.now().toString()}`,
+    id: `start_variable_${Date.now().toString()}`,
     name: "",
     label: "",
     value: "",
@@ -24,11 +24,11 @@ const add_variable1 = () => {
   counter.select_modal_node2 = true
   counter.start_edit_open2 = true
 }
-const add_variable2 = (id) => {
+const add_variable2 = (item) => {
   counter.select_variable_data = "编辑变量"
-  counter.variable_data = id
+  counter.variable_data = item.id
   counter.variable_data = counter.flow_data.nodes[0].data.variable.filter((item) => {
-    return item.id == id
+    return item.id == item.id
   })
   counter.variable_data = counter.variable_data[0]
   counter.select_modal_node2 = true
@@ -61,7 +61,7 @@ const delete_variable = (id) => {
       <span class="div2-txt-label">{{ item.label }}</span>
       <span class="div2-txt-name">{{ item.name }}</span>
       <span class="div2-txt-type">{{ item.type }}</span>
-      <icon :style="{ color: '#4381fd'}" class="div2-ico-edit" @click="add_variable2(item.id)">
+      <icon :style="{ color: '#4381fd'}" class="div2-ico-edit" @click="add_variable2(item)">
         <template #component>
           <svg t="1720003009290" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
                p-id="2655" width="16" height="16">

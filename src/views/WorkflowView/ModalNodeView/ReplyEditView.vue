@@ -4,9 +4,7 @@ import Icon, {DeleteOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-watch(() => counter.reply_edit_open, () => {
-  counter.edit_start = !counter.reply_edit_open
-})
+
 
 // ------------------------------------提交保存------------------------------------
 const handleOk = () => {
@@ -23,11 +21,6 @@ const handleOk = () => {
   }
 
   counter.reply_node_data.data.edit_mod_img = counter.edit_mod_img_options.filter(item => item.name === counter.reply_node_data.data.edit_mod[0])[0].img
-  if (counter.reply_node_data.data.input == undefined) {
-    counter.reply_node_data.data.input = ""
-  } else if (typeof counter.reply_node_data.data.input !== "string") {
-    counter.reply_node_data.data.input = counter.reply_node_data.data.input[0]
-  }
   counter.reply_edit_open = false
 }
 // ------------------------------------添加分类------------------------------------
@@ -54,6 +47,37 @@ const add_variable = () => {
 const delete_variable = (id) => {
   counter.reply_node_data.data.question = counter.reply_node_data.data.question.filter(item => item.id !== id)
 }
+watch(() => counter.reply_edit_open, () => {
+
+  if (counter.reply_node_data.data.input == undefined) {
+    counter.reply_node_data.data.input = ""
+    counter.reply_node_data.data.input_id = ""
+  } else if (typeof counter.reply_node_data.data.input !== "string") {
+    counter.reply_node_data.data.input = counter.reply_node_data.data.input[0]
+    for (let i = 0; i < counter.flow_data.nodes[0].data.variable.length; i++) {
+      if (!counter.reply_node_data.data.input.startsWith("AI回复内容")) {
+        if (counter.reply_node_data.data.input === counter.flow_data.nodes[0].data.variable[i].name) {
+          counter.reply_node_data.data.input_id = counter.flow_data.nodes[0].data.variable[i].id
+        }
+      } else if (counter.reply_node_data.data.input.startsWith("AI回复内容")) {
+        for (let i = 0; i < counter.flow_data.nodes.length; i++) {
+          if (counter.flow_data.nodes[i].type === "ai") {
+            if (counter.flow_data.nodes[i].data.print === counter.reply_node_data.data.input) {
+              counter.reply_node_data.data.input_id = counter.flow_data.nodes[i].data.print_id
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  console.log(counter.reply_node_data.data.input)
+  console.log(counter.reply_node_data.data.input_id)
+
+
+  counter.edit_start = !counter.reply_edit_open
+})
 </script>
 
 <template>

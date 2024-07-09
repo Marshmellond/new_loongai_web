@@ -34,15 +34,36 @@ const handleOk = () => {
     }
   }
   counter.ai_node_data.data.edit_mod_img = counter.edit_mod_img_options.filter(item => item.name === counter.ai_node_data.data.edit_mod[0])[0].img
-  console.log()
-  if (counter.ai_node_data.data.input == undefined) {
-    counter.ai_node_data.data.input = ""
-  } else if (typeof counter.ai_node_data.data.input !== "string") {
-    counter.ai_node_data.data.input = counter.ai_node_data.data.input[0]
-  }
   counter.ai_edit_open = false
 }
+
+
 watch(() => counter.ai_edit_open, () => {
+  if (counter.ai_node_data.data.input == undefined) {
+    counter.ai_node_data.data.input = ""
+    counter.ai_node_data.data.input_id = ""
+  } else if (typeof counter.ai_node_data.data.input !== "string") {
+    counter.ai_node_data.data.input = counter.ai_node_data.data.input[0]
+    for (let i = 0; i < counter.flow_data.nodes[0].data.variable.length; i++) {
+      if (!counter.ai_node_data.data.input.startsWith("AI回复内容")) {
+        if (counter.ai_node_data.data.input === counter.flow_data.nodes[0].data.variable[i].name) {
+          counter.ai_node_data.data.input_id = counter.flow_data.nodes[0].data.variable[i].id
+        }
+      } else if (counter.ai_node_data.data.input.startsWith("AI回复内容")) {
+        for (let i = 0; i < counter.flow_data.nodes.length; i++) {
+          if (counter.flow_data.nodes[i].type === "ai") {
+            if (counter.flow_data.nodes[i].data.print === counter.ai_node_data.data.input) {
+              counter.ai_node_data.data.input_id = counter.flow_data.nodes[i].data.print_id
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  console.log(counter.ai_node_data.data.input)
+  console.log(counter.ai_node_data.data.input_id)
   counter.edit_start = !counter.ai_edit_open
 })
 </script>
@@ -78,7 +99,7 @@ watch(() => counter.ai_edit_open, () => {
   margin-bottom: 1vh;
 
   .div1-title {
-        margin-left: 0.2vw;
+    margin-left: 0.2vw;
     margin-bottom: 0.2vh;
   }
 }

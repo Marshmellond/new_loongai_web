@@ -2,9 +2,9 @@
 import {ref, onMounted, onUnmounted, watch} from 'vue'
 import Icon, {PlusOutlined} from "@ant-design/icons-vue";
 import {useCounterStore} from '@/stores/counter'
+import {message} from "ant-design-vue";
 
 const counter = useCounterStore()
-const must = ref(false)
 const save_variable_data1 = () => {
   console.log(counter.variable_data.must)
   counter.flow_data.nodes[0].data.variable.push(counter.variable_data)
@@ -22,6 +22,14 @@ const handleOk = () => {
     save_variable_data2()
   }
 }
+
+watch(() => counter.variable_data.name, () => {
+  for (let i = 0; i < counter.flow_data.nodes.length; i++) {
+    if (counter.flow_data.nodes[i].type === "ai" || counter.flow_data.nodes[i].type === "reply") {
+      counter.flow_data.nodes[i].data.input = counter.variable_data.name
+    }
+  }
+})
 </script>
 
 <template>

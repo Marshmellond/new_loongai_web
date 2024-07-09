@@ -14,6 +14,7 @@ const edit_name = ref("")
 const edit_id = ref("")
 // ------------------------------------变量初始化------------------------------------
 counter.flow_data_select = localStorage.getItem("flow_data_select");
+const jsonContent = ref(null);
 
 // ------------------------------------获取localStorage数据------------------------------------
 const get_local_flow_data = () => {
@@ -188,9 +189,7 @@ const flow_add_note_max_id = () => {
     }
   }
 }
-
 // ------------------------------------新增工作流------------------------------------
-
 const on_add_flow_data = () => {
   const ai_id = `ai_${Date.now().toString()}`
   const flow_data = {
@@ -199,7 +198,7 @@ const on_add_flow_data = () => {
       data: {
         variable: [
           {
-            id: "0",
+            id: `start_variable_${Date.now().toString()}`,
             name: "输入内容",
             label: "content",
             value: "",
@@ -214,7 +213,7 @@ const on_add_flow_data = () => {
         isSelected: false,
       },
       type: 'start', // 节点类型
-      position: {x: 100, y: 400},
+      position: {x: 50, y: 300},
     }, {
       id: `end_${Date.now().toString()}`,
       data: {
@@ -223,7 +222,7 @@ const on_add_flow_data = () => {
         isSelected: false,
       },
       type: 'end', // 节点类型
-      position: {x: 900, y: 420},
+      position: {x: 1300, y: 320},
     }, {
       id: ai_id,
       data: {
@@ -246,7 +245,7 @@ const on_add_flow_data = () => {
         id: ai_id,
       },
       type: 'ai', // 节点类型
-      position: {x: 500, y: 250},
+      position: {x: 700, y: 150},
     }], "edges": [], "position": [],
   }
 
@@ -266,7 +265,9 @@ const on_add_flow_data = () => {
     }
   }).then((data) => {
     if (data["code"] == 1) {
-      set_flow_data()
+      if (counter.flow_data_select !== "") {
+        set_flow_data()
+      }
       get_flow_data_list(true, true)
       message.success("新增工作流成功")
     }
@@ -359,14 +360,16 @@ const add_ai_node = () => {
       app_mod_view: "无",
       app_mod_img: "http://127.0.0.1:8000/img/head?path=model&name=null.png",
       system: "",
+      input_id: "",
       input: "",
       print: `AI回复内容${counter.flow_add_ai_max_id + 1}`,
+      print_id: `ai_variable_${Date.now().toString()}`,
       order: counter.flow_add_ai_max_id + 1,
       isSelected: false,
       id: ai_id,
     },
     type: 'ai', // 节点类型
-    position: {x: 900, y: 500},
+    position: {x: 450, y: 600},
   };
   counter.flow_data.nodes.push(newNode);
 }
@@ -383,6 +386,7 @@ const add_reply_node = () => {
       ],
       edit_mod_view: "gpt-3.5-turbo",
       edit_mod_img: "http://127.0.0.1:8000/img/head?path=api&name=openai.png",
+      input_id: "",
       input: "",
       question: [],
       order: counter.flow_add_reply_max_id + 1,
@@ -390,7 +394,7 @@ const add_reply_node = () => {
       id: reply_id,
     },
     type: 'reply', // 节点类型
-    position: {x: 1200, y: 500},
+    position: {x: 100, y: 600},
   };
   counter.flow_data.nodes.push(newNode);
 }
@@ -408,7 +412,7 @@ const add_if_node = () => {
       id: if_id,
     },
     type: 'if', // 节点类型
-    position: {x: 900, y: 200},
+    position: {x: 1150, y: 600},
   };
   counter.flow_data.nodes.push(newNode);
 }
@@ -426,7 +430,7 @@ const add_var_node = () => {
       id: var_id,
     },
     type: 'var', // 节点类型
-    position: {x: 1200, y: 200},
+    position: {x: 820, y: 600},
   };
   counter.flow_data.nodes.push(newNode);
 }
@@ -438,15 +442,76 @@ const add_note_node = () => {
     id: note_id,
     data: {
       order: counter.flow_add_note_max_id + 1,
-      content: "我靠我靠我靠",
+      content: "",
       isSelected: false,
       id: note_id,
     },
     type: 'note', // 节点类型
-    position: {x: 1300, y: 200},
+    position: {x: 820, y: 720},
   };
   counter.flow_data.nodes.push(newNode);
 }
+
+// ------------------------------------导入工作流------------------------------------
+const beforeUpload = (file) => {
+  const isJSON = file.type === 'application/json';
+  if (!isJSON) {
+    message.error('只能上传JSON文件');
+  }
+  return isJSON || Upload.LIST_IGNORE;
+};
+const handleChange = (info) => {
+  const status = info.file.status;
+  if (status === 'done') {
+    message.success(`文件 ${info.file.name} 上传成功`);
+    readJSONFile(info.file.originFileObj);
+  } else if (status === 'error') {
+    message.error(`文件 ${info.file.name} 上传失败`);
+  }
+};
+const readJSONFile = (file) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const content = JSON.parse(e.target.result);
+      jsonContent.value = content;
+      processJSONContent();
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+      message.error('JSON解析失败');
+    }
+  };
+  reader.readAsText(file);
+};
+const customRequest = ({file, onSuccess}) => {
+  setTimeout(() => {
+    onSuccess("ok", file);
+  }, 0);
+};
+const processJSONContent = () => {
+  const url = "/api/workflow/add_flow_data"
+  let body = {
+    flow_data: JSON.stringify(jsonContent.value),
+  }
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      if (counter.flow_data_select !== "") {
+        set_flow_data()
+      }
+      get_flow_data_list(true, true)
+      message.success("导入工作流成功")
+    }
+  })
+};
 </script>
 
 <template>
@@ -579,23 +644,30 @@ const add_note_node = () => {
   </div>
 
   <div class="div4">
-    <a-button type="primary" size="large" class="ant-button1" @click="on_import_flow_data">
-      <icon :style="{ color: '#000000'}">
-        <template #component>
-          <svg t="1720337863663" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-               p-id="27526" width="20" height="20">
-            <path
-                d="M937.2 851.5V599c-0.7-23.7-20.1-42.7-44-42.7s-43.3 19-44 42.7v217H178.5V599c-0.7-23.7-20.1-42.7-44-42.7s-43.3 19-44 42.7v252.5c0 28.9 23.6 52.5 52.5 52.5h741.8c28.8 0 52.4-23.6 52.4-52.5z"
-                p-id="27527" fill="#515151"></path>
-            <path
-                d="M482.8 625.2c17.1 17.1 45.1 17.1 62.2 0l164-164c17.1-17.1 17.1-45.1 0-62.2s-45.1-17.1-62.2 0l-85.7 85.7V169.9c0-26-21.3-47.2-47.2-47.2-26 0-47.2 21.3-47.2 47.2v314.7L381 398.9c-17.1-17.1-45.1-17.1-62.2 0s-17.1 45.1 0 62.2l164 164.1z"
-                p-id="27528" fill="#515151"></path>
-          </svg>
-        </template>
-      </icon>
-      <span class="div4-title">导入</span>
-    </a-button>
-    <a-button type="primary" size="large" class="ant-button1" @click="on_add_flow_data" style="margin-left: 0.2vw">
+    <a-upload
+        :showUploadList="false"
+        :beforeUpload="beforeUpload"
+        @change="handleChange"
+        :customRequest="customRequest"
+    >
+      <a-button type="primary" size="large" class="ant-button1" @click="on_import_flow_data">
+        <icon :style="{ color: '#000000'}">
+          <template #component>
+            <svg t="1720337863663" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="27526" width="20" height="20">
+              <path
+                  d="M937.2 851.5V599c-0.7-23.7-20.1-42.7-44-42.7s-43.3 19-44 42.7v217H178.5V599c-0.7-23.7-20.1-42.7-44-42.7s-43.3 19-44 42.7v252.5c0 28.9 23.6 52.5 52.5 52.5h741.8c28.8 0 52.4-23.6 52.4-52.5z"
+                  p-id="27527" fill="#515151"></path>
+              <path
+                  d="M482.8 625.2c17.1 17.1 45.1 17.1 62.2 0l164-164c17.1-17.1 17.1-45.1 0-62.2s-45.1-17.1-62.2 0l-85.7 85.7V169.9c0-26-21.3-47.2-47.2-47.2-26 0-47.2 21.3-47.2 47.2v314.7L381 398.9c-17.1-17.1-45.1-17.1-62.2 0s-17.1 45.1 0 62.2l164 164.1z"
+                  p-id="27528" fill="#515151"></path>
+            </svg>
+          </template>
+        </icon>
+        <span class="div4-title">导入</span>
+      </a-button>
+    </a-upload>
+    <a-button type="primary" size="large" class="ant-button2" @click="on_add_flow_data" style="margin-left: 0.2vw">
       <PlusOutlined style="color: black"/>
       <span class="div4-title">新建</span>
     </a-button>
@@ -610,7 +682,7 @@ const add_note_node = () => {
 
 .no-chat {
   position: relative;
-  margin-top: 5%;
+  margin-top: 10%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -622,7 +694,7 @@ const add_note_node = () => {
   }
 
   .no-txt {
-    margin-top: 1vh;
+    margin-top: 0.8vh;
     color: #c1c1c1;
     font-size: 120%;
   }
@@ -740,6 +812,25 @@ const add_note_node = () => {
   padding: 0.5vh;
 
   .ant-button1 {
+    position: relative;
+    background: #fdfdfd;
+    border: 1px solid #e4e4e4;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: #f0f0f0;
+    }
+
+    .div4-title {
+      color: black;
+    }
+  }
+
+  .ant-button2 {
     position: relative;
     background: #fdfdfd;
     border: 1px solid #e4e4e4;

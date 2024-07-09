@@ -20,7 +20,7 @@ watch(() => counter.note_edit_open, () => {
       <a-textarea
           v-model:value="counter.note_node_data.data.content"
           placeholder="输入内容"
-          :autoSize="{ minRows: 5, maxRows: 5}"
+          :autoSize="{ minRows: 5}"
           style="width: 100%"
           :allowClear="true"/>
     </div>

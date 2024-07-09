@@ -184,7 +184,7 @@ const on_add_flow_data = () => {
         isSelected: false,
       },
       type: 'start', // 节点类型
-      position: {x: 100, y: 400},
+      position: {x: 50, y: 300},
     }, {
       id: `end_${Date.now().toString()}`,
       data: {
@@ -193,7 +193,7 @@ const on_add_flow_data = () => {
         isSelected: false,
       },
       type: 'end', // 节点类型
-      position: {x: 900, y: 420},
+      position: {x: 1300, y: 320},
     }, {
       id: ai_id,
       data: {
@@ -216,7 +216,7 @@ const on_add_flow_data = () => {
         id: ai_id,
       },
       type: 'ai', // 节点类型
-      position: {x: 500, y: 250},
+      position: {x: 700, y: 150},
     }], "edges": [], "position": [],
   }
 
@@ -236,13 +236,14 @@ const on_add_flow_data = () => {
     }
   }).then((data) => {
     if (data["code"] == 1) {
-      set_flow_data()
+      if (counter.flow_data_select !== "") {
+        set_flow_data()
+      }
       get_flow_data_list(true, true)
       message.success("新增工作流成功")
     }
   })
 }
-
 // ------------------------------------移动node------------------------------------
 const handleNodesChange = (changes) => { // node移动变化
   changes.forEach(change => {
@@ -394,7 +395,7 @@ onUnmounted(() => {
       :nodes="counter.flow_data.nodes"
       v-if="counter.flow_data_status"
       :edges="counter.flow_data.edges"
-      :default-viewport="{ x: 0, y: 0, zoom: 1 }"
+      :default-viewport="{ x: 0, y: 0, zoom: 0.8 }"
       :min-zoom="0.2"
       :max-zoom="10"
       @node-click="handleNodeClick"
