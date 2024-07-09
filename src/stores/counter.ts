@@ -91,6 +91,22 @@ export const useCounterStore = defineStore('counter', () => {
     const flow_add_if_max_id = ref() // 判断器节点最大增加ID
     const flow_add_var_max_id = ref() // 变量更新节点最大增加ID
     const flow_add_note_max_id = ref() // 注释节点最大增加ID
+    const flow_if_condition_list = ref([
+        {value: "等于", label: "等于"},
+        {value: "不等于", label: "不等于"},
+        {value: "包含", label: "包含"},
+        {value: "不包含", label: "不包含"},
+        {value: "为空", label: "为空"},
+        {value: "不为空", label: "不为空"},
+        {value: "开始为", label: "开始为"},
+        {value: "结束为", label: "结束为"},
+        {value: "长度等于", label: "长度等于"},
+        {value: "长度不等于", label: "长度不等于"},
+        {value: "长度大于", label: "长度大于"},
+        {value: "长度大于等于", label: "长度大于等于"},
+        {value: "长度小于", label: "长度小于"},
+        {value: "长度小于等于", label: "长度小于等于"},
+    ]) //判断器条件
     return {
         selectedKeys,
         recording,
@@ -178,5 +194,6 @@ export const useCounterStore = defineStore('counter', () => {
         flow_add_if_max_id,
         flow_add_var_max_id,
         flow_add_note_max_id,
+        flow_if_condition_list,
     }
 })

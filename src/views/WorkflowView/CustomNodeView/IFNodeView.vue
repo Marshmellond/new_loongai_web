@@ -28,13 +28,57 @@ const deleteNode = (nodeId) => {
     return flow_temp_data[0] !== nodeId && flow_temp_data[1] !== nodeId;
   });
 };
+
+// ------------------------------------编辑node------------------------------------
+const show_edit = () => {
+  setTimeout(() => {
+    counter.if_node_data = counter.flow_data.nodes.filter(node => node.id === counter.selectedNode)
+    counter.if_node_data = counter.if_node_data[0]
+    counter.select_modal_node = 'if_edit'
+    counter.input_options = []
+    for (let i of counter.flow_data.nodes[0].data.variable) {
+      counter.input_options.push({value: i.name, label: i.name})
+    }
+
+
+    let temp_edges = [];
+
+    function func_add_edge(nodeId) {
+      // 遍历所有边，寻找与当前节点相关的边
+      for (let i = 0; i < counter.flow_data.edges.length; i++) {
+        let edge = counter.flow_data.edges[i];
+        // 检查目标节点和目标句柄是否匹配
+        if (edge.target === nodeId && edge.targetHandle === "left") {
+          // 检查源节点是否以"ai"开头
+          if (edge.source.split("_")[0] === "ai") {
+            // 将源节点添加到临时数组中
+            temp_edges.push(edge.source);
+            // 递归调用，处理新的源节点
+            func_add_edge(edge.source);
+          }
+        }
+      }
+    }
+
+    func_add_edge(counter.selectedNode);
+    for (let i = 0; i < counter.flow_data.nodes.length; i++) {
+      if (temp_edges.includes(counter.flow_data.nodes[i].id)) {
+        counter.input_options.push({
+          value: counter.flow_data.nodes[i].data.print,
+          label: counter.flow_data.nodes[i].data.print
+        })
+      }
+    }
+    counter.if_edit_open = true
+  }, 100)
+}
 </script>
 
 <template>
   <div class="if-node" :class="{'selected': data.isSelected}">
     <Handle type="source" position="left" id="left" class="div-Handle"/>
-    <Handle type="source" position="right1" id="right" class="div-Handle" :style="{ top: '50%' }"/>
-    <Handle type="source" position="right2" id="right" class="div-Handle" :style="{ top: '90%' }"/>
+    <Handle type="source" position="right" id="right1" class="div-Handle" :style="{ top: '57%' }"/>
+    <Handle type="source" position="right" id="right2" class="div-Handle" :style="{ top: '86%' }"/>
     <div class="div0">
       <div class="div0-ico">
         <icon :style="{ color: '#000000'}">
@@ -70,34 +114,40 @@ const deleteNode = (nodeId) => {
       <div class="div2">
         <div class="div2-1">
           <span class="div2-1-title1">IF</span>
-          <span class="div2-1-title2">AND</span>
+          <span class="div2-1-title2">{{data.logic}}</span>
         </div>
         <div v-for="(item) in data.condition" :key="item.id">
           <div class="div2-2">
-            <span class="div2-2-content">{{ item.var }}</span>
-            <span class="div2-2-content">{{ item.dit }}</span>
-            <span class="div2-2-content">{{ item.value }}</span>
+            <span class="div2-2-content1">{{ item.var }}</span>
+            <span class="div2-2-content2">{{ item.dit }}</span>
+            <span class="div2-2-content3">{{ item.value }}</span>
           </div>
         </div>
       </div>
-      <div class="div2">
+      <div class="div3">
         <span>ELSE</span>
       </div>
-      <!--      <div v-for="(item) in data.question" :key="item.id" style="margin-top: 1vh">-->
-      <!--        <span style="margin-left: 0.5vh">分类{{ item.id }}</span>-->
-      <!--        <div class="div1-2">-->
-      <!--          <span class="div1-2-title" style="margin-left: 0">{{ item.value }}</span>-->
-      <!--        </div>-->
-      <!--      </div>-->
     </div>
   </div>
 </template>
 
 <style scoped lang="less">
+
+.div3 {
+  background: #f5f6f8;
+  width: 100%;
+  height: 5vh;
+  margin-top: 1vh;
+  border-radius: 5px;
+  padding: 1vh;
+  display: flex;
+  align-items: center;
+}
+
 .div2 {
   background: #f5f6f8;
   width: 100%;
-  min-height: 10vh;
+  min-height: 6vh;
   margin-top: 1vh;
   border-radius: 5px;
   padding: 1vh;
@@ -108,7 +158,7 @@ const deleteNode = (nodeId) => {
     align-items: center;
 
     .div2-1-title2 {
-      margin-left: 0.5vw;
+      margin-left: 19.5vw;
       color: #336ffd;
     }
 
@@ -121,14 +171,36 @@ const deleteNode = (nodeId) => {
     margin-top: 1vh;
 
 
-    .div2-2-content {
+    .div2-2-content1 {
+      position: relative;
       border: 1px solid @theme-border-color;
       padding: 0.5vh;
       margin-right: 1vh;
       border-radius: 5px;
+      width: 8vw;
+      min-height: 3.5vh;
+    }
+
+    .div2-2-content2 {
+      position: relative;
+      border: 1px solid @theme-border-color;
+      padding: 0.5vh;
+      margin-right: 1vh;
+      border-radius: 5px;
+      width: 5vw;
+      min-height: 3.5vh;
+    }
+
+    .div2-2-content3 {
+      position: relative;
+      border: 1px solid @theme-border-color;
+      padding: 0.5vh;
+      margin-right: 1vh;
+      border-radius: 5px;
+      width: 8vw;
+      min-height: 3.5vh;
     }
   }
-
 }
 
 .div1 {
@@ -208,7 +280,7 @@ const deleteNode = (nodeId) => {
   .div0-title {
     font-weight: 900;
     font-size: 18px;
-    margin-right: 5vw;
+    margin-right: 14.5vw;
   }
 
   .div0-edit1 {
@@ -245,7 +317,7 @@ const deleteNode = (nodeId) => {
   background: #fdfdfd;
   padding: 1vh;
   border-radius: 5px;
-  min-width: 15vw;
-  min-height: 25vh;
+  min-width: 24vw;
+  min-height: 23vh;
 }
 </style>

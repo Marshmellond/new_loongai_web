@@ -19,11 +19,8 @@ const handleOk = () => {
   counter.var_edit_open = false
 }
 // ------------------------------------添加变量------------------------------------
-// ------------------------------------删除变量------------------------------------
 const add_variable = () => {
   let id = 0
-
-
   if (counter.var_node_data.data.var_update_data.length !== 0) {
     for (let i = 0; i < counter.var_node_data.data.var_update_data.length; i++) {
       if (counter.var_node_data.data.var_update_data[i].id > id) {
@@ -32,9 +29,10 @@ const add_variable = () => {
     }
   }
   id += 1
-
   counter.var_node_data.data.var_update_data.push({id: id, var: "", value: ""})
 }
+
+// ------------------------------------删除变量------------------------------------
 const delete_variable = (id) => {
   counter.var_node_data.data.var_update_data = counter.var_node_data.data.var_update_data.filter(item => item.id !== id)
 }

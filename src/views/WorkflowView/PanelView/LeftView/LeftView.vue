@@ -402,7 +402,8 @@ const add_if_node = () => {
     id: if_id,
     data: {
       order: counter.flow_add_if_max_id + 1,
-      condition: [{id:1,var:"输入内容",dit:"等于",value:"就这内容"},{id:2,var:"输入内容2",dit:"等于",value:"就这内容2"},{id:3,var:"输入内容3",dit:"等于",value:"就这内容3"}],
+      logic: "AND",
+      condition: [],
       isSelected: false,
       id: if_id,
     },
