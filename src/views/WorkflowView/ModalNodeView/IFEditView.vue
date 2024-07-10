@@ -4,23 +4,8 @@ import Icon, {DeleteOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-watch(() => counter.if_edit_open, () => {
-  counter.edit_start = !counter.if_edit_open
-})
 // ------------------------------------提交保存------------------------------------
 const handleOk = () => {
-  for (let i = 0; i < counter.if_node_data.data.condition.length; i++) {
-    if (counter.if_node_data.data.condition[i].var == undefined) {
-      counter.if_node_data.data.condition[i].var = ""
-    } else if (typeof counter.if_node_data.data.condition[i].var !== "string") {
-      counter.if_node_data.data.condition[i].var = counter.if_node_data.data.condition[i].var[0]
-    }
-    if (counter.if_node_data.data.condition[i].dit == undefined) {
-      counter.if_node_data.data.condition[i].dit = ""
-    } else if (typeof counter.if_node_data.data.condition[i].dit !== "string") {
-      counter.if_node_data.data.condition[i].dit = counter.if_node_data.data.condition[i].dit[0]
-    }
-  }
   counter.if_edit_open = false
 }
 
@@ -35,7 +20,7 @@ const add_variable = () => {
     }
   }
   id += 1
-  counter.if_node_data.data.condition.push({id: id, var: "", dit: "", value: ""})
+  counter.if_node_data.data.condition.push({id: id, input_id: "", input: "", dit: "", value: ""})
 }
 
 // ------------------------------------删除变量------------------------------------
@@ -49,6 +34,41 @@ const click_logic = () => {
     counter.if_node_data.data.logic = "AND"
   }
 }
+watch(() => counter.if_edit_open, () => {
+
+  for (let i = 0; i < counter.if_node_data.data.condition.length; i++) {
+    if (counter.if_node_data.data.condition[i].input == undefined) {
+      counter.if_node_data.data.condition[i].input = ""
+      counter.if_node_data.data.condition[i].input_id = ""
+    } else if (typeof counter.if_node_data.data.condition[i].input !== "string") {
+      counter.if_node_data.data.condition[i].input = counter.if_node_data.data.condition[i].input[0]
+      for (let a = 0; a < counter.flow_data.nodes[0].data.variable.length; a++) {
+        if (!counter.if_node_data.data.condition[i].input.startsWith("AI回复内容")) {
+          if (counter.if_node_data.data.condition[i].input === counter.flow_data.nodes[0].data.variable[a].name) {
+            counter.if_node_data.data.condition[i].input_id = counter.flow_data.nodes[0].data.variable[a].id
+          }
+        } else if (counter.if_node_data.data.condition[i].input.startsWith("AI回复内容")) {
+          for (let b = 0; b < counter.flow_data.nodes.length; b++) {
+            if (counter.flow_data.nodes[b].type === "ai") {
+              if (counter.flow_data.nodes[b].data.print === counter.if_node_data.data.condition[i].input) {
+                counter.if_node_data.data.condition[i].input_id = counter.flow_data.nodes[b].data.print_id
+              }
+            }
+          }
+        }
+      }
+    }
+    if (counter.if_node_data.data.condition[i].dit == undefined) {
+      counter.if_node_data.data.condition[i].dit = ""
+    } else if (typeof counter.if_node_data.data.condition[i].dit !== "string") {
+      counter.if_node_data.data.condition[i].dit = counter.if_node_data.data.condition[i].dit[0]
+    }
+  }
+
+
+  console.log(counter.if_node_data.data.condition)
+  counter.edit_start = !counter.if_edit_open
+})
 </script>
 
 <template>
@@ -68,7 +88,7 @@ const click_logic = () => {
         </div>
         <div v-for="(item) in counter.if_node_data.data.condition" :key="item.id">
           <div class="div2-2">
-            <a-cascader v-model:value="item.var" :options="counter.input_options" class="div2-2-content1"/>
+            <a-cascader v-model:value="item.input" :options="counter.input_options" class="div2-2-content1"/>
             <a-cascader v-model:value="item.dit" :options="counter.flow_if_condition_list" class="div2-2-content2"/>
             <a-textarea
                 v-model:value="item.value"

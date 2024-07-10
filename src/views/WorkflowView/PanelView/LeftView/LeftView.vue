@@ -238,8 +238,10 @@ const on_add_flow_data = () => {
         app_mod_view: "无",
         app_mod_img: "http://127.0.0.1:8000/img/head?path=model&name=null.png",
         system: "",
+        input_id: "",
         input: "",
         print: `AI回复内容1`,
+        print_id: `ai_variable_${Date.now().toString()}`,
         order: 1,
         isSelected: false,
         id: ai_id,
@@ -248,8 +250,6 @@ const on_add_flow_data = () => {
       position: {x: 700, y: 150},
     }], "edges": [], "position": [],
   }
-
-
   const url = "/api/workflow/add_flow_data"
   let body = {
     flow_data: JSON.stringify(flow_data),
@@ -424,7 +424,6 @@ const add_var_node = () => {
     id: var_id,
     data: {
       order: counter.flow_add_var_max_id + 1,
-      input: "",
       var_update_data: [],
       isSelected: false,
       id: var_id,

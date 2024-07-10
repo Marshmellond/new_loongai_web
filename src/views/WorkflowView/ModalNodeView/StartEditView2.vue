@@ -26,7 +26,23 @@ const handleOk = () => {
 watch(() => counter.variable_data.name, () => {
   for (let i = 0; i < counter.flow_data.nodes.length; i++) {
     if (counter.flow_data.nodes[i].type === "ai" || counter.flow_data.nodes[i].type === "reply") {
-      counter.flow_data.nodes[i].data.input = counter.variable_data.name
+      if (counter.flow_data.nodes[i].data.input_id === counter.variable_data.id) {
+        counter.flow_data.nodes[i].data.input = counter.variable_data.name
+      }
+    }
+    if (counter.flow_data.nodes[i].type === "if") {
+      for (let a = 0; a < counter.flow_data.nodes[i].data.condition.length; a++) {
+        if (counter.flow_data.nodes[i].data.condition[a].input_id === counter.variable_data.id) {
+          counter.flow_data.nodes[i].data.condition[a].input = counter.variable_data.name
+        }
+      }
+    }
+    if (counter.flow_data.nodes[i].type === "var") {
+      for (let a = 0; a < counter.flow_data.nodes[i].data.var_update_data.length; a++) {
+        if (counter.flow_data.nodes[i].data.var_update_data[a].input_id === counter.variable_data.id) {
+          counter.flow_data.nodes[i].data.var_update_data[a].input = counter.variable_data.name
+        }
+      }
     }
   }
 })

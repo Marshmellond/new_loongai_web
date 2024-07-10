@@ -111,7 +111,7 @@ const show_edit = () => {
         </div>
         <div v-for="(item) in data.condition" :key="item.id">
           <div class="div2-2">
-            <span class="div2-2-content1">{{ item.var }}</span>
+            <span class="div2-2-content1">{{ item.input }}</span>
             <span class="div2-2-content2">{{ item.dit }}</span>
             <span class="div2-2-content3">{{ item.value }}</span>
           </div>

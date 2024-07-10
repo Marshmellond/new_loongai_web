@@ -4,18 +4,8 @@ import Icon, {DeleteOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-watch(() => counter.var_edit_open, () => {
-  counter.edit_start = !counter.var_edit_open
-})
 // ------------------------------------提交保存------------------------------------
 const handleOk = () => {
-  for (let i = 0; i < counter.var_node_data.data.var_update_data.length; i++) {
-    if (counter.var_node_data.data.var_update_data[i].var == undefined) {
-      counter.var_node_data.data.var_update_data[i].var = ""
-    } else if (typeof counter.var_node_data.data.var_update_data[i].var !== "string") {
-      counter.var_node_data.data.var_update_data[i].var = counter.var_node_data.data.var_update_data[i].var[0]
-    }
-  }
   counter.var_edit_open = false
 }
 // ------------------------------------添加变量------------------------------------
@@ -29,13 +19,51 @@ const add_variable = () => {
     }
   }
   id += 1
-  counter.var_node_data.data.var_update_data.push({id: id, var: "", value: ""})
+  counter.var_node_data.data.var_update_data.push({id: id, input_id: "", input: "", value: ""})
 }
 
 // ------------------------------------删除变量------------------------------------
 const delete_variable = (id) => {
+  `1`
   counter.var_node_data.data.var_update_data = counter.var_node_data.data.var_update_data.filter(item => item.id !== id)
 }
+
+watch(() => counter.var_edit_open, () => {
+
+  for (let i = 0; i < counter.var_node_data.data.var_update_data.length; i++) {
+    if (counter.var_node_data.data.var_update_data[i].input == undefined) {
+      counter.var_node_data.data.var_update_data[i].input = ""
+      counter.var_node_data.data.var_update_data[i].input_id = ""
+    } else if (typeof counter.var_node_data.data.var_update_data[i].input !== "string") {
+      counter.var_node_data.data.var_update_data[i].input = counter.var_node_data.data.var_update_data[i].input[0]
+      for (let a = 0; a < counter.flow_data.nodes[0].data.variable.length; a++) {
+        if (!counter.var_node_data.data.var_update_data[i].input.startsWith("AI回复内容")) {
+          if (counter.var_node_data.data.var_update_data[i].input === counter.flow_data.nodes[0].data.variable[a].name) {
+            counter.var_node_data.data.var_update_data[i].input_id = counter.flow_data.nodes[0].data.variable[a].id
+          }
+        } else if (counter.var_node_data.data.var_update_data[i].input.startsWith("AI回复内容")) {
+          for (let b = 0; b < counter.flow_data.nodes.length; b++) {
+            if (counter.flow_data.nodes[b].type === "ai") {
+              if (counter.flow_data.nodes[b].data.print === counter.var_node_data.data.var_update_data[i].input) {
+                counter.var_node_data.data.var_update_data[i].input_id = counter.flow_data.nodes[b].data.print_id
+              }
+            }
+          }
+        }
+      }
+    }
+    if (counter.var_node_data.data.var_update_data[i].dit == undefined) {
+      counter.var_node_data.data.var_update_data[i].dit = ""
+    } else if (typeof counter.var_node_data.data.var_update_data[i].dit !== "string") {
+      counter.var_node_data.data.var_update_data[i].dit = counter.var_node_data.data.var_update_data[i].dit[0]
+    }
+  }
+
+
+  console.log(counter.var_node_data.data.var_update_data)
+
+  counter.edit_start = !counter.var_edit_open
+})
 </script>
 
 <template>
@@ -54,7 +82,7 @@ const delete_variable = (id) => {
             变量
             <DeleteOutlined class="div3-ico" @click="delete_variable(item.id)"/>
           </div>
-          <a-cascader v-model:value="item.var" :options="counter.input_options"/>
+          <a-cascader v-model:value="item.input" :options="counter.input_options"/>
           <div class="div3-title2">
             值
           </div>

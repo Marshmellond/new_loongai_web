@@ -106,7 +106,7 @@ const show_edit = () => {
       <div v-for="(item) in data.var_update_data" :key="item.id" class="div1-2-div">
         <span style="margin-left: 0.5vh">变量</span>
         <div class="div1-2">
-          <span class="div1-2-title" style="margin-left: 0">{{ item.var }}</span>
+          <span class="div1-2-title" style="margin-left: 0">{{ item.input }}</span>
         </div>
         <span style="margin-left: 0.5vh">值</span>
         <div class="div1-2">

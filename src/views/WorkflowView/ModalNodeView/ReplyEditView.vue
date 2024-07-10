@@ -54,16 +54,16 @@ watch(() => counter.reply_edit_open, () => {
     counter.reply_node_data.data.input_id = ""
   } else if (typeof counter.reply_node_data.data.input !== "string") {
     counter.reply_node_data.data.input = counter.reply_node_data.data.input[0]
-    for (let i = 0; i < counter.flow_data.nodes[0].data.variable.length; i++) {
+    for (let a = 0; a < counter.flow_data.nodes[0].data.variable.length; a++) {
       if (!counter.reply_node_data.data.input.startsWith("AI回复内容")) {
-        if (counter.reply_node_data.data.input === counter.flow_data.nodes[0].data.variable[i].name) {
-          counter.reply_node_data.data.input_id = counter.flow_data.nodes[0].data.variable[i].id
+        if (counter.reply_node_data.data.input === counter.flow_data.nodes[0].data.variable[a].name) {
+          counter.reply_node_data.data.input_id = counter.flow_data.nodes[0].data.variable[a].id
         }
       } else if (counter.reply_node_data.data.input.startsWith("AI回复内容")) {
-        for (let i = 0; i < counter.flow_data.nodes.length; i++) {
-          if (counter.flow_data.nodes[i].type === "ai") {
-            if (counter.flow_data.nodes[i].data.print === counter.reply_node_data.data.input) {
-              counter.reply_node_data.data.input_id = counter.flow_data.nodes[i].data.print_id
+        for (let b = 0; b < counter.flow_data.nodes.length; b++) {
+          if (counter.flow_data.nodes[b].type === "ai") {
+            if (counter.flow_data.nodes[b].data.print === counter.reply_node_data.data.input) {
+              counter.reply_node_data.data.input_id = counter.flow_data.nodes[b].data.print_id
             }
           }
         }
@@ -71,11 +71,8 @@ watch(() => counter.reply_edit_open, () => {
     }
   }
 
-
   console.log(counter.reply_node_data.data.input)
   console.log(counter.reply_node_data.data.input_id)
-
-
   counter.edit_start = !counter.reply_edit_open
 })
 </script>
