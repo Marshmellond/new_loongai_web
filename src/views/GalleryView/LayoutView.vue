@@ -28,9 +28,9 @@ onMounted(get_data)
 </script>
 
 <template>
-  <div class="div-overflow">
-    <div class="div1">
-      <div v-for="(item) in counter.gallery_img_list" :key="item[0]" class="div2">
+  <div class="div1">
+    <div class="container">
+      <div class="div2" v-for="(item) in counter.gallery_img_list" :key="item[0]">
         <a-image :src="item[1]"/>
       </div>
     </div>
@@ -40,26 +40,46 @@ onMounted(get_data)
 <style scoped lang="less">
 @import "src/assets/css/theme.less";
 
-.div-overflow {
-  width: 100%;
-  height: 95.5vh;
+.div1 {
   overflow: auto;
+  height: 95.5vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .div1 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    align-items: start;
-    padding-left: 5vw;
-    padding-right: 5vw;
+.container {
+  width: 80vw;
+  column-count: 4;
+  column-gap: 1vh;
+  margin-top: 1vh;
+}
+
+.div2 {
+  margin-bottom: 1vh;
+  border-radius: 7px;
+  overflow: hidden;
+
+}
 
 
-    .div2 {
-      margin: 0.5vh;
-      border-radius: 7px;
-      overflow: hidden;
-      //border: 1px solid red;
-    }
+@media (max-width: 1200px) {
+  .container {
+    columns: 4;
   }
 }
+
+@media (max-width: 850px) {
+  .container {
+    columns: 3;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    columns: 2;
+  }
+}
+
 
 </style>
