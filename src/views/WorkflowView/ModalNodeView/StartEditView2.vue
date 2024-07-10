@@ -44,6 +44,14 @@ watch(() => counter.variable_data.name, () => {
         }
       }
     }
+    if (counter.flow_data.nodes[i].type === "end") {
+      for (let a = 0; a < counter.flow_data.nodes[i].data.variable_content.length; a++) {
+        if (counter.flow_data.nodes[i].data.variable_content[a].input_id === counter.variable_data.id) {
+          counter.flow_data.nodes[i].data.variable_content[a].input = counter.variable_data.name
+          counter.flow_data.nodes[i].data.variable_print[a][0] = counter.variable_data.name
+        }
+      }
+    }
   }
 })
 </script>

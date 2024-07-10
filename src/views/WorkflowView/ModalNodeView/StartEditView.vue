@@ -36,6 +36,37 @@ const add_variable2 = (item) => {
 }
 const delete_variable = (id) => {
   counter.flow_data.nodes[0].data.variable = counter.flow_data.nodes[0].data.variable.filter(variable => variable.id != id)
+
+
+  for (let i = 0; i < counter.flow_data.nodes.length; i++) {
+    if (counter.flow_data.nodes[i].type === "ai" || counter.flow_data.nodes[i].type === "reply") {
+      if (counter.flow_data.nodes[i].data.input_id === id) {
+        counter.flow_data.nodes[i].data.input = ""
+      }
+    }
+    if (counter.flow_data.nodes[i].type === "if") {
+      for (let a = 0; a < counter.flow_data.nodes[i].data.condition.length; a++) {
+        if (counter.flow_data.nodes[i].data.condition[a].input_id === id) {
+          counter.flow_data.nodes[i].data.condition[a].input = ""
+        }
+      }
+    }
+    if (counter.flow_data.nodes[i].type === "var") {
+      for (let a = 0; a < counter.flow_data.nodes[i].data.var_update_data.length; a++) {
+        if (counter.flow_data.nodes[i].data.var_update_data[a].input_id === id) {
+          counter.flow_data.nodes[i].data.var_update_data[a].input = ""
+        }
+      }
+    }
+    if (counter.flow_data.nodes[i].type === "end") {
+      for (let a = 0; a < counter.flow_data.nodes[i].data.variable_content.length; a++) {
+        if (counter.flow_data.nodes[i].data.variable_content[a].input_id === id) {
+          counter.flow_data.nodes[i].data.variable_content[a].input = ""
+          counter.flow_data.nodes[i].data.variable_print[a][0] = ""
+        }
+      }
+    }
+  }
 }
 </script>
 

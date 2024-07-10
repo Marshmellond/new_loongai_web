@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import InputView from "@/views/WorkflowView/PanelView/RightView/InputView.vue";
-import ResultView from "@/views/WorkflowView/PanelView/RightView/ResultView.vue";
 import {ref, onMounted, onUnmounted, watch} from 'vue'
 import {useCounterStore} from '@/stores/counter'
 
@@ -23,7 +22,7 @@ const counter = useCounterStore()
                 force-render>
       <div class="div3">
         <div v-for="(i, index) in item.data.variable_content" :key="index">
-          <span class="div2-title">{{ i.name }}</span>
+          <span class="div2-title">{{ i.input }}</span>
           <div class="div2-content">{{ i.value }}</div>
         </div>
       </div>

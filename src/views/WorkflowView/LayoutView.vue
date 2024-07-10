@@ -169,7 +169,7 @@ const on_add_flow_data = () => {
       data: {
         variable: [
           {
-            id: "0",
+            id: `start_variable_${Date.now().toString()}`,
             name: "输入内容",
             label: "content",
             value: "",
@@ -209,8 +209,10 @@ const on_add_flow_data = () => {
         app_mod_view: "无",
         app_mod_img: "http://127.0.0.1:8000/img/head?path=model&name=null.png",
         system: "",
+        input_id: "",
         input: "",
         print: `AI回复内容1`,
+        print_id: `ai_variable_${Date.now().toString()}`,
         order: 1,
         isSelected: false,
         id: ai_id,

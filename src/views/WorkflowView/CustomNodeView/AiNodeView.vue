@@ -58,11 +58,44 @@ const show_edit = () => {
 }
 // ------------------------------------删除node------------------------------------
 const deleteNode = (nodeId) => {
+  let id = counter.flow_data.nodes.filter(node => node.id === nodeId)[0].data.print_id
+  console.log(id)
   counter.flow_data.nodes = counter.flow_data.nodes.filter(node => node.id !== nodeId);
   counter.flow_data.edges = counter.flow_data.edges.filter((edge) => {
     let flow_temp_data = edge.id.replace("vueflow__edge-", "").split("-");
     return flow_temp_data[0] !== nodeId && flow_temp_data[1] !== nodeId;
   });
+
+  for (let i = 0; i < counter.flow_data.nodes.length; i++) {
+    if (counter.flow_data.nodes[i].type === "ai" || counter.flow_data.nodes[i].type === "reply") {
+      if (counter.flow_data.nodes[i].data.input_id === id) {
+        counter.flow_data.nodes[i].data.input = ""
+      }
+    }
+    if (counter.flow_data.nodes[i].type === "if") {
+      for (let a = 0; a < counter.flow_data.nodes[i].data.condition.length; a++) {
+        if (counter.flow_data.nodes[i].data.condition[a].input_id === id) {
+          counter.flow_data.nodes[i].data.condition[a].input = ""
+        }
+      }
+    }
+    if (counter.flow_data.nodes[i].type === "var") {
+      for (let a = 0; a < counter.flow_data.nodes[i].data.var_update_data.length; a++) {
+        if (counter.flow_data.nodes[i].data.var_update_data[a].input_id === id) {
+          counter.flow_data.nodes[i].data.var_update_data[a].input = ""
+        }
+      }
+    }
+    if (counter.flow_data.nodes[i].type === "end") {
+      for (let a = 0; a < counter.flow_data.nodes[i].data.variable_content.length; a++) {
+        if (counter.flow_data.nodes[i].data.variable_content[a].input_id === id) {
+          counter.flow_data.nodes[i].data.variable_content[a].input = ""
+          counter.flow_data.nodes[i].data.variable_print[a][0] = ""
+        }
+      }
+    }
+  }
+
 };
 </script>
 <template>
