@@ -107,6 +107,8 @@ export const useCounterStore = defineStore('counter', () => {
         {value: "长度小于", label: "长度小于"},
         {value: "长度小于等于", label: "长度小于等于"},
     ]) //判断器条件
+    const workflow_seed_load = ref(false) // 工作流运行加载动画
+    const workflow_result_open = ref(false) // 放大查看结果
     return {
         selectedKeys,
         recording,
@@ -195,5 +197,7 @@ export const useCounterStore = defineStore('counter', () => {
         flow_add_var_max_id,
         flow_add_note_max_id,
         flow_if_condition_list,
+        workflow_seed_load,
+        workflow_result_open,
     }
 })

@@ -9,6 +9,7 @@ const counter = useCounterStore()
 
 const seed_meg = () => {
   console.log(counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content)
+  counter.workflow_seed_load = true
   const url = "/api/workflow/seed"
   let body = {
     flow_data: JSON.stringify(counter.flow_data),
@@ -20,14 +21,12 @@ const seed_meg = () => {
     credentials: "include"
   }).then((res) => {
     if (res.ok) {
+      counter.workflow_seed_load = false
       return res.json()
     }
   }).then((data) => {
     if (data["code"] == 1) {
-      for (let i = 0; i < counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content.length; i++) {
-        counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content[i]["value"] = data["data"][counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content[i]["name"]]
-      }
-      console.log(counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content)
+      counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content = data["data"]
     }
   })
 }

@@ -33,6 +33,7 @@ import ReplyEditView from "@/views/WorkflowView/ModalNodeView/ReplyEditView.vue"
 import NoteEditView from "@/views/WorkflowView/ModalNodeView/NoteEditView.vue";
 import VarEditView from "@/views/WorkflowView/ModalNodeView/VarEditView.vue";
 import IFEditView from "@/views/WorkflowView/ModalNodeView/IFEditView.vue";
+import ResultView from "@/views/WorkflowView/PanelView/ResultView/ResultView.vue";
 import {message} from "ant-design-vue";
 import {PlusOutlined} from "@ant-design/icons-vue";
 
@@ -392,6 +393,7 @@ onUnmounted(() => {
   <NoteEditView class="div3" v-if="counter.select_modal_node=='note_edit'"></NoteEditView>
   <VarEditView class="div3" v-if="counter.select_modal_node=='var_edit'"></VarEditView>
   <IFEditView class="div3" v-if="counter.select_modal_node=='if_edit'"></IFEditView>
+  <ResultView class="div3" v-if="counter.select_modal_node=='result_view'"></ResultView>
   <VueFlow
       class="basic-flow"
       :nodes="counter.flow_data.nodes"
