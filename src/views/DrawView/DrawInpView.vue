@@ -231,6 +231,52 @@ const on_generate = () => {
     message.error("请输入图像描述")
   }
 }
+
+function downloadIamge(src) {
+
+  let image = new Image();
+
+  image.src = src;
+
+  image.setAttribute("crossOrigin", "anonymous");
+
+  image.onload = function () {
+
+    let c = document.createElement("canvas");
+
+    c.width = image.width;
+
+    c.height = image.height;
+
+    c.getContext("2d").drawImage(image, 0, 0, image.width, image.height);
+
+    let a = document.createElement("a");
+
+    let uuid = crypto.randomUUID();
+    a.download = `${uuid}.png`;
+
+    a.href = c.toDataURL("image/png");
+
+    a.click();
+
+  }
+
+}
+
+const on_download = () => {
+  if (counter.draw_img1 !== "") {
+    downloadIamge(counter.draw_img1)
+  }
+  if (counter.draw_img2 !== "") {
+    downloadIamge(counter.draw_img2)
+  }
+  if (counter.draw_img3 !== "") {
+    downloadIamge(counter.draw_img3)
+  }
+  if (counter.draw_img4 !== "") {
+    downloadIamge(counter.draw_img4)
+  }
+}
 </script>
 
 <template>

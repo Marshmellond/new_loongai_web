@@ -6,9 +6,14 @@ import {Input, Button, Typography, message} from 'ant-design-vue';
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-
+const clear_variable_content = () => {
+  for (let i = 0; i < counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content.length; i++) {
+    counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content[i].value = ""
+  }
+}
 const seed_meg = () => {
   console.log(counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content)
+  clear_variable_content()
   counter.workflow_seed_load = true
   const url = "/api/workflow/seed"
   let body = {

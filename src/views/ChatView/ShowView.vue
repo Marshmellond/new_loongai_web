@@ -730,7 +730,8 @@ const delete_message = (id) => {
       </div>
 
     </div>
-
+    <!--          size="large"-->
+    <!--          :showCount="true"-->
     <div class="div4">
       <a-textarea
           v-model:value="textarea_input"
