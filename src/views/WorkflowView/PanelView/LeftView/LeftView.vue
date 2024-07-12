@@ -271,9 +271,6 @@ const on_add_flow_data = () => {
   })
 }
 
-// ------------------------------------导入工作流------------------------------------
-const on_import_flow_data = () => {
-}
 // ------------------------------------选择工作流------------------------------------
 const selectItem = (id: string) => {
   set_flow_data()
@@ -646,7 +643,7 @@ const processJSONContent = () => {
         @change="handleChange"
         :customRequest="customRequest"
     >
-      <a-button type="primary" size="large" class="ant-button1" @click="on_import_flow_data">
+      <a-button type="primary" size="large" class="ant-button1">
         <icon :style="{ color: '#000000'}">
           <template #component>
             <svg t="1720337863663" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"

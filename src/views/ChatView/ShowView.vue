@@ -237,21 +237,6 @@ const seed_microphone_stop = () => {
 
 
 const microphone_status = ref(false);
-marked.setOptions({
-  highlight: function (code, lang) {
-    try {
-      if (lang) {
-        return hljs.highlight(code, {language: lang}).value
-      } else {
-        return hljs.highlightAuto(code).value
-      }
-    } catch (error) {
-      return code
-    }
-  },
-  gfmtrue: true,
-  breaks: true
-})
 
 
 const chat_show_load = ref(false)
@@ -343,11 +328,24 @@ const seed_message = () => {
     return
   }
   const url1 = "/api/chat/add_con_data"
-  const chat_con_user = textarea_input.value
+  let chat_con_user = textarea_input.value
+  let img_textarea = ""
   textarea_input.value = ''
+  if (counter.chat_put_img_list.length > 0) {
+    for (let i of counter.chat_put_img_list) {
+      img_textarea += `![](${i.url})<br>`
+    }
+    img_textarea += `${chat_con_user}`
+    chat_con_user = img_textarea
+  }
+
+  let put_img_list = JSON.stringify(counter.chat_put_img_list)
+  counter.chat_put_img_list = []
+  chat_status_bool.value = true
   let body = {
     chat_rec_id: chat_rec_id.value,
-    textarea_input: chat_con_user
+    textarea_input: chat_con_user,
+    chat_emotion_status: counter.chat_emotion_status
   }
   fetch(url1, {
     method: "POST",
@@ -365,9 +363,12 @@ const seed_message = () => {
       }
       chat_show_load.value = true
       const url2 = "/api/chat/add_con_chat"
+      console.log(put_img_list)
+      console.log(typeof put_img_list)
       let body2 = {
         chat_rec_id: chat_rec_id.value,
         textarea_input: chat_con_user,
+        put_img_list: put_img_list,
         chat_con_order: data["data"][0][0],
         chat_con_user_time: data["data"][0][2],
         chat_con_user_img: data["data"][0][3],
@@ -380,7 +381,6 @@ const seed_message = () => {
       }).then((res) => {
         if (res.ok) {
           temp_meg.value = ""
-          chat_status_bool.value = true
           chat_show_load.value = false
           return res.body;
         }
@@ -581,6 +581,7 @@ const click_copy = (text: string) => {
   message.success("复制成功")
 }
 const stop_chat = () => {
+  chat_show_load.value = false
   chat_status_bool.value = false
 }
 
@@ -605,7 +606,78 @@ const delete_message = (id) => {
     }
   })
 }
+// ------------------------------------上传图片------------------------------------
+const beforeUpload = (file) => {
+  const isImage = file.type.startsWith('image/');
+  if (!isImage) {
+    message.error('只能上传图片文件');
+    return Upload.LIST_IGNORE;
+  }
+  const isLt5M = file.size / 1024 / 1024 < 5;
+  if (!isLt5M) {
+    message.error('图片大小不能超过5MB');
+    return Upload.LIST_IGNORE;
+  }
+  return isImage && isLt5M;
+};
 
+const handleChange = (info) => {
+  const status = info.file.status;
+  if (status === 'done') {
+    processUploadedImage(info.file.originFileObj, info.file.name);
+  } else if (status === 'error') {
+    message.error(`图片 ${info.file.name} 上传失败`);
+  }
+};
+
+const processUploadedImage = (file, file_name) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const imageDataUrl = e.target.result;
+    uploadImageToServer(imageDataUrl, file_name);
+  };
+  reader.readAsDataURL(file);
+};
+
+const customRequest = ({file, onSuccess}) => {
+  setTimeout(() => {
+    onSuccess("ok", file);
+  }, 0);
+};
+
+const uploadImageToServer = (imageDataUrl, file_name) => {
+  console.log(imageDataUrl)
+  console.log(file_name)
+  const url = "/api/chat/put_img";
+  let body = {
+    image_data: imageDataUrl,
+    file_name: file_name
+  };
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      counter.chat_put_img_list.push({"id": crypto.randomUUID(), "url": data["data"]["img_url"]})
+      message.success("图片上传成功");
+    } else {
+      message.error("图片上传失败");
+    }
+  }).catch((error) => {
+    console.error('Error uploading image:', error);
+    message.error("图片上传失败");
+  });
+};
+// ------------------------------------删除图片------------------------------------
+const delete_put_img_list = (id) => {
+  counter.chat_put_img_list = counter.chat_put_img_list.filter(item => item.id !== id)
+}
 </script>
 <template>
 
@@ -613,7 +685,10 @@ const delete_message = (id) => {
     <div class="div2">
       <FormOutlined class="ant-edit" @click="show_edit"/>
       <DeleteOutlined class="ant-delete" @click="delete_record"/>
-
+      <div class="ant-emotion">
+        <span style="margin-right: 0.2vw">情感识别</span>
+        <a-switch v-model:checked="counter.chat_emotion_status"/>
+      </div>
       <div v-if="counter.chat_img_head" style="margin-left: -3vw">
         <a-avatar shape="square" class="ant-head1">
           <template #icon>
@@ -747,8 +822,6 @@ const delete_message = (id) => {
       </div>
 
     </div>
-    <!--          size="large"-->
-    <!--          :showCount="true"-->
     <div class="div4">
       <a-textarea
           v-model:value="textarea_input"
@@ -779,22 +852,30 @@ const delete_message = (id) => {
             <span style="color: white;font-size: 12px">{{ btnText }}</span>
           </div>
         </div>
-        <icon :style="{ color: '#000000'}" class="div4-gallery">
-          <template #component>
-            <svg t="1719564468784" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                 p-id="3965" width="30" height="30">
-              <path
-                  d="M828.8 598.4c-6.4-6.4-12.8-9.6-22.4-9.6-9.6 0-16 3.2-22.4 9.6L694.4 688c-12.8 12.8-12.8 32 0 44.8 12.8 12.8 32 12.8 44.8 0l35.2-35.2V896c0 16 12.8 32 32 32s32-12.8 32-32V697.6l38.4 38.4c12.8 12.8 32 12.8 44.8 0 12.8-12.8 12.8-32 0-44.8l-92.8-92.8z m-419.2-240c16-35.2 6.4-76.8-19.2-105.6-28.8-28.8-73.6-35.2-108.8-22.4-35.2 16-57.6 54.4-57.6 92.8 0 51.2 41.6 92.8 92.8 92.8 38.4 0 76.8-22.4 92.8-57.6zM288 323.2c0-9.6 3.2-16 9.6-22.4 3.2-9.6 12.8-12.8 22.4-12.8 16 0 32 12.8 32 28.8s-12.8 32-28.8 35.2c-19.2 0-35.2-12.8-35.2-28.8z"
-                  fill="#000000" p-id="3966"></path>
-              <path
-                  d="M896 96H128c-35.2 0-64 28.8-64 64v640c0 35.2 28.8 64 64 64h544v-64H160c-19.2 0-32-16-32-32V192c0-16 12.8-32 32-32h704c19.2 0 32 16 32 32v416h64V160c0-35.2-28.8-64-64-64z"
-                  fill="#000000" p-id="3967"></path>
-              <path
-                  d="M182.4 713.6c12.8 12.8 32 12.8 44.8 0l134.4-134.4 112 112c3.2 3.2 3.2 3.2 6.4 3.2 12.8 6.4 25.6 6.4 38.4-3.2l316.8-316.8c12.8-12.8 12.8-32 0-44.8-12.8-12.8-32-12.8-44.8 0L496 624 384 508.8l-3.2-3.2c-12.8-9.6-28.8-9.6-41.6 3.2l-160 160c-9.6 12.8-9.6 32 3.2 44.8z"
-                  fill="#000000" p-id="3968"></path>
-            </svg>
-          </template>
-        </icon>
+        <a-upload
+            :showUploadList="false"
+            :beforeUpload="beforeUpload"
+            @change="handleChange"
+            :customRequest="customRequest"
+        >
+          <icon :style="{ color: '#000000'}" class="div4-gallery">
+            <template #component>
+              <svg t="1719564468784" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                   xmlns="http://www.w3.org/2000/svg"
+                   p-id="3965" width="30" height="30">
+                <path
+                    d="M828.8 598.4c-6.4-6.4-12.8-9.6-22.4-9.6-9.6 0-16 3.2-22.4 9.6L694.4 688c-12.8 12.8-12.8 32 0 44.8 12.8 12.8 32 12.8 44.8 0l35.2-35.2V896c0 16 12.8 32 32 32s32-12.8 32-32V697.6l38.4 38.4c12.8 12.8 32 12.8 44.8 0 12.8-12.8 12.8-32 0-44.8l-92.8-92.8z m-419.2-240c16-35.2 6.4-76.8-19.2-105.6-28.8-28.8-73.6-35.2-108.8-22.4-35.2 16-57.6 54.4-57.6 92.8 0 51.2 41.6 92.8 92.8 92.8 38.4 0 76.8-22.4 92.8-57.6zM288 323.2c0-9.6 3.2-16 9.6-22.4 3.2-9.6 12.8-12.8 22.4-12.8 16 0 32 12.8 32 28.8s-12.8 32-28.8 35.2c-19.2 0-35.2-12.8-35.2-28.8z"
+                    fill="#000000" p-id="3966"></path>
+                <path
+                    d="M896 96H128c-35.2 0-64 28.8-64 64v640c0 35.2 28.8 64 64 64h544v-64H160c-19.2 0-32-16-32-32V192c0-16 12.8-32 32-32h704c19.2 0 32 16 32 32v416h64V160c0-35.2-28.8-64-64-64z"
+                    fill="#000000" p-id="3967"></path>
+                <path
+                    d="M182.4 713.6c12.8 12.8 32 12.8 44.8 0l134.4-134.4 112 112c3.2 3.2 3.2 3.2 6.4 3.2 12.8 6.4 25.6 6.4 38.4-3.2l316.8-316.8c12.8-12.8 12.8-32 0-44.8-12.8-12.8-32-12.8-44.8 0L496 624 384 508.8l-3.2-3.2c-12.8-9.6-28.8-9.6-41.6 3.2l-160 160c-9.6 12.8-9.6 32 3.2 44.8z"
+                    fill="#000000" p-id="3968"></path>
+              </svg>
+            </template>
+          </icon>
+        </a-upload>
         <icon :style="{ color: '#000000'}" class="div4-clear">
           <template #component>
             <svg t="1719565031756" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -807,7 +888,7 @@ const delete_message = (id) => {
         </icon>
         <span class="div4-seed-desc">Enter发送 / Shift+Enter换行</span>
         <div class="div4-seed" @click="seed_message">
-          <icon :style="{ color: '#000000'}" class="icon-div4-seed" @click="stop_chat" v-if="!chat_status_bool">
+          <icon :style="{ color: '#000000'}" class="icon-div4-seed" @click="stop_chat">
             <template #component>
               <svg t="1719487236129" class="icon" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg"
@@ -822,19 +903,43 @@ const delete_message = (id) => {
               </svg>
             </template>
           </icon>
-          <icon :style="{ color: '#000000'}" class="icon-div4-stop" @click="stop_chat" v-if="chat_status_bool">
+          <span style="cursor: pointer">发送</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="div5" v-if="counter.chat_put_img_list.length!==0">
+      <div class="div5-img" v-for="(item) in counter.chat_put_img_list" :key="item.id">
+        <div class="div5-content">
+          <a-image :src="item.url"/>
+          <icon :style="{ color: '#000000'}" class="div5-delete" @click="delete_put_img_list(item.id)">
             <template #component>
-              <svg t="1719484882928" class="icon" viewBox="0 0 1024 1024" version="1.1"
+              <svg t="1720785675237" class="icon" viewBox="0 0 1024 1024" version="1.1"
                    xmlns="http://www.w3.org/2000/svg"
-                   p-id="2570" width="32" height="32">
+                   p-id="2573" width="16" height="16">
                 <path
-                    d="M512 42.666667C252.793333 42.666667 42.666667 252.793333 42.666667 512s210.126667 469.333333 469.333333 469.333333 469.333333-210.126667 469.333333-469.333333S771.206667 42.666667 512 42.666667z m213.333333 645.333333a37.373333 37.373333 0 0 1-37.333333 37.333333H336a37.373333 37.373333 0 0 1-37.333333-37.333333V336a37.373333 37.373333 0 0 1 37.333333-37.333333h352a37.373333 37.373333 0 0 1 37.333333 37.333333z"
-                    fill="#000000" p-id="2571"></path>
+                    d="M512 64c-247.00852 0-448 200.960516-448 448S264.960516 960 512 960c247.00852 0 448-200.960516 448-448S759.039484 64 512 64zM694.752211 649.984034c12.480043 12.54369 12.447359 32.768069-0.063647 45.248112-6.239161 6.208198-14.399785 9.34412-22.591372 9.34412-8.224271 0-16.415858-3.135923-22.65674-9.407768l-137.60043-138.016718-138.047682 136.576912c-6.239161 6.14455-14.368821 9.247789-22.496761 9.247789-8.255235 0-16.479505-3.168606-22.751351-9.504099-12.416396-12.576374-12.320065-32.800753 0.25631-45.248112l137.887703-136.384249-137.376804-137.824056c-12.480043-12.512727-12.447359-32.768069 0.063647-45.248112 12.512727-12.512727 32.735385-12.447359 45.248112 0.063647l137.567746 137.984034 138.047682-136.575192c12.54369-12.447359 32.831716-12.320065 45.248112 0.25631 12.447359 12.576374 12.320065 32.831716-0.25631 45.248112L557.344443 512.127295 694.752211 649.984034z"
+                    fill="#2c2c2c" p-id="2574"></path>
               </svg>
             </template>
           </icon>
-          <span style="cursor: pointer">发送</span>
         </div>
+      </div>
+    </div>
+    <div class="div6" v-if="chat_status_bool">
+      <div class="div6-content">
+        <icon :style="{ color: '#000000'}" class="icon-div4-stop" @click="stop_chat">
+          <template #component>
+            <svg t="1719484882928" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg"
+                 p-id="2570" width="32" height="32">
+              <path
+                  d="M512 42.666667C252.793333 42.666667 42.666667 252.793333 42.666667 512s210.126667 469.333333 469.333333 469.333333 469.333333-210.126667 469.333333-469.333333S771.206667 42.666667 512 42.666667z m213.333333 645.333333a37.373333 37.373333 0 0 1-37.333333 37.333333H336a37.373333 37.373333 0 0 1-37.333333-37.333333V336a37.373333 37.373333 0 0 1 37.333333-37.333333h352a37.373333 37.373333 0 0 1 37.333333 37.333333z"
+                  fill="#000000" p-id="2571"></path>
+            </svg>
+          </template>
+        </icon>
+        <span>停止对话</span>
       </div>
     </div>
 
@@ -847,6 +952,63 @@ const delete_message = (id) => {
 <style scoped lang="less">
 @import "src/assets/css/theme.less";
 
+.div6 {
+  position: absolute;
+  top: 68vh;
+  z-index: 1000;
+  width: 100%;
+  height: 8vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .div6-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3vh 1.5vh 0.3vh 1.5vh;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: #d0e4f4;
+    }
+  }
+}
+
+.div5 {
+  position: absolute;
+  top: 65.5vh;
+  z-index: 1000;
+  width: 100%;
+  height: 10vh;
+  background: rgba(0, 0, 0, 0.1);
+  overflow: auto;
+  display: flex;
+  flex-direction: row;
+
+  .div5-img {
+    width: 4.5vw;
+    height: 9vh;
+    position: relative;
+    top: 1vh;
+    left: 0.5vw;
+
+    .div5-content {
+      display: flex;
+
+      .div5-delete {
+        cursor: pointer;
+        height: 2vh;
+        padding: 0.2vh;
+      }
+
+    }
+  }
+}
 
 .div4 {
   width: 99.96%;
@@ -1052,6 +1214,14 @@ const delete_message = (id) => {
       padding: 0.01vh 1vh 0.01vh 1vh;
       word-wrap: break-word; /* 设置文字换行 */
       overflow-wrap: break-word; /* 设置文字换行 */
+
+      .div-content-txt-user {
+        ::v-deep img {
+          width: 150px;
+          border-radius: 5px;
+          height: auto;
+        }
+      }
     }
 
   }
@@ -1166,6 +1336,11 @@ const delete_message = (id) => {
       color: #3085fb;
       border: 1px solid #3085fb;
     }
+  }
+
+  .ant-emotion {
+    position: absolute;
+    left: 65vw;
   }
 
   .ant-delete {
