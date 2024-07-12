@@ -9,6 +9,17 @@ import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
 const activeKey = ref("1");
+const get_draw_select = () => {
+  const url = "/api/draw/default_select"
+  fetch(url).then((res) => {
+    return res.json()
+  }).then((data) => {
+    if (data["code"] == 1) {
+      let draw_mod_select = data["data"]["draw_mod_select"]
+      localStorage.setItem("draw_mod_select", draw_mod_select)
+    }
+  })
+}
 const get_about_data = () => {
   const url = "/api/key/draw"
   fetch(url).then((res) => {
@@ -21,6 +32,7 @@ const get_about_data = () => {
   })
 }
 onMounted(get_about_data)
+onMounted(get_draw_select)
 </script>
 
 <template>

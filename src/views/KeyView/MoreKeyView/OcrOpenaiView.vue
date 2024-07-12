@@ -5,10 +5,10 @@ import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-const openai_api = ref(["", [], "", false])
+const openai_api = ref(["", [], "", ""])
 
 const get_about_data = () => {
-  const url = "/api/key/draw_openai"
+  const url = "/api/key/ocr_openai"
   fetch(url).then((res) => {
     return res.json()
   }).then((data) => {
@@ -16,32 +16,17 @@ const get_about_data = () => {
       openai_api.value[0] = data["data"]["api_key"]
       openai_api.value[1] = data["data"]["api_ver"]
       openai_api.value[2] = data["data"]["api_select"]
-      openai_api.value[3] = data["data"]["api_default"]
-      if (openai_api.value[3]) {
-        counter.draw_mode_name = "openai"
-        counter.draw_mode_ver = openai_api.value[1][openai_api.value[2]]
-      }
+      openai_api.value[3] = data["data"]["base_url"]
     }
   })
 }
 onMounted(get_about_data)
-const get_draw_select = () => {
-  const url = "/api/draw/default_select"
-  fetch(url).then((res) => {
-    return res.json()
-  }).then((data) => {
-    if (data["code"] == 1) {
-      let draw_mod_select = data["data"]["draw_mod_select"]
-      localStorage.setItem("draw_mod_select", draw_mod_select)
-    }
-  })
-}
 const onFinish = () => {
-  const url = "/api/key/alter/draw_openai"
+  const url = "/api/key/alter/ocr_openai"
   let body = {
     api_key: openai_api.value[0],
+    base_url: openai_api.value[3],
     api_select: openai_api.value[2],
-    api_default: openai_api.value[3],
   }
   fetch(url, {
     method: "POST",
@@ -53,13 +38,9 @@ const onFinish = () => {
       return res.json()
     }
   }).then((data) => {
-    if (parseInt(data["alter_default_code"]) === 2) {
-      message.error("必须设置一个默认")
-      get_about_data()
-    } else if (parseInt(data["code"]) === 1) {
+    if (parseInt(data["code"]) === 1) {
       message.success("修改成功")
       get_about_data()
-      get_draw_select()
     } else {
       message.error("修改失败")
     }
@@ -80,6 +61,11 @@ const onFinish = () => {
     >
       <a-input v-model:value="openai_api[0]"/>
     </a-form-item>
+    <a-form-item
+        label="base_url"
+    >
+      <a-input v-model:value="openai_api[3]"/>
+    </a-form-item>
 
     <a-form-item
         label="模型版本:"
@@ -98,12 +84,6 @@ const onFinish = () => {
           {{ ver }}
         </a-select-option>
       </a-select>
-    </a-form-item>
-
-    <a-form-item
-        label="设为默认"
-    >
-      <a-checkbox v-model:checked="openai_api[3]"></a-checkbox>
     </a-form-item>
 
     <a-form-item :wrapper-col="{ offset: 7, span: 16 }">

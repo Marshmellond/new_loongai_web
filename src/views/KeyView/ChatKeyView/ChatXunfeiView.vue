@@ -69,7 +69,7 @@ const onFinish = () => {
       class="ant-form"
   >
     <a-form-item
-        label="appid"
+        label="app_id"
     >
       <a-input v-model:value="xunfei_api[0]"/>
     </a-form-item>

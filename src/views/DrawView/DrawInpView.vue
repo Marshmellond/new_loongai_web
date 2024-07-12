@@ -8,8 +8,9 @@ import {message} from "ant-design-vue";
 import {PlusOutlined, DownloadOutlined} from "@ant-design/icons-vue";
 import {useCounterStore} from '@/stores/counter'
 
-
 const counter = useCounterStore()
+counter.draw_mod_select = localStorage.getItem("draw_mod_select")
+
 const on1 = () => {
   counter.draw_mod_select = "1"
 }
@@ -264,17 +265,21 @@ function downloadIamge(src) {
 }
 
 const on_download = () => {
-  if (counter.draw_img1 !== "") {
-    downloadIamge(counter.draw_img1)
-  }
-  if (counter.draw_img2 !== "") {
-    downloadIamge(counter.draw_img2)
-  }
-  if (counter.draw_img3 !== "") {
-    downloadIamge(counter.draw_img3)
-  }
-  if (counter.draw_img4 !== "") {
-    downloadIamge(counter.draw_img4)
+  if (counter.draw_img1 === "" && counter.draw_img2 === "" && counter.draw_img3 === "" && counter.draw_img4 === "") {
+    message.warn("当前无生成图片可下载")
+  } else {
+    if (counter.draw_img1 !== "") {
+      downloadIamge(counter.draw_img1)
+    }
+    if (counter.draw_img2 !== "") {
+      downloadIamge(counter.draw_img2)
+    }
+    if (counter.draw_img3 !== "") {
+      downloadIamge(counter.draw_img3)
+    }
+    if (counter.draw_img4 !== "") {
+      downloadIamge(counter.draw_img4)
+    }
   }
 }
 </script>

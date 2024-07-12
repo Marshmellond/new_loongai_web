@@ -19,12 +19,27 @@ import '/src/voice-utils/utilJS/index.umd.js'; // 调用Web Speech API 的依赖
 const btnText = ref("开始录音");
 const btnStatus = ref("UNDEFINED"); // "UNDEFINED" "CONNECTING" "OPEN" "CLOSING" "CLOSED"
 const recorder = new RecorderManager('/src/voice-utils/voice_dist')
-const APPID = "20c0ca0e"; // TODO 你的讯飞模型APPID
-const API_SECRET = "ODkwZWUzZjc3NmNmMTc0ZTA3ZTI2Y2I3"; // TODO 你的讯飞模型API_SECRET
-const API_KEY = "0966746747f331913453687203fad7ae"; // TODO 你的讯飞模型API_KEY
+let APPID = ""; // TODO 你的讯飞模型APPID
+let API_SECRET = ""; // TODO 你的讯飞模型API_SECRET
+let API_KEY = ""; // TODO 你的讯飞模型API_KEY
 let iatWS; //监听录音的变量
 let resultTextTemp = ref('');
 let countdownInterval;
+// -----------------------------对话页面stt_xunfei传key-----------------------------
+const get_stt_xunfei_key = () => {
+  const url = "/api/chat/stt_xunfei"
+  fetch(url).then((res) => {
+    return res.json()
+  }).then((data) => {
+    if (data["code"] == 1) {
+      APPID = data["data"]["app_id"]
+      API_SECRET = data["data"]["api_secret"]
+      API_KEY = data["data"]["api_key"]
+    }
+  })
+}
+onMounted(get_stt_xunfei_key)
+
 
 // 生成 WebSocket URL 生成规则由平台决定
 function getWebSocketUrl() {
@@ -628,7 +643,8 @@ const delete_message = (id) => {
       </a-modal>
     </div>
     <div class="div3" ref="scrollContainer">
-      <span class="div3_5_title" v-if="counter.contents.length===0">你好！我是AI助手，随时为您提供支持和解答，欢迎向我提问！</span>
+      <span class="div3_5_title"
+            v-if="counter.contents.length===0">你好！我是AI助手，随时为您提供支持和解答，欢迎向我提问！</span>
       <div v-for="(item, index) in counter.contents" :key="item[0]">
         <div class="div-div-user" v-if="item[4]=='user'">
           <a-radio-group size="small" class="div-utils-user">

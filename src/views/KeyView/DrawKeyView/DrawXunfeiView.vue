@@ -27,7 +27,17 @@ const get_about_data = () => {
   })
 }
 onMounted(get_about_data)
-
+const get_draw_select = () => {
+  const url = "/api/draw/default_select"
+  fetch(url).then((res) => {
+    return res.json()
+  }).then((data) => {
+    if (data["code"] == 1) {
+      let draw_mod_select = data["data"]["draw_mod_select"]
+      localStorage.setItem("draw_mod_select", draw_mod_select)
+    }
+  })
+}
 const onFinish = () => {
   const url = "/api/key/alter/draw_xunfei"
   let body = {
@@ -53,6 +63,7 @@ const onFinish = () => {
     } else if (parseInt(data["code"]) === 1) {
       message.success("修改成功")
       get_about_data()
+      get_draw_select()
     } else {
       message.error("修改失败")
     }
@@ -69,7 +80,7 @@ const onFinish = () => {
       class="ant-form"
   >
     <a-form-item
-        label="appid"
+        label="app_id"
     >
       <a-input v-model:value="xunfei_api[0]"/>
     </a-form-item>
