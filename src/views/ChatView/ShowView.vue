@@ -297,7 +297,7 @@ const get_data = () => {
       if (data["code"] == 1) {
         counter.contents = []
         for (let i of data["data"]) {
-          counter.contents.push([i[0], marked.parse(i[1]), i[2], i[3], i[4], i[1], false])
+          counter.contents.push([i[0], marked.parse(i[1]), i[2], i[3], i[4], i[1], false, chat_rec_id.value])
         }
       }
     })
@@ -333,7 +333,7 @@ const seed_message = () => {
   textarea_input.value = ''
   if (counter.chat_put_img_list.length > 0) {
     for (let i of counter.chat_put_img_list) {
-      img_textarea += `![](${i.url})<br>`
+      img_textarea += `![](${i.url})<br><br>`
     }
     img_textarea += `${chat_con_user}`
     chat_con_user = img_textarea
@@ -359,7 +359,7 @@ const seed_message = () => {
   }).then((data) => {
     if (data["code"] == 1) {
       for (let i of data["data"]) {
-        counter.contents.push([i[0], marked.parse(i[1]), i[2], i[3], i[4], i[1], false])
+        counter.contents.push([i[0], marked.parse(i[1]), i[2], i[3], i[4], i[1], false, chat_rec_id.value])
       }
       chat_show_load.value = true
       const url2 = "/api/chat/add_con_chat"
@@ -585,26 +585,31 @@ const stop_chat = () => {
   chat_status_bool.value = false
 }
 
-const delete_message = (id) => {
-  counter.contents = counter.contents.filter(item => item[0] !== id)
-  let body = {
-    chat_con_id: id,
+const delete_message = (chat_con_order, chat_rec_id) => {
+  if (!chat_status_bool.value) {
+    let body = {
+      chat_con_order: chat_con_order,
+      chat_rec_id: chat_rec_id
+    }
+    const url = "/api/chat/delete/chat_con_id"
+    fetch(url, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body),
+      credentials: "include"
+    }).then((res) => {
+      if (res.ok) {
+        return res.json()
+      }
+    }).then((data) => {
+      if (data["code"] == 1) {
+        get_data()
+        message.success("删除成功")
+      }
+    })
+  } else {
+    message.warn("AI正在生成中，请稍后再试")
   }
-  const url = "/api/chat/delete/chat_con_id"
-  fetch(url, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(body),
-    credentials: "include"
-  }).then((res) => {
-    if (res.ok) {
-      return res.json()
-    }
-  }).then((data) => {
-    if (data["code"] == 1) {
-      message.success("删除成功")
-    }
-  })
 }
 // ------------------------------------上传图片------------------------------------
 const beforeUpload = (file) => {
@@ -747,7 +752,7 @@ const delete_put_img_list = (id) => {
                 </template>
               </icon>
             </a-radio-button>
-            <a-radio-button value="c" @click="delete_message(item[0])">
+            <a-radio-button value="c" @click="delete_message(item[0], item[7])">
               <DeleteOutlined class="icon-user-red" :style="{ color: '#8994a6'}"/>
             </a-radio-button>
           </a-radio-group>
@@ -816,7 +821,7 @@ const delete_put_img_list = (id) => {
           <div class="div-content-ai">
             <a-spin :indicator="indicator" class="chat-show-load-ai"
                     v-show="chat_show_load && index === counter.contents.length - 1"/>
-            <span v-html="item[1]"></span>
+            <span v-html="item[1]" class="div-content-txt-ai"></span>
           </div>
         </div>
       </div>
@@ -1266,6 +1271,14 @@ const delete_put_img_list = (id) => {
       padding: 0.01vh 1vh 0.01vh 1vh;
       word-wrap: break-word; // 设置文字换行
       overflow-wrap: break-word; // 设置文字换行
+
+      .div-content-txt-ai {
+        ::v-deep img {
+          width: 150px;
+          border-radius: 5px;
+          height: auto;
+        }
+      }
 
       .chat-show-load-ai {
         width: 2.5vw;
