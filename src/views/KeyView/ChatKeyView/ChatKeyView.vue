@@ -2,6 +2,7 @@
 import ChatXunfeiView from "@/views/KeyView/ChatKeyView/ChatXunfeiView.vue";
 import ChatTongyiView from "@/views/KeyView/ChatKeyView/ChatTongyiView.vue";
 import ChatOpenaiView from "@/views/KeyView/ChatKeyView/ChatOpenaiView.vue";
+import ChatQianfanView from "@/views/KeyView/ChatKeyView/ChatQianfanView.vue";
 
 import {ref} from "vue";
 import {onMounted} from "vue";
@@ -52,6 +53,15 @@ onMounted(get_about_data)
         </span>
       </template>
       <ChatOpenaiView></ChatOpenaiView>
+    </a-tab-pane>
+
+    <a-tab-pane key="4">
+      <template #tab>
+        <span>
+          千帆
+        </span>
+      </template>
+      <ChatQianfanView></ChatQianfanView>
     </a-tab-pane>
 
   </a-tabs>

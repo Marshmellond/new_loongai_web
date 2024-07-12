@@ -628,6 +628,7 @@ const delete_message = (id) => {
       </a-modal>
     </div>
     <div class="div3" ref="scrollContainer">
+      <span class="div3_5_title" v-if="counter.contents.length===0">你好！我是AI助手，随时为您提供支持和解答，欢迎向我提问！</span>
       <div v-for="(item, index) in counter.contents" :key="item[0]">
         <div class="div-div-user" v-if="item[4]=='user'">
           <a-radio-group size="small" class="div-utils-user">
@@ -982,6 +983,14 @@ const delete_message = (id) => {
   background-color: @theme-background-color;
   border-bottom: 1px solid @theme-border-color;
   overflow: auto;
+
+
+  .div3_5_title {
+    position: relative;
+    top: 2vh;
+    left: 33%;
+    color: #b4b4b4;
+  }
 
   .div-div-user {
     display: flex;

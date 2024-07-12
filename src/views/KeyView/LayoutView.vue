@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import ChatKeyView from "@/views/KeyView/ChatKeyView/ChatKeyView.vue";
 import DrawKeyView from "@/views/KeyView/DrawKeyView/DrawKeyView.vue";
+import MoreKeyView from "@/views/KeyView/MoreKeyView/MoreKeyView.vue";
+
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
@@ -38,10 +40,10 @@ const activeKey = ref("1");
         <a-tab-pane key="3">
           <template #tab>
         <span>
-          PPTkey
+          更多
         </span>
           </template>
-          Tab 2
+          <MoreKeyView></MoreKeyView>
         </a-tab-pane>
 
       </a-tabs>

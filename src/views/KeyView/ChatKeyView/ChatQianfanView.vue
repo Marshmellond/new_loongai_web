@@ -1,38 +1,40 @@
 <script lang="ts" setup>
 import {ref} from 'vue';
-import {message} from "ant-design-vue";
 import {onMounted} from "vue";
+import {message} from 'ant-design-vue';
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-const openai_api = ref(["", [], "", false, ""])
+const qianfan_api = ref(["", "", [], "", false])
 
 const get_about_data = () => {
-  const url = "/api/key/openai"
+  const url = "/api/key/qianfan"
   fetch(url).then((res) => {
     return res.json()
   }).then((data) => {
     if (data["code"] == 1) {
-      openai_api.value[0] = data["data"]["api_key"]
-      openai_api.value[1] = data["data"]["api_ver"]
-      openai_api.value[2] = data["data"]["api_select"]
-      openai_api.value[3] = data["data"]["api_default"]
-      openai_api.value[4] = data["data"]["base_url"]
-      if (openai_api.value[3]) {
-        counter.chat_mode_name = "openai"
-        counter.chat_mode_ver = openai_api.value[1][openai_api.value[2]]
+      qianfan_api.value[0] = data["data"]["api_key"]
+      qianfan_api.value[1] = data["data"]["secret_key"]
+
+      qianfan_api.value[2] = data["data"]["api_ver"]
+      qianfan_api.value[3] = data["data"]["api_select"]
+      qianfan_api.value[4] = data["data"]["api_default"]
+      if (qianfan_api.value[4]) {
+        counter.chat_mode_name = "千帆"
+        counter.chat_mode_ver = qianfan_api.value[2][qianfan_api.value[3]]
       }
     }
   })
 }
 onMounted(get_about_data)
+
 const onFinish = () => {
-  const url = "/api/key/alter/openai"
+  const url = "/api/key/alter/qianfan"
   let body = {
-    api_key: openai_api.value[0],
-    base_url: openai_api.value[4],
-    api_select: openai_api.value[2],
-    api_default: openai_api.value[3],
+    api_key: qianfan_api.value[0],
+    secret_key: qianfan_api.value[1],
+    api_select: qianfan_api.value[3],
+    api_default: qianfan_api.value[4],
   }
   fetch(url, {
     method: "POST",
@@ -68,12 +70,13 @@ const onFinish = () => {
     <a-form-item
         label="api_key"
     >
-      <a-input v-model:value="openai_api[0]"/>
+      <a-input v-model:value="qianfan_api[0]"/>
     </a-form-item>
+
     <a-form-item
-        label="base_url"
+        label="secret_key"
     >
-      <a-input v-model:value="openai_api[4]"/>
+      <a-input v-model:value="qianfan_api[1]"/>
     </a-form-item>
 
     <a-form-item
@@ -81,12 +84,12 @@ const onFinish = () => {
     >
       <a-select
           ref="select"
-          v-model:value="openai_api[2]"
+          v-model:value="qianfan_api[3]"
           style="width: 400px"
           :maxTagTextLength=1
       >
         <a-select-option
-            v-for="(ver, index) in openai_api[1]"
+            v-for="(ver, index) in qianfan_api[2]"
             :key="index"
             :value="index.toString()"
         >
@@ -98,7 +101,7 @@ const onFinish = () => {
     <a-form-item
         label="设为默认"
     >
-      <a-checkbox v-model:checked="openai_api[3]"></a-checkbox>
+      <a-checkbox v-model:checked="qianfan_api[4]"></a-checkbox>
     </a-form-item>
 
     <a-form-item :wrapper-col="{ offset: 7, span: 16 }">
