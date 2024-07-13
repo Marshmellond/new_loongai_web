@@ -54,6 +54,9 @@ watch(() => counter.variable_data.name, () => {
     }
   }
 })
+const select_type = (inp_type) => {
+  counter.variable_data.type = inp_type
+}
 </script>
 
 <template>
@@ -61,7 +64,15 @@ watch(() => counter.variable_data.name, () => {
            width="20%">
     <div class="div1">
       <span class="div1-title">变量类型</span>
-      <div class="div1-type" :class="{'selected':counter.variable_data.type=='String'}">文本</div>
+      <div class="div1-content">
+        <div class="div1-type" :class="{'selected':counter.variable_data.type=='String'}" @click="select_type('String')">
+          文本输入
+        </div>
+        <div class="div1-type" :class="{'selected':counter.variable_data.type=='File'}" style="margin-left: 0.2vw"
+             @click="select_type('File')">
+          文件上传
+        </div>
+      </div>
     </div>
     <div class="div2">
       <span class="div1-title">显示名称</span>
@@ -72,11 +83,6 @@ watch(() => counter.variable_data.name, () => {
       <span class="div1-title">变量名称</span>
       <br/>
       <a-input v-model:value="counter.variable_data.label" autofocus placeholder="请输入"/>
-    </div>
-    <div class="div2">
-      <span class="div1-title">最大长度</span>
-      <br/>
-      <a-input v-model:value="counter.variable_data.max_len" autofocus placeholder="请输入"/>
     </div>
     <div class="div3">
       <span class="div1-title">必填</span>
@@ -97,13 +103,17 @@ watch(() => counter.variable_data.name, () => {
     margin-left: 0.2vw;
   }
 
+  .div1-content {
+    display: flex;
+  }
+
   .div1-type {
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 5px;
     background: #f3f6fd;
-    width: 8vw;
+    width: 10vw;
     height: 6vh;
   }
 }

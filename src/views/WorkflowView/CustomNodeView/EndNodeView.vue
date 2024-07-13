@@ -80,7 +80,7 @@ const show_edit = () => {
         <span class="div1-1-title">输出</span>
       </div>
       <div class="div1-2"
-           v-for="(item, index) in data.variable_print" :key="index">
+           v-for="(item, index) in data.variable_content" :key="index">
         <icon :style="{ color: '#4381fd'}" class="div1-2-ico">
           <template #component>
             <svg t="1719996910739" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -91,8 +91,8 @@ const show_edit = () => {
             </svg>
           </template>
         </icon>
-        <span class="div1-2-title">{{ item[0] }}</span>
-        <span class="div1-2-title2">String</span>
+        <span class="div1-2-title">{{ item.input }}</span>
+        <span class="div1-2-title2">{{ item.type }}</span>
       </div>
     </div>
 

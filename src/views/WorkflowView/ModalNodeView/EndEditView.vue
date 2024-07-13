@@ -11,21 +11,27 @@ const handleOk = () => {
 
 watch(() => counter.end_edit_open, () => {
 
-  console.log(counter.end_node_data.data.variable_print)
   counter.end_node_data.data.variable_content = []
   for (let i = 0; i < counter.end_node_data.data.variable_print.length; i++) {
 
     let input_id = ""
+    let type = ""
+    let file_name = ""
+    let file_type = ""
     for (let a = 0; a < counter.flow_data.nodes[0].data.variable.length; a++) {
       if (!counter.end_node_data.data.variable_print[i][0].startsWith("AI回复内容")) {
         if (counter.end_node_data.data.variable_print[i][0] === counter.flow_data.nodes[0].data.variable[a].name) {
           input_id = counter.flow_data.nodes[0].data.variable[a].id
+          type = counter.flow_data.nodes[0].data.variable[a].type
+          file_name = counter.flow_data.nodes[0].data.variable[a].file_name
+          file_type = counter.flow_data.nodes[0].data.variable[a].file_type
         }
       } else if (counter.end_node_data.data.variable_print[i][0].startsWith("AI回复内容")) {
         for (let b = 0; b < counter.flow_data.nodes.length; b++) {
           if (counter.flow_data.nodes[b].type === "ai") {
             if (counter.flow_data.nodes[b].data.print === counter.end_node_data.data.variable_print[i][0]) {
               input_id = counter.flow_data.nodes[b].data.print_id
+              type = counter.flow_data.nodes[b].data.type
             }
           }
         }
@@ -35,11 +41,12 @@ watch(() => counter.end_edit_open, () => {
     counter.end_node_data.data.variable_content.push({
       "input_id": input_id,
       "input": counter.end_node_data.data.variable_print[i][0],
-      "value": ""
+      "value": "",
+      "type": type,
+      "file_name": file_name,
+      "file_type": file_type
     })
   }
-  console.log("a:", counter.end_node_data.data.variable_print)
-  console.log("b:", counter.end_node_data.data.variable_content)
 
   counter.edit_start = !counter.end_edit_open
 })

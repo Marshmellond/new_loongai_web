@@ -17,8 +17,9 @@ const add_variable1 = () => {
     name: "",
     label: "",
     value: "",
-    max_len: "42",
     type: "String",
+    file_name: "",
+    file_type: "",
     must: true
   }
   counter.select_modal_node2 = true
