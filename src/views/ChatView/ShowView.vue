@@ -2,7 +2,6 @@
 import {ref, onUpdated, watch} from 'vue';
 import {useCounterStore} from '@/stores/counter'
 import {marked} from 'marked';
-import hljs from 'highlight.js'
 import Icon from '@ant-design/icons-vue';
 import {onMounted} from "vue";
 
@@ -16,6 +15,11 @@ import {h} from 'vue';
 import {message} from "ant-design-vue";
 import '/src/voice-utils/utilJS/crypto-js.js'; //鉴权的引用地址
 import '/src/voice-utils/utilJS/index.umd.js'; // 调用Web Speech API 的依赖，应该是官方的写的工具类
+// -----------------------------代码高亮-----------------------------
+import Prism from "prismjs"
+import "prismjs/themes/prism-okaidia.min.css"
+
+// -----------------------------变量初始化-----------------------------
 const btnText = ref("开始录音");
 const btnStatus = ref("UNDEFINED"); // "UNDEFINED" "CONNECTING" "OPEN" "CLOSING" "CLOSED"
 const recorder = new RecorderManager('/src/voice-utils/voice_dist')
@@ -299,6 +303,9 @@ const get_data = () => {
         for (let i of data["data"]) {
           counter.contents.push([i[0], marked.parse(i[1]), i[2], i[3], i[4], i[1], false, chat_rec_id.value])
         }
+        setTimeout(() => {
+          Prism.highlightAll()
+        }, 100)
       }
     })
 
@@ -327,19 +334,40 @@ const seed_message = () => {
     message.warn("输入不能为空")
     return
   }
+  if (chat_show_load.value) {
+    message.warn("AI正在生成中")
+    return
+  }
   const url1 = "/api/chat/add_con_data"
   let chat_con_user = textarea_input.value
-  let img_textarea = ""
+  let put_file_data = textarea_input.value
   textarea_input.value = ''
-  if (counter.chat_put_img_list.length > 0) {
-    for (let i of counter.chat_put_img_list) {
-      img_textarea += `![](${i.url})<br><br>`
+  if (counter.chat_put_file_list.length > 0) {
+    let file_temp1 = ""
+    let file_temp2 = ""
+    for (let i of counter.chat_put_file_list) {
+      file_temp1 += `<h3>文件：${i.name}</h3><br><br>`
+      file_temp2 += `文件名：${i.name}<br>文件类型：${i.type}<br>文件内容：${i.content}<br><br>`
     }
-    img_textarea += `${chat_con_user}`
-    chat_con_user = img_textarea
+    file_temp1 += `${chat_con_user}`
+    chat_con_user = file_temp1
+    file_temp2 += `${put_file_data}`
+    put_file_data = file_temp2
   }
-
+  if (counter.chat_put_img_list.length > 0) {
+    let file_temp1 = ""
+    let file_temp2 = ""
+    for (let i of counter.chat_put_img_list) {
+      file_temp1 += `![](${i.url})<br><br>`
+      file_temp2 += `![](${i.url})<br><br>`
+    }
+    file_temp1 += `${chat_con_user}`
+    chat_con_user = file_temp1
+    file_temp2 += `${put_file_data}`
+    put_file_data = file_temp2
+  }
   let put_img_list = JSON.stringify(counter.chat_put_img_list)
+  counter.chat_put_file_list = []
   counter.chat_put_img_list = []
   chat_status_bool.value = true
   let body = {
@@ -363,12 +391,11 @@ const seed_message = () => {
       }
       chat_show_load.value = true
       const url2 = "/api/chat/add_con_chat"
-      console.log(put_img_list)
-      console.log(typeof put_img_list)
       let body2 = {
         chat_rec_id: chat_rec_id.value,
         textarea_input: chat_con_user,
         put_img_list: put_img_list,
+        put_file_data: put_file_data,
         chat_con_order: data["data"][0][0],
         chat_con_user_time: data["data"][0][2],
         chat_con_user_img: data["data"][0][3],
@@ -382,6 +409,9 @@ const seed_message = () => {
         if (res.ok) {
           temp_meg.value = ""
           chat_show_load.value = false
+          setTimeout(() => {
+            Prism.highlightAll()
+          }, 100)
           return res.body;
         }
       }).then((rb) => {
@@ -391,6 +421,9 @@ const seed_message = () => {
         function process({done, value}) {
           if (done) {
             chat_status_bool.value = false
+            setTimeout(() => {
+              Prism.highlightAll()
+            }, 100)
             return;
           }
           if (chat_status_bool.value === false) {
@@ -584,7 +617,7 @@ const stop_chat = () => {
   chat_show_load.value = false
   chat_status_bool.value = false
 }
-
+// ------------------------------------删除单条对话------------------------------------
 const delete_message = (chat_con_order, chat_rec_id) => {
   if (!chat_status_bool.value) {
     let body = {
@@ -605,6 +638,67 @@ const delete_message = (chat_con_order, chat_rec_id) => {
       if (data["code"] == 1) {
         get_data()
         message.success("删除成功")
+      }
+    })
+  } else {
+    message.warn("AI正在生成中，请稍后再试")
+  }
+}
+// ------------------------------------清除所有对话------------------------------------
+const clear_message = () => {
+  if (counter.contents.length > 0) {
+    if (!chat_status_bool.value) {
+      let body = {
+        chat_rec_id: counter.contents[0][7]
+      }
+      const url = "/api/chat/clear/chat_rec_id"
+      fetch(url, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(body),
+        credentials: "include"
+      }).then((res) => {
+        if (res.ok) {
+          return res.json()
+        }
+      }).then((data) => {
+        if (data["code"] == 1) {
+          get_data()
+          message.success("清除所有对话成功")
+        }
+      })
+    } else {
+      message.warn("AI正在生成中，请稍后再试")
+    }
+  } else {
+    message.warn("当前无对话记录")
+  }
+}
+// ------------------------------------重问对话------------------------------------
+const reset_message = (item) => {
+  let chat_con_order = item[0]
+  let chat_rec_id = item[7]
+  let inp_text = item[5]
+  if (!chat_status_bool.value) {
+    let body = {
+      chat_con_order: chat_con_order,
+      chat_rec_id: chat_rec_id
+    }
+    const url = "/api/chat/reset/chat_con_id"
+    fetch(url, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body),
+      credentials: "include"
+    }).then((res) => {
+      if (res.ok) {
+        return res.json()
+      }
+    }).then((data) => {
+      if (data["code"] == 1) {
+        textarea_input.value = inp_text
+        get_data()
+        seed_message()
       }
     })
   } else {
@@ -679,9 +773,60 @@ const uploadImageToServer = (imageDataUrl, file_name) => {
     message.error("图片上传失败");
   });
 };
+
+
+// ------------------------------------上传文本文件------------------------------------
+const beforeUpload2 = (file) => {
+  const allowedTypes = ['text/plain', 'application/json', 'text/csv'];
+  const isAllowedType = allowedTypes.includes(file.type);
+  if (!isAllowedType) {
+    message.error('只能上传 txt、json 或 csv 文件');
+    return Upload.LIST_IGNORE;
+  }
+  const isLt2M = file.size / 1024 / 1024 < 1;
+  if (!isLt2M) {
+    message.error('文件大小不能超过1MB');
+    return Upload.LIST_IGNORE;
+  }
+  return isAllowedType && isLt2M;
+};
+
+const handleChange2 = (info) => {
+  const status = info.file.status;
+  if (status === 'done') {
+    processUploadedFile2(info.file.originFileObj, info.file.name);
+  } else if (status === 'error') {
+    message.error(`文件 ${info.file.name} 上传失败`);
+  }
+};
+
+const processUploadedFile2 = (file, fileName) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const fileContent = e.target.result;
+    uploadFileToServer2(fileContent, fileName, file.type);
+  };
+  reader.readAsText(file);
+};
+
+const customRequest2 = ({file, onSuccess}) => {
+  setTimeout(() => {
+    onSuccess("ok", file);
+  }, 0);
+};
+
+const uploadFileToServer2 = (fileContent, fileName, fileType) => {
+  let id = `id_${Date.now().toString()}`;
+  counter.chat_put_file_list.push({"id": id, "content": fileContent, "name": fileName, "type": fileType})
+};
+
+
 // ------------------------------------删除图片------------------------------------
 const delete_put_img_list = (id) => {
   counter.chat_put_img_list = counter.chat_put_img_list.filter(item => item.id !== id)
+}
+const delete_put_file_list = (id) => {
+  counter.chat_put_file_list = counter.chat_put_file_list.filter(item => item.id !== id)
 }
 </script>
 <template>
@@ -740,7 +885,7 @@ const delete_put_img_list = (id) => {
                 </template>
               </icon>
             </a-radio-button>
-            <a-radio-button value="b">
+            <a-radio-button value="b" @click="reset_message(item)">
               <icon :style="{ color: '#8994a6'}" class="icon-user-green">
                 <template #component>
                   <svg t="1719393386501" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -881,7 +1026,25 @@ const delete_put_img_list = (id) => {
             </template>
           </icon>
         </a-upload>
-        <icon :style="{ color: '#000000'}" class="div4-clear">
+        <a-upload
+            :showUploadList="false"
+            :beforeUpload="beforeUpload2"
+            @change="handleChange2"
+            :customRequest="customRequest2"
+        >
+          <icon :style="{ color: '#000000'}" class="div4-files">
+            <template #component>
+              <svg t="1720868607442" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                   xmlns="http://www.w3.org/2000/svg" p-id="6526" width="30" height="30">
+                <path d="M0 0h1024v1024H0z" fill="#202425" opacity=".01" p-id="6527"></path>
+                <path
+                    d="M750.933333 648.567467V256a153.6 153.6 0 1 0-307.2 0V682.666667a68.266667 68.266667 0 1 0 136.533334 0V341.333333a34.133333 34.133333 0 1 1 68.266666 0v341.333334a136.533333 136.533333 0 0 1-273.066666 0V256a221.866667 221.866667 0 1 1 443.733333 0V682.666667a307.2 307.2 0 1 1-614.4 0V273.066667a34.133333 34.133333 0 1 1 68.266667 0v409.6a238.933333 238.933333 0 1 0 477.866666 0v-34.0992z"
+                    fill="#202425" p-id="6528"></path>
+              </svg>
+            </template>
+          </icon>
+        </a-upload>
+        <icon :style="{ color: '#000000'}" class="div4-clear" @click="clear_message">
           <template #component>
             <svg t="1719565031756" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
                  p-id="5248" width="25" height="25">
@@ -948,6 +1111,40 @@ const delete_put_img_list = (id) => {
       </div>
     </div>
 
+    <div class="div7" v-if="counter.chat_put_file_list.length!==0">
+      <div class="div7-img" v-for="(item) in counter.chat_put_file_list" :key="item.id">
+        <div class="div7-content">
+          <div class="div7-title">
+            <icon :style="{ color: '#000000'}">
+              <template #component>
+                <svg t="1720872958870" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" p-id="3649" width="16" height="16">
+                  <path
+                      d="M36.197719 837.475285a186.768061 186.768061 0 0 0 186.524714 186.524715h578.555134a186.646388 186.646388 0 0 0 186.524714-186.524715v-650.95057A186.646388 186.646388 0 0 0 801.277567 0H222.722433A186.768061 186.768061 0 0 0 36.197719 186.524715z m83.832699 0v-650.95057a102.813688 102.813688 0 0 1 102.692015-102.692015h578.555134a102.935361 102.935361 0 0 1 102.813688 102.692015v650.95057a102.935361 102.935361 0 0 1-102.813688 102.692015H222.722433a102.813688 102.813688 0 0 1-102.692015-102.692015z"
+                      fill="#4D4D4D" p-id="3650"></path>
+                  <path
+                      d="M222.722433 306.737643H812.471483a41.855513 41.855513 0 0 0 0-83.711027H222.722433a41.855513 41.855513 0 0 0 0 83.711027zM222.722433 565.657795H812.471483a41.977186 41.977186 0 0 0 0-83.8327H222.722433a41.977186 41.977186 0 0 0 0 83.8327zM222.722433 824.577947h597.171103a41.977186 41.977186 0 0 0 0-83.8327H222.722433a41.977186 41.977186 0 0 0 0 83.8327z"
+                      fill="#4D4D4D" p-id="3651"></path>
+                </svg>
+              </template>
+            </icon>
+            <span style="margin-left: 0.2vw">{{ item.name }}</span>
+          </div>
+          <icon :style="{ color: '#000000'}" class="div7-delete" @click="delete_put_file_list(item.id)">
+            <template #component>
+              <svg t="1720785675237" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                   xmlns="http://www.w3.org/2000/svg"
+                   p-id="2573" width="16" height="16">
+                <path
+                    d="M512 64c-247.00852 0-448 200.960516-448 448S264.960516 960 512 960c247.00852 0 448-200.960516 448-448S759.039484 64 512 64zM694.752211 649.984034c12.480043 12.54369 12.447359 32.768069-0.063647 45.248112-6.239161 6.208198-14.399785 9.34412-22.591372 9.34412-8.224271 0-16.415858-3.135923-22.65674-9.407768l-137.60043-138.016718-138.047682 136.576912c-6.239161 6.14455-14.368821 9.247789-22.496761 9.247789-8.255235 0-16.479505-3.168606-22.751351-9.504099-12.416396-12.576374-12.320065-32.800753 0.25631-45.248112l137.887703-136.384249-137.376804-137.824056c-12.480043-12.512727-12.447359-32.768069 0.063647-45.248112 12.512727-12.512727 32.735385-12.447359 45.248112 0.063647l137.567746 137.984034 138.047682-136.575192c12.54369-12.447359 32.831716-12.320065 45.248112 0.25631 12.447359 12.576374 12.320065 32.831716-0.25631 45.248112L557.344443 512.127295 694.752211 649.984034z"
+                    fill="#2c2c2c" p-id="2574"></path>
+              </svg>
+            </template>
+          </icon>
+        </div>
+      </div>
+    </div>
+
 
   </div>
 
@@ -956,6 +1153,48 @@ const delete_put_img_list = (id) => {
 
 <style scoped lang="less">
 @import "src/assets/css/theme.less";
+
+.div7 {
+  position: absolute;
+  top: 65.5vh;
+  z-index: 1000;
+  width: 50%;
+  height: 10vh;
+  left: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  overflow: auto;
+
+  .div7-img {
+    min-width: 1vw;
+    min-height: 1vh;
+    position: relative;
+    top: 1vh;
+    left: 0.5vw;
+    margin-right: 1vh;
+    margin-bottom: 1vh;
+
+    .div7-content {
+      display: flex;
+
+      .div7-title {
+        border-radius: 5px;
+        background: white;
+        padding: 1vh;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .div7-delete {
+        cursor: pointer;
+        height: 2vh;
+        padding: 0.2vh;
+      }
+
+    }
+  }
+}
 
 .div6 {
   position: absolute;
@@ -988,7 +1227,7 @@ const delete_put_img_list = (id) => {
   position: absolute;
   top: 65.5vh;
   z-index: 1000;
-  width: 100%;
+  width: 49.8%;
   height: 10vh;
   background: rgba(0, 0, 0, 0.1);
   overflow: auto;
@@ -1001,6 +1240,7 @@ const delete_put_img_list = (id) => {
     position: relative;
     top: 1vh;
     left: 0.5vw;
+    margin-right: 1vh;
 
     .div5-content {
       display: flex;
@@ -1097,13 +1337,37 @@ const delete_put_img_list = (id) => {
       transition: fill 0.3s ease;
     }
 
+    .div4-files {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      left: 1vw;
+      top: 2vh;
+      padding: 0.3vh 1vh 0.3vh 1vh;
+      transition: background-color 0.3s ease;
+      border-radius: 5px;
+    }
+
+    .div4-files:hover {
+      background-color: #d0e4f4;
+    }
+
+    .div4-files:hover .icon path {
+      fill: #2664c5;
+    }
+
+    .div4-files .icon path {
+      transition: fill 0.3s ease;
+    }
+
     .div4-clear {
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       top: 2vh;
-      left: 55.5vw;
+      left: 54.5vw;
       padding: 0.3vh 1.2vh 0.3vh 1.2vh;
       transition: background-color 0.3s ease;
       border-radius: 5px;
@@ -1125,7 +1389,7 @@ const delete_put_img_list = (id) => {
 
     .div4-seed-desc {
       position: relative;
-      left: 56.5vw;
+      left: 55.5vw;
       top: 3vh;
       color: #b4b4b4;
     }
@@ -1135,7 +1399,7 @@ const delete_put_img_list = (id) => {
       align-items: center;
       justify-content: center;
       position: relative;
-      left: 57vw;
+      left: 56vw;
       top: 2vh;
       padding: 0.3vh 1.5vh 0.3vh 1.5vh;
       transition: background-color 0.3s ease;

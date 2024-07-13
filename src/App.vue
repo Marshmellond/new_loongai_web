@@ -53,7 +53,6 @@ localStorage.setItem('selectedKey', "6");
 </script>
 <template>
   <a-layout>
-
     <a-layout-header class="ant-header">
       <TheHeader></TheHeader>
     </a-layout-header>

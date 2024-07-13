@@ -5,7 +5,7 @@ import {onMounted} from "vue";
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-const openai_api = ref(["", [], "", false])
+const openai_api = ref(["", [], "", false, ""])
 
 const get_about_data = () => {
   const url = "/api/key/draw_openai"
@@ -17,6 +17,7 @@ const get_about_data = () => {
       openai_api.value[1] = data["data"]["api_ver"]
       openai_api.value[2] = data["data"]["api_select"]
       openai_api.value[3] = data["data"]["api_default"]
+      openai_api.value[4] = data["data"]["base_url"]
       if (openai_api.value[3]) {
         counter.draw_mode_name = "openai"
         counter.draw_mode_ver = openai_api.value[1][openai_api.value[2]]
@@ -40,6 +41,7 @@ const onFinish = () => {
   const url = "/api/key/alter/draw_openai"
   let body = {
     api_key: openai_api.value[0],
+    base_url: openai_api.value[4],
     api_select: openai_api.value[2],
     api_default: openai_api.value[3],
   }
@@ -79,6 +81,12 @@ const onFinish = () => {
         label="api_key"
     >
       <a-input v-model:value="openai_api[0]"/>
+    </a-form-item>
+
+    <a-form-item
+        label="base_url"
+    >
+      <a-input v-model:value="openai_api[4]"/>
     </a-form-item>
 
     <a-form-item

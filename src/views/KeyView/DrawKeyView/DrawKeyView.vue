@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import DrawOpenaiView from "@/views/KeyView/DrawKeyView/DrawOpenaiView.vue";
 import DrawXunfeiView from "@/views/KeyView/DrawKeyView/DrawXunfeiView.vue";
-import DrawTongyiView from "@/views/KeyView/DrawKeyView/DrawTongyiView.vue";
 
 import {ref} from "vue";
 import {onMounted} from "vue";
@@ -48,15 +47,6 @@ onMounted(get_draw_select)
     </a-tab-pane>
 
     <a-tab-pane key="2">
-      <template #tab>
-        <span>
-          通义千问
-        </span>
-      </template>
-      <DrawTongyiView></DrawTongyiView>
-    </a-tab-pane>
-
-    <a-tab-pane key="3">
       <template #tab>
         <span>
           openai

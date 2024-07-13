@@ -4,8 +4,11 @@ import Icon, {PlusOutlined} from "@ant-design/icons-vue";
 import {ref, onMounted, onUnmounted, watch} from 'vue'
 import {Input, Button, Typography, message} from 'ant-design-vue';
 import {useCounterStore} from '@/stores/counter'
+import Prism from "prismjs"
+import "prismjs/themes/prism-okaidia.min.css"
 
 const counter = useCounterStore()
+
 const clear_variable_content = () => {
   for (let i = 0; i < counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content.length; i++) {
     counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content[i].value = ""
@@ -32,6 +35,9 @@ const seed_meg = () => {
   }).then((data) => {
     if (data["code"] == 1) {
       counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content = data["data"]
+      setTimeout(() => {
+        Prism.highlightAll()
+      }, 100)
     }
   })
 }

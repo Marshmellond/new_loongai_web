@@ -41,7 +41,22 @@ const theme_on8 = () => {
 const notes_on1 = () => {
   counter.ppt_notes_select = !counter.ppt_notes_select
 }
-
+const get_data = () => {
+  const url = "/api/ppt/get_data"
+  fetch(url).then((res) => {
+    if (res.ok) {
+      counter.ppt_data_list = []
+      return res.json()
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      counter.ppt_data_list = data["data"]["ppt_dat_list"]
+      if (counter.ppt_data_list.length !== 0) {
+        counter.ppt_data_select = counter.ppt_data_list[0][0]
+      }
+    }
+  })
+}
 const on_generate = () => {
   counter.ppt_path_url = ""
   if (counter.ppt_inp.length > 0) {
@@ -69,6 +84,7 @@ const on_generate = () => {
           if (data["code"] == 1) {
             counter.ppt_show_load_status = false
             counter.ppt_path_url = data["data"]["ppt_path_url"]
+            get_data()
           }
         })
       }
@@ -83,6 +99,30 @@ const on_generate = () => {
     }
   }
 }
+const on_download = () => {
+  if (counter.ppt_path_url.length !== 0) {
+
+    fetch(counter.ppt_path_url)
+        .then(response => {
+          if (response.ok) {
+            return response.blob();
+          }
+        })
+        .then(blob => {
+          const downloadUrl = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = downloadUrl;
+          a.download = `loongai_ppt_${Date.now().toString()}.pptx`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(downloadUrl);
+          document.body.removeChild(a);
+          message.success("PPT文件下载完毕");
+        })
+  } else {
+    message.warn("PPT选择为空")
+  }
+};
 
 </script>
 

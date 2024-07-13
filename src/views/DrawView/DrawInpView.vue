@@ -2,7 +2,6 @@
 import Dell3View from "@/views/DrawView/DrawInpView/Dell3View.vue";
 import Dell2View from "@/views/DrawView/DrawInpView/Dell2View.vue";
 import XunfeiView from "@/views/DrawView/DrawInpView/XunfeiView.vue";
-import TongyiView from "@/views/DrawView/DrawInpView/TongyiView.vue";
 
 import {message} from "ant-design-vue";
 import {PlusOutlined, DownloadOutlined} from "@ant-design/icons-vue";
@@ -299,23 +298,18 @@ const on_download = () => {
         <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_mod_select==='1'}" @click="on1">
           <div class="div-mod-title">讯飞星火</div>
         </div>
-        <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_mod_select==='2'}" style="margin-left: 10px"
-             @click="on2">
-          <div class="div-mod-title">通义千问</div>
+        <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_mod_select==='3'}" style="margin-left: 10px"
+             @click="on3">
+          <div class="div-mod-title">Dell3</div>
         </div>
       </div>
       <div class="div-mod-div">
-        <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_mod_select==='3'}" @click="on3">
-          <div class="div-mod-title">Dell3</div>
-        </div>
-        <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_mod_select==='4'}" style="margin-left: 10px"
-             @click="on4">
+        <div class="div-mod" :class="{ 'div-mod-div-select': counter.draw_mod_select==='4'}" @click="on4">
           <div class="div-mod-title">Dell2</div>
         </div>
       </div>
       <div class="div3">
         <XunfeiView v-if="counter.draw_mod_select==='1'"></XunfeiView>
-        <TongyiView v-if="counter.draw_mod_select==='2'"></TongyiView>
         <Dell3View v-if="counter.draw_mod_select==='3'"></Dell3View>
         <Dell2View v-if="counter.draw_mod_select==='4'"></Dell2View>
       </div>
@@ -355,7 +349,7 @@ const on_download = () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    width: 8vw;
     height: 7vh;
     border: 1px solid @theme-border-color;
     border-radius: 3px;

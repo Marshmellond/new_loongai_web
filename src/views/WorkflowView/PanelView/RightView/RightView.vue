@@ -3,12 +3,20 @@ import InputView from "@/views/WorkflowView/PanelView/RightView/InputView.vue";
 import {ref, onMounted, onUnmounted, watch} from 'vue'
 import {useCounterStore} from '@/stores/counter'
 import {marked} from 'marked';
+import Prism from "prismjs"
+import "prismjs/themes/prism-okaidia.min.css"
 import {
   ExpandOutlined,
 } from '@ant-design/icons-vue';
 
+setTimeout(() => {
+  Prism.highlightAll()
+}, 100)
 const counter = useCounterStore()
 const result_add = () => {
+  setTimeout(() => {
+    Prism.highlightAll()
+  }, 100)
   counter.select_modal_node = 'result_view'
   counter.workflow_result_open = true
 }

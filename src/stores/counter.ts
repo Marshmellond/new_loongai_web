@@ -57,6 +57,9 @@ export const useCounterStore = defineStore('counter', () => {
     const chat_rec_title = ref("") // 对面页面显示页面对话记录选择
     const chat_emotion_status = ref(false) // 对话页面情感分析开关
     const chat_put_img_list = ref([]) // 对话页面图片上传
+    const ppt_data_list = ref([]) // PPT历史对话数据
+    const ppt_data_select = ref("") // PPT对话选择
+    const chat_put_file_list = ref([]) // 对话页面文件上传列表
 
     // ------------------工作流页面------------------
     const flow_data = ref() // 页面数据
@@ -203,5 +206,8 @@ export const useCounterStore = defineStore('counter', () => {
         workflow_result_open,
         chat_emotion_status,
         chat_put_img_list,
+        ppt_data_list,
+        ppt_data_select,
+        chat_put_file_list,
     }
 })
