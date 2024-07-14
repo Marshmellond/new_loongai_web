@@ -430,6 +430,12 @@ const seed_message = () => {
             return;
           }
           temp_meg.value += decoder.decode(value);
+          if (temp_meg.value.startsWith("ERROR")) {
+            // 处理错误情况
+            chat_status_bool.value = false;
+            message.error("生成出现错误：输入内容不合法或key错误")
+            return;
+          }
           counter.contents[counter.contents.length - 1][1] = marked(temp_meg.value)
           counter.contents[counter.contents.length - 1][5] = temp_meg.value
           reader?.read().then(process);

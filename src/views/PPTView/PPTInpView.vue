@@ -85,6 +85,9 @@ const on_generate = () => {
             counter.ppt_show_load_status = false
             counter.ppt_path_url = data["data"]["ppt_path_url"]
             get_data()
+          } else {
+            counter.ppt_show_load_status = false
+            message.error("生成出现错误：输入内容不合法或key错误")
           }
         })
       }

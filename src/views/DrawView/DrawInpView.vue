@@ -72,11 +72,12 @@ const on_generate = () => {
             temp_draw_img_url.push(data["draw_img4"])
           }
         } else {
-          message.error("生成出现错误")
+          counter.draw_img_load1 = false
+          message.error("生成出现错误：输入内容不合法或key错误")
         }
       }).catch(() => {
             counter.draw_img_load1 = false
-            message.error("生成出现错误")
+            message.error("生成出现错误：输入内容不合法或key错误")
           }
       )
     } else if (counter.draw_mod_select === "2") {
@@ -147,11 +148,12 @@ const on_generate = () => {
           })
 
         } else {
-          message.error("生成出现错误")
+          counter.draw_img_load1 = false
+          message.error("生成出现错误：输入内容不合法或key错误")
         }
       }).catch(() => {
             counter.draw_img_load1 = false
-            message.error("生成出现错误")
+            message.error("生成出现错误：输入内容不合法或key错误")
           }
       )
     } else if (counter.draw_mod_select === "4") {
@@ -219,11 +221,12 @@ const on_generate = () => {
           })
 
         } else {
-          message.error("生成出现错误")
+          counter.draw_img_load1 = false
+          message.error("生成出现错误：输入内容不合法或key错误")
         }
       }).catch(() => {
             counter.draw_img_load1 = false
-            message.error("生成出现错误")
+            message.error("生成出现错误：输入内容不合法或key错误")
           }
       )
     }

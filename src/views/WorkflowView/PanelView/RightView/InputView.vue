@@ -38,6 +38,8 @@ const seed_meg = () => {
       setTimeout(() => {
         Prism.highlightAll()
       }, 100)
+    } else if (data["code"] == -1) {
+      message.error("生成出现错误：输入内容不合法或key错误")
     }
   })
 }
@@ -47,7 +49,6 @@ const on_generate = () => {
   } else {
     seed_meg()
     counter.right_select_key = "2"
-    message.success("发送成功")
   }
 }
 

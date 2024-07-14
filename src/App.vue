@@ -88,10 +88,6 @@ localStorage.setItem('selectedKey', "6");
             <PictureOutlined/>
             <span class="nav-text"><RouterLink to="/gallery">画廊</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="6">
-            <CustomerServiceOutlined/>
-            <span class="nav-text"><RouterLink to="/music">音乐</RouterLink></span>
-          </a-menu-item>
           <a-menu-item key="7">
             <FilePptOutlined/>
             <span class="nav-text"><RouterLink to="/ppt">PPT</RouterLink></span>
