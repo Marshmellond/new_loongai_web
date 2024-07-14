@@ -109,7 +109,7 @@ const handleOk = () => {
 
 
 const search_value = ref<string>('');
-const get_rec_data = (status: boolean) => {
+const get_rec_data = (status: boolean=false) => {
   const url = "/api/chat/get_rec_data"
   fetch(url).then((res) => {
     return res.json()
@@ -120,11 +120,12 @@ const get_rec_data = (status: boolean) => {
         counter.recording.unshift(i)
       }
     }
-    if (status) {
-      localStorage.setItem('chat_selected_item', counter.recording[0][0]);
-      counter.selected_item = counter.recording[0][0]
-    }
-    if (counter.recording.length === 0) {
+    if (counter.recording.length !== 0) {
+      if (status) {
+        localStorage.setItem('chat_selected_item', counter.recording[0][0]);
+        counter.selected_item = counter.recording[0][0]
+      }
+    } else {
       localStorage.setItem('chat_selected_item', "");
       counter.selected_item = "";
     }

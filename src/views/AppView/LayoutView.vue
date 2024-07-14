@@ -2,6 +2,7 @@
 import DefaultView from "@/views/AppView/DefaultView.vue";
 import UserView from "@/views/AppView/UserView.vue";
 import AddModView from "@/views/AppView/AddModView.vue";
+import AlterModView from "@/views/AppView/AlterModView.vue";
 import {useCounterStore} from '@/stores/counter'
 
 import {ref} from 'vue';
@@ -19,6 +20,7 @@ const activeKey = ref('2');
     </div>
     <div class="div1">
       <AddModView v-if="activeKey==2"></AddModView>
+      <AlterModView></AlterModView>
       <a-tabs v-model:activeKey="activeKey" type="card" :centered="true" :tabBarGutter="10">
         <a-tab-pane key="1" tab="系统预设">
           <DefaultView></DefaultView>

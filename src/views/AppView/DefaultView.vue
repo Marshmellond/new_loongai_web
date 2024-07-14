@@ -18,14 +18,17 @@ const get_rec_data = () => {
       for (let i of data["data"]) {
         counter.recording.unshift(i)
       }
-      if (counter.recording.length > 0) {
-        counter.selected_item = counter.recording[0][0];
+      if (counter.recording.length !== 0) {
         counter.selectedKeys = ['1']
         router.push('/');
+        setTimeout(() => {
+          localStorage.setItem('chat_selected_item', counter.recording[0][0]);
+          counter.selected_item = counter.recording[0][0];
+        }, 100)
+      } else {
+        localStorage.setItem('chat_selected_item', "");
+        counter.selected_item = "";
       }
-    }
-    if (counter.recording.length === 0) {
-      counter.selected_item = "";
     }
   })
 
@@ -195,9 +198,11 @@ onMounted(get_data)
         top: -2vh;
         font-size: 12px;
         display: -webkit-box;
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
         text-overflow: ellipsis;
+        white-space: pre-wrap;
+        word-break: break-word;
       }
 
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {CommentOutlined, DeleteOutlined, ThunderboltOutlined} from '@ant-design/icons-vue';
+import {CommentOutlined, DeleteOutlined, FormOutlined, ThunderboltOutlined} from '@ant-design/icons-vue';
 
 import {useCounterStore} from '@/stores/counter'
 import {onMounted} from "vue";
@@ -18,14 +18,17 @@ const get_rec_data = () => {
       for (let i of data["data"]) {
         counter.recording.unshift(i)
       }
-      if (counter.recording.length > 0) {
-        counter.selected_item = counter.recording[0][0];
+      if (counter.recording.length !== 0) {
         counter.selectedKeys = ['1']
         router.push('/');
+        setTimeout(() => {
+          localStorage.setItem('chat_selected_item', counter.recording[0][0]);
+          counter.selected_item = counter.recording[0][0];
+        }, 100)
+      } else {
+        localStorage.setItem('chat_selected_item', "");
+        counter.selected_item = "";
       }
-    }
-    if (counter.recording.length === 0) {
-      counter.selected_item = "";
     }
   })
 
@@ -71,6 +74,11 @@ const del_user_mod = (value) => {
   })
 
 };
+const alter_user_mod = (item) => {
+  counter.app_alter_mod_data = []
+  counter.app_alter_mod_data = item
+  counter.app_alter_mod_open = true
+}
 
 const get_data = () => {
   const url = "/api/app/get_app_data"
@@ -113,13 +121,13 @@ onMounted(get_data)
             {{ item[3] }}
           </div>
         </div>
-
         <div class="app-title4" @click="add_chat(item[0])">
           <CommentOutlined/>
           添至对话
         </div>
-        <div class="app-title5" @click="del_user_mod(item[0])">
-          <DeleteOutlined/>
+        <div class="app-title5">
+          <FormOutlined @click="alter_user_mod(item)" class="app-title5-edit"/>
+          <DeleteOutlined @click="del_user_mod(item[0])" class="app-title5-delete"/>
         </div>
 
         <div class="div-default">
@@ -216,23 +224,41 @@ onMounted(get_data)
         top: -13vh;
         font-size: 15px;
         padding: 1vh;
-      }
 
-      .app-title5:hover {
-        color: red;
+        .app-title5-edit {
+          position: relative;
+          right: 2.5vh;
+          transition: color 0.3s ease, border-color 0.3s ease;
+
+          &:hover {
+            color: #3086fd;
+          }
+        }
+
+        .app-title5-delete {
+          position: relative;
+          right: 1vh;
+          transition: color 0.3s ease, border-color 0.3s ease;
+
+          &:hover {
+            color: #3086fd;
+          }
+        }
       }
 
       .app-title6 {
         position: relative;
         padding: 1vh;
         margin-right: 1vw;
-        top: -7vh;
+        top: -6.8vh;
         left: 0.3vw;
         font-size: 12px;
         display: -webkit-box;
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
         text-overflow: ellipsis;
+        white-space: pre-wrap;
+        word-break: break-word;
       }
 
     }

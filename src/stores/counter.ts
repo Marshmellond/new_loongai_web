@@ -60,6 +60,8 @@ export const useCounterStore = defineStore('counter', () => {
     const ppt_data_list = ref([]) // PPT历史对话数据
     const ppt_data_select = ref("") // PPT对话选择
     const chat_put_file_list = ref([]) // 对话页面文件上传列表
+    const app_alter_mod_open = ref(false) // 应用页面修改模型面板开关
+    const app_alter_mod_data = ref([]) // 应用页面修改模型面板数据
 
     // ------------------工作流页面------------------
     const flow_data = ref() // 页面数据
@@ -209,5 +211,7 @@ export const useCounterStore = defineStore('counter', () => {
         ppt_data_list,
         ppt_data_select,
         chat_put_file_list,
+        app_alter_mod_open,
+        app_alter_mod_data,
     }
 })
