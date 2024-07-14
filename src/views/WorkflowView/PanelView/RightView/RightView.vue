@@ -65,7 +65,7 @@ const result_add = () => {
       </div>
       <div class="div5">
         <div class="div5-1" @click="result_add">
-          <span style="margin-right: 0.2vw">全屏</span>
+          <span style="margin-right: 0.2vw">全屏查看结果</span>
           <ExpandOutlined/>
         </div>
       </div>
@@ -100,7 +100,7 @@ const result_add = () => {
   height: 100%;
 
   .div5-1 {
-    width: 4vw;
+    width: 12vw;
     border-radius: 5px;
     padding: 1vh;
     display: flex;

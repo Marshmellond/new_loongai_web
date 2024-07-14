@@ -188,66 +188,142 @@ const flow_add_note_max_id = () => {
 }
 // ------------------------------------新增工作流------------------------------------
 const on_add_flow_data = () => {
-  const ai_id = `ai_${Date.now().toString()}`
   const flow_data = {
-    "nodes": [{
-      id: `start_${Date.now().toString()}`,
-      data: {
-        variable: [
-          {
-            id: `start_variable_${Date.now().toString()}`,
-            name: "输入内容",
-            label: "content",
-            value: "",
-            type: "String",
-            file_name: "",
-            file_type: "",
-            must: true
-          },
-        ],
-        flow_name: "",
-        flow_order: "",
-        flow_create_time: "",
-        isSelected: false,
+    "nodes": [
+      {
+        "id": "start_1720930694204",
+        "type": "start",
+        "initialized": false,
+        "position": {
+          "x": 50,
+          "y": 300
+        },
+        "data": {
+          "variable": [
+            {
+              "id": "start_variable_1720930694204",
+              "name": "输入内容",
+              "label": "content",
+              "value": "",
+              "type": "String",
+              "file_name": "",
+              "file_type": "",
+              "must": true
+            }
+          ],
+          "flow_name": "新工作流1",
+          "flow_order": 1,
+          "flow_create_time": "2024-07-14 12:18:14",
+          "isSelected": false
+        }
       },
-      type: 'start', // 节点类型
-      position: {x: 50, y: 300},
-    }, {
-      id: `end_${Date.now().toString()}`,
-      data: {
-        variable_print: [],
-        variable_content: [],
-        isSelected: false,
+      {
+        "id": "end_1720930694204",
+        "type": "end",
+        "initialized": false,
+        "position": {
+          "x": 1300,
+          "y": 320
+        },
+        "data": {
+          "variable_print": [
+            [
+              "AI回复内容1"
+            ]
+          ],
+          "variable_content": [
+            {
+              "input_id": "ai_variable_1720930694204",
+              "input": "AI回复内容1",
+              "value": "",
+              "type": "String",
+              "file_name": "",
+              "file_type": ""
+            }
+          ],
+          "isSelected": true
+        }
       },
-      type: 'end', // 节点类型
-      position: {x: 1300, y: 320},
-    }, {
-      id: ai_id,
-      data: {
-        edit_mod: [
-          "openai",
-          0
-        ],
-        edit_mod_view: "gpt-3.5-turbo",
-        edit_mod_img: "http://127.0.0.1:8000/img/head?path=api&name=openai.png",
-        app_mod: [
-          "无"
-        ],
-        app_mod_view: "无",
-        app_mod_img: "http://127.0.0.1:8000/img/head?path=model&name=null.png",
-        system: "",
-        input_id: "",
-        input: "",
-        print: `AI回复内容1`,
-        print_id: `ai_variable_${Date.now().toString()}`,
-        order: 1,
-        type: "String",
-        isSelected: false,
-        id: ai_id,
+      {
+        "id": "ai_1720930694204",
+        "type": "ai",
+        "initialized": false,
+        "position": {
+          "x": 700,
+          "y": 150
+        },
+        "data": {
+          "edit_mod": [
+            "openai",
+            0
+          ],
+          "edit_mod_view": "gpt-3.5-turbo",
+          "edit_mod_img": "http://127.0.0.1:8000/img/head?path=api&name=openai.png",
+          "app_mod": [
+            "无"
+          ],
+          "app_mod_view": "无",
+          "app_mod_img": "http://127.0.0.1:8000/img/head?path=model&name=null.png",
+          "system": "",
+          "input_id": "start_variable_1720930694204",
+          "input": "输入内容",
+          "print": "AI回复内容1",
+          "print_id": "ai_variable_1720930694204",
+          "order": 1,
+          "type": "String",
+          "isSelected": false,
+          "id": "ai_1720930694204"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "vueflow__edge-start_1720930694204-ai_1720930694204",
+        "type": "default",
+        "source": "start_1720930694204",
+        "target": "ai_1720930694204",
+        "sourceHandle": "right",
+        "targetHandle": "left",
+        "data": {},
+        "label": "",
+        "style": {
+          "stroke": "#9fbcfc",
+          "strokeWidth": 4
+        },
+        "sourceX": 344.15626525878906,
+        "sourceY": 368.2656478881836,
+        "targetX": 692.3593902587891,
+        "targetY": 364.9062728881836
       },
-      type: 'ai', // 节点类型
-      position: {x: 700, y: 150},
-    }], "edges": [], "position": [],
+      {
+        "id": "vueflow__edge-ai_1720930694204-end_1720930694204",
+        "type": "default",
+        "source": "ai_1720930694204",
+        "target": "end_1720930694204",
+        "sourceHandle": "right",
+        "targetHandle": "left",
+        "data": {},
+        "label": "",
+        "style": {
+          "stroke": "#9fbcfc",
+          "strokeWidth": 4
+        },
+        "sourceX": 994.1562652587891,
+        "sourceY": 364.9062728881836,
+        "targetX": 1292.3593139648438,
+        "targetY": 368.29689025878906
+      }
+    ],
+    "position": [
+      -26.158751208613012,
+      103.00629700263943
+    ],
+    "zoom": 0.8,
+    "viewport": {
+      "x": -26.158751208613012,
+      "y": 103.00629700263943,
+      "zoom": 0.8
+    }
   }
   const url = "/api/workflow/add_flow_data"
   let body = {

@@ -28,8 +28,8 @@ const add_variable1 = () => {
 const add_variable2 = (item) => {
   counter.select_variable_data = "编辑变量"
   counter.variable_data = item.id
-  counter.variable_data = counter.flow_data.nodes[0].data.variable.filter((item) => {
-    return item.id == item.id
+  counter.variable_data = counter.flow_data.nodes[0].data.variable.filter((variable) => {
+    return variable.id == item.id
   })
   counter.variable_data = counter.variable_data[0]
   counter.select_modal_node2 = true

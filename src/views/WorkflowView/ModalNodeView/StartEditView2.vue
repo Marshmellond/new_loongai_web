@@ -65,10 +65,10 @@ const select_type = (inp_type) => {
     <div class="div1">
       <span class="div1-title">变量类型</span>
       <div class="div1-content">
-        <div class="div1-type" :class="{'selected':counter.variable_data.type=='String'}" @click="select_type('String')">
+        <div class="div1-type" :class="{'selected':counter.variable_data.type==='String'}" @click="select_type('String')">
           文本输入
         </div>
-        <div class="div1-type" :class="{'selected':counter.variable_data.type=='File'}" style="margin-left: 0.2vw"
+        <div class="div1-type" :class="{'selected':counter.variable_data.type==='File'}" style="margin-left: 0.5vw"
              @click="select_type('File')">
           文件上传
         </div>
@@ -112,7 +112,7 @@ const select_type = (inp_type) => {
     align-items: center;
     justify-content: center;
     border-radius: 5px;
-    background: #f3f6fd;
+    background: #e6ebf6;
     width: 10vw;
     height: 6vh;
   }

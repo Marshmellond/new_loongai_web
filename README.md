@@ -19,4 +19,4 @@
 - npm install less --save
 - npm install marked --save
 - npm install highlight.js --save
--  npm install clipboard --save
+- npm install clipboard --save

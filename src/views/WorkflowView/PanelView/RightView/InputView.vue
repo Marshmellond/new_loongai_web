@@ -44,12 +44,17 @@ const seed_meg = () => {
   })
 }
 const on_generate = () => {
-  if (counter.flow_data.nodes.filter(item => item.type === 'end').length === 0) {
-    message.warn("没有结束节点")
-  } else {
-    seed_meg()
-    counter.right_select_key = "2"
+  for (let i = 0; i < counter.flow_data.nodes[0].data.variable.length; i++) {
+    if (counter.flow_data.nodes[0].data.variable[i].must) {
+      if (counter.flow_data.nodes[0].data.variable[i].value.length === 0) {
+        message.error(`${counter.flow_data.nodes[0].data.variable[i].name} 输入为空`)
+        return
+      }
+    }
   }
+  seed_meg()
+  counter.right_select_key = "2"
+
 }
 
 
@@ -134,7 +139,10 @@ const delete_put_file_list = (id) => {
   <div class="div1">
     <div class="div1-2"
          v-for="(item) in counter.flow_data.nodes[0].data.variable" :key="item.id">
-      <div style="margin-left: 0.2vw;font-size: 15px;font-weight: 900">{{ item.name }}</div>
+      <div class="div1-2-title-div">
+        <div class="div1-2-title-span">{{ item.name }}</div>
+        <div class="div1-2-title-must" v-if="item.must">*</div>
+      </div>
       <a-textarea
           style="margin-top: 0.5vh; margin-bottom: 1vh" v-model:value="item.value"
           v-if="item.type==='String'"
@@ -241,6 +249,25 @@ const delete_put_file_list = (id) => {
 
 .div1-2 {
   margin-bottom: 1vh;
+
+  .div1-2-title-div {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+
+
+    .div1-2-title-span {
+      margin-left: 0.2vw;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .div1-2-title-must {
+      position: relative;
+      margin-left: 0.2vw;
+      color: red;
+    }
+  }
 }
 
 .div2 {
