@@ -3,6 +3,7 @@ import {ref, onMounted, onUnmounted, watch} from 'vue'
 import Icon, {DeleteOutlined, ExpandOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {useCounterStore} from '@/stores/counter'
 import {marked} from "marked";
+import {message} from "ant-design-vue";
 
 const counter = useCounterStore()
 const handleOk = () => {
@@ -11,6 +12,43 @@ const handleOk = () => {
 watch(() => counter.workflow_result_open, () => {
   counter.edit_start = !counter.workflow_result_open
 })
+
+
+// ------------------------------------下载结果文件------------------------------------
+const save_txt = (value: string) => {
+  const blob = new Blob([value], {type: 'text/plain;charset=utf-8'});
+  downloadFile(blob, `loongai_file_${Date.now().toString()}.txt`);
+};
+
+const save_json = (value: string) => {
+  const jsonMatch = value.match(/```json\n([\s\S]*?)\n```/);
+  if (jsonMatch && jsonMatch[1]) {
+    const jsonContent = jsonMatch[1].trim();
+    const blob = new Blob([jsonContent], {type: 'application/json;charset=utf-8'});
+    downloadFile(blob, `loongai_file_${Date.now().toString()}.json`);
+  } else {
+    message.error("未找到有效的JSON内容")
+  }
+};
+
+const save_csv = (value: string) => {
+  const csvMatch = value.match(/```csv\n([\s\S]*?)\n```/);
+  if (csvMatch && csvMatch[1]) {
+    const csvContent = csvMatch[1].trim();
+    const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8'});
+    downloadFile(blob, `loongai_file_${Date.now().toString()}.csv`);
+  } else {
+    message.error('未找到有效的CSV内容');
+  }
+}
+
+const downloadFile = (blob: Blob, fileName: string) => {
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  link.click();
+  URL.revokeObjectURL(link.href);
+};
 </script>
 
 <template>
@@ -25,7 +63,6 @@ watch(() => counter.workflow_result_open, () => {
         :key="index"
         class="div1">
       <span class="div1-title">{{ i.input }}</span>
-      <div class="div1-content" v-html="marked.parse(i.value)" v-if="i.type==='String'"></div>
       <div class="div7-title" v-if="i.type==='File'">
         <icon :style="{ color: '#000000'}">
           <template #component>
@@ -43,11 +80,53 @@ watch(() => counter.workflow_result_open, () => {
         <div style="margin-left: 0.2vw" class="div-7-span" v-if="i.value.length!==0">{{ i.file_name }}</div>
         <div style="margin-left: 0.2vw" class="div-7-span" v-if="i.value.length===0">无文件上传</div>
       </div>
+
+      <div v-if="i.type==='String'">
+        <div class="div1-content" v-html="marked.parse(i.value)"></div>
+        <div class="div1-download">
+          <a-button class="div1-button" @click="save_txt(i.value)">下载txt</a-button>
+          <a-button class="div1-button" @click="save_json(i.value)">下载json</a-button>
+          <a-button class="div1-button" @click="save_csv(i.value)">下载csv</a-button>
+        </div>
+      </div>
     </div>
   </a-modal>
 </template>
 
 <style scoped lang="less">
+
+.div1 {
+  position: relative;
+
+  .div1-title {
+    font-weight: 900;
+    margin-left: 1vw;
+  }
+
+  .div1-download {
+    margin-bottom: 2vh;
+    margin-top: 0.5vh;
+    margin-left: 0.5vw;
+    border-radius: 5px;
+
+    .div1-button {
+      margin-left: 0.5vw;
+    }
+  }
+
+  .div1-content {
+    margin-bottom: 2vh;
+    margin-top: 0.5vh;
+    margin-left: 1vw;
+    border-radius: 5px;
+    border: 1px solid @theme-border-color;
+    min-height: 5vh;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+}
+
 .div7-title {
   margin-bottom: 2vh;
   margin-top: 0.5vh;
@@ -67,26 +146,6 @@ watch(() => counter.workflow_result_open, () => {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis; /* 这将添加省略号，如果文本超出其最大宽度 */
-  }
-}
-
-.div1 {
-  position: relative;
-
-  .div1-title {
-    font-weight: 900;
-    margin-left: 1vw;
-  }
-
-  .div1-content {
-    margin-bottom: 2vh;
-    margin-top: 0.5vh;
-    margin-left: 1vw;
-    border-radius: 5px;
-    border: 1px solid @theme-border-color;
-    min-height: 5vh;
-    white-space: pre-wrap;
-    word-break: break-word;
   }
 }
 </style>
