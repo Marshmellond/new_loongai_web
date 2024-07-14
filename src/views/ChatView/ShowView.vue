@@ -4,6 +4,9 @@ import {useCounterStore} from '@/stores/counter'
 import {marked} from 'marked';
 import Icon from '@ant-design/icons-vue';
 import {onMounted} from "vue";
+import CryptoJS from 'crypto-js';
+import { v4 as uuidv4 } from "uuid";
+
 
 import {
   LoadingOutlined,
@@ -770,7 +773,7 @@ const uploadImageToServer = (imageDataUrl, file_name) => {
     }
   }).then((data) => {
     if (data["code"] == 1) {
-      counter.chat_put_img_list.push({"id": crypto.randomUUID(), "url": data["data"]["img_url"]})
+      counter.chat_put_img_list.push({"id": uuidv4(), "url": data["data"]["img_url"]})
       message.success("图片上传成功");
     } else {
       message.error("图片上传失败");

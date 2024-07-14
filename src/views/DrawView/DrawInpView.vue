@@ -2,6 +2,7 @@
 import Dell3View from "@/views/DrawView/DrawInpView/Dell3View.vue";
 import Dell2View from "@/views/DrawView/DrawInpView/Dell2View.vue";
 import XunfeiView from "@/views/DrawView/DrawInpView/XunfeiView.vue";
+import { v4 as uuidv4 } from "uuid";
 
 import {message} from "ant-design-vue";
 import {PlusOutlined, DownloadOutlined} from "@ant-design/icons-vue";
@@ -255,7 +256,7 @@ function downloadIamge(src) {
 
     let a = document.createElement("a");
 
-    let uuid = crypto.randomUUID();
+    let uuid = uuidv4();
     a.download = `${uuid}.png`;
 
     a.href = c.toDataURL("image/png");
