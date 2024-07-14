@@ -21,12 +21,12 @@ const handleOk = () => {
       "无"
     ]
     counter.ai_node_data.data.app_mod_view = "无"
-    counter.ai_node_data.data.app_mod_img = "http://127.0.0.1:8000/img/head?path=model&name=null.png"
+    counter.ai_node_data.data.app_mod_img = "/api/img/head?path=model&name=null.png"
   } else {
     let app_label = counter.ai_node_data.data.app_mod[0]
     if (app_label == "无") {
       counter.ai_node_data.data.app_mod_view = "无"
-      counter.ai_node_data.data.app_mod_img = "http://127.0.0.1:8000/img/head?path=model&name=null.png"
+      counter.ai_node_data.data.app_mod_img = "/api/img/head?path=model&name=null.png"
     } else {
       let app_index = counter.ai_node_data.data.app_mod[1]
       counter.ai_node_data.data.app_mod_view = counter.edit_app_options.filter(item => item.label === app_label)[0].children.filter(item => item.value == app_index)[0].label

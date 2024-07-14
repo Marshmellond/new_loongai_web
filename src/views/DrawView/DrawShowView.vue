@@ -9,7 +9,7 @@ const windowHeight = ref(window.innerHeight);
 
 const updateDimensions = () => {
   windowWidth.value = window.innerWidth;
-  windowHeight.value = window.innerHeight;
+  windowHeight.value = window.innerHeight;``
 };
 
 onMounted(() => {
@@ -28,7 +28,7 @@ onUnmounted(() => {
       <a-image
           :width="798"
           :height="798"
-          fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1024.png"
+          fallback="/api/img/head?path=default&name=1024_1024.png"
           :src="counter.draw_img1"
           v-if="!counter.draw_img_load1"
       />
@@ -38,7 +38,7 @@ onUnmounted(() => {
       <a-image
           :width="1223"
           :height="698"
-          fallback="http://127.0.0.1:8000/img/head?path=default&name=1792_1024.png"
+          fallback="/api/img/head?path=default&name=1792_1024.png"
           :src="counter.draw_img1"
           v-if="!counter.draw_img_load1"
       />
@@ -48,7 +48,7 @@ onUnmounted(() => {
       <a-image
           :width="478"
           :height="838"
-          fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1792.png"
+          fallback="/api/img/head?path=default&name=1024_1792.png"
           :src="counter.draw_img1"
           v-if="!counter.draw_img_load1"
       />
@@ -64,7 +64,7 @@ onUnmounted(() => {
           <a-image
               :width="598"
               :height="598"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1024.png"
+              fallback="/api/img/head?path=default&name=1024_1024.png"
               :src="counter.draw_img1"
               v-if="!counter.draw_img_load1"
           />
@@ -74,7 +74,7 @@ onUnmounted(() => {
           <a-image
               :width="598"
               :height="598"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1024.png"
+              fallback="/api/img/head?path=default&name=1024_1024.png"
               :src="counter.draw_img2"
               v-if="!counter.draw_img_load1"
           />
@@ -88,7 +88,7 @@ onUnmounted(() => {
           <a-image
               :width="610.5"
               :height="348"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1792_1024.png"
+              fallback="/api/img/head?path=default&name=1792_1024.png"
               :src="counter.draw_img1"
               v-if="!counter.draw_img_load1"
           />
@@ -98,7 +98,7 @@ onUnmounted(() => {
           <a-image
               :width="610.5"
               :height="348"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1792_1024.png"
+              fallback="/api/img/head?path=default&name=1792_1024.png"
               :src="counter.draw_img2"
               v-if="!counter.draw_img_load1"
           />
@@ -112,7 +112,7 @@ onUnmounted(() => {
           <a-image
               :width="398"
               :height="698"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1792.png"
+              fallback="/api/img/head?path=default&name=1024_1792.png"
               :src="counter.draw_img1"
               v-if="!counter.draw_img_load1"
           />
@@ -122,7 +122,7 @@ onUnmounted(() => {
           <a-image
               :width="398"
               :height="698"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1792.png"
+              fallback="/api/img/head?path=default&name=1024_1792.png"
               :src="counter.draw_img2"
               v-if="!counter.draw_img_load1"
           />
@@ -140,7 +140,7 @@ onUnmounted(() => {
           <a-image
               :width="398"
               :height="398"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1024.png"
+              fallback="/api/img/head?path=default&name=1024_1024.png"
               :src="counter.draw_img1"
               v-if="!counter.draw_img_load1"
           />
@@ -150,7 +150,7 @@ onUnmounted(() => {
           <a-image
               :width="398"
               :height="398"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1024.png"
+              fallback="/api/img/head?path=default&name=1024_1024.png"
               :src="counter.draw_img2"
               v-if="!counter.draw_img_load1"
           />
@@ -162,7 +162,7 @@ onUnmounted(() => {
           <a-image
               :width="398"
               :height="398"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1024.png"
+              fallback="/api/img/head?path=default&name=1024_1024.png"
               :src="counter.draw_img3"
               v-if="!counter.draw_img_load1"
           />
@@ -176,7 +176,7 @@ onUnmounted(() => {
           <a-image
               :width="610.5"
               :height="348"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1792_1024.png"
+              fallback="/api/img/head?path=default&name=1792_1024.png"
               :src="counter.draw_img1"
               v-if="!counter.draw_img_load1"
           />
@@ -186,7 +186,7 @@ onUnmounted(() => {
           <a-image
               :width="610.5"
               :height="348"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1792_1024.png"
+              fallback="/api/img/head?path=default&name=1792_1024.png"
               :src="counter.draw_img2"
               v-if="!counter.draw_img_load1"
           />
@@ -198,7 +198,7 @@ onUnmounted(() => {
           <a-image
               :width="610.5"
               :height="348"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1792_1024.png"
+              fallback="/api/img/head?path=default&name=1792_1024.png"
               :src="counter.draw_img3"
               v-if="!counter.draw_img_load1"
           />
@@ -212,7 +212,7 @@ onUnmounted(() => {
           <a-image
               :width="238"
               :height="418"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1792.png"
+              fallback="/api/img/head?path=default&name=1024_1792.png"
               :src="counter.draw_img1"
               v-if="!counter.draw_img_load1"
           />
@@ -222,7 +222,7 @@ onUnmounted(() => {
           <a-image
               :width="238"
               :height="418"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1792.png"
+              fallback="/api/img/head?path=default&name=1024_1792.png"
               :src="counter.draw_img2"
               v-if="!counter.draw_img_load1"
           />
@@ -234,7 +234,7 @@ onUnmounted(() => {
           <a-image
               :width="238"
               :height="418"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1792.png"
+              fallback="/api/img/head?path=default&name=1024_1792.png"
               :src="counter.draw_img3"
               v-if="!counter.draw_img_load1"
           />
@@ -252,7 +252,7 @@ onUnmounted(() => {
           <a-image
               :width="398"
               :height="398"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1024.png"
+              fallback="/api/img/head?path=default&name=1024_1024.png"
               :src="counter.draw_img1"
               v-if="!counter.draw_img_load1"
           />
@@ -262,7 +262,7 @@ onUnmounted(() => {
           <a-image
               :width="398"
               :height="398"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1024.png"
+              fallback="/api/img/head?path=default&name=1024_1024.png"
               :src="counter.draw_img2"
               v-if="!counter.draw_img_load1"
           />
@@ -274,7 +274,7 @@ onUnmounted(() => {
           <a-image
               :width="398"
               :height="398"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1024.png"
+              fallback="/api/img/head?path=default&name=1024_1024.png"
               :src="counter.draw_img3"
               v-if="!counter.draw_img_load1"
           />
@@ -284,7 +284,7 @@ onUnmounted(() => {
           <a-image
               :width="398"
               :height="398"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1024.png"
+              fallback="/api/img/head?path=default&name=1024_1024.png"
               :src="counter.draw_img4"
               v-if="!counter.draw_img_load1"
           />
@@ -298,7 +298,7 @@ onUnmounted(() => {
           <a-image
               :width="610.5"
               :height="348"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1792_1024.png"
+              fallback="/api/img/head?path=default&name=1792_1024.png"
               :src="counter.draw_img1"
               v-if="!counter.draw_img_load1"
           />
@@ -308,7 +308,7 @@ onUnmounted(() => {
           <a-image
               :width="610.5"
               :height="348"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1792_1024.png"
+              fallback="/api/img/head?path=default&name=1792_1024.png"
               :src="counter.draw_img2"
               v-if="!counter.draw_img_load1"
           />
@@ -320,7 +320,7 @@ onUnmounted(() => {
           <a-image
               :width="610.5"
               :height="348"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1792_1024.png"
+              fallback="/api/img/head?path=default&name=1792_1024.png"
               :src="counter.draw_img3"
               v-if="!counter.draw_img_load1"
           />
@@ -330,7 +330,7 @@ onUnmounted(() => {
           <a-image
               :width="610.5"
               :height="348"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1792_1024.png"
+              fallback="/api/img/head?path=default&name=1792_1024.png"
               :src="counter.draw_img4"
               v-if="!counter.draw_img_load1"
           />
@@ -344,7 +344,7 @@ onUnmounted(() => {
           <a-image
               :width="238"
               :height="418"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1792.png"
+              fallback="/api/img/head?path=default&name=1024_1792.png"
               :src="counter.draw_img1"
               v-if="!counter.draw_img_load1"
           />
@@ -354,7 +354,7 @@ onUnmounted(() => {
           <a-image
               :width="238"
               :height="418"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1792.png"
+              fallback="/api/img/head?path=default&name=1024_1792.png"
               :src="counter.draw_img2"
               v-if="!counter.draw_img_load1"
           />
@@ -366,7 +366,7 @@ onUnmounted(() => {
           <a-image
               :width="238"
               :height="418"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1792.png"
+              fallback="/api/img/head?path=default&name=1024_1792.png"
               :src="counter.draw_img3"
               v-if="!counter.draw_img_load1"
           />
@@ -376,7 +376,7 @@ onUnmounted(() => {
           <a-image
               :width="238"
               :height="418"
-              fallback="http://127.0.0.1:8000/img/head?path=default&name=1024_1792.png"
+              fallback="/api/img/head?path=default&name=1024_1792.png"
               :src="counter.draw_img4"
               v-if="!counter.draw_img_load1"
           />

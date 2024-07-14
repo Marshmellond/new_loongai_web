@@ -200,12 +200,12 @@ const on_add_flow_data = () => {
           0
         ],
         edit_mod_view: "gpt-3.5-turbo",
-        edit_mod_img: "http://127.0.0.1:8000/img/head?path=api&name=openai.png",
+        edit_mod_img: "/api/img/head?path=api&name=openai.png",
         app_mod: [
           "无"
         ],
         app_mod_view: "无",
-        app_mod_img: "http://127.0.0.1:8000/img/head?path=model&name=null.png",
+        app_mod_img: "/api/img/head?path=model&name=null.png",
         system: "",
         input_id: "",
         input: "",

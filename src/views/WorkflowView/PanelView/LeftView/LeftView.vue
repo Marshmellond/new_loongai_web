@@ -258,12 +258,12 @@ const on_add_flow_data = () => {
             0
           ],
           "edit_mod_view": "gpt-3.5-turbo",
-          "edit_mod_img": "http://127.0.0.1:8000/img/head?path=api&name=openai.png",
+          "edit_mod_img": "/api/img/head?path=api&name=openai.png",
           "app_mod": [
             "无"
           ],
           "app_mod_view": "无",
-          "app_mod_img": "http://127.0.0.1:8000/img/head?path=model&name=null.png",
+          "app_mod_img": "/api/img/head?path=model&name=null.png",
           "system": "",
           "input_id": "start_variable_1720930694204",
           "input": "输入内容",
@@ -425,12 +425,12 @@ const add_ai_node = () => {
         0
       ],
       edit_mod_view: "gpt-3.5-turbo",
-      edit_mod_img: "http://127.0.0.1:8000/img/head?path=api&name=openai.png",
+      edit_mod_img: "/api/img/head?path=api&name=openai.png",
       app_mod: [
         "无"
       ],
       app_mod_view: "无",
-      app_mod_img: "http://127.0.0.1:8000/img/head?path=model&name=null.png",
+      app_mod_img: "/api/img/head?path=model&name=null.png",
       system: "",
       input_id: "",
       input: "",
@@ -458,7 +458,7 @@ const add_reply_node = () => {
         0
       ],
       edit_mod_view: "gpt-3.5-turbo",
-      edit_mod_img: "http://127.0.0.1:8000/img/head?path=api&name=openai.png",
+      edit_mod_img: "/api/img/head?path=api&name=openai.png",
       input_id: "",
       input: "",
       question: [],
