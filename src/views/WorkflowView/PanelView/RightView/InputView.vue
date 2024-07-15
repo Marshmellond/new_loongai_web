@@ -14,6 +14,11 @@ const clear_variable_content = () => {
     counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content[i].value = ""
   }
 }
+const clear_start_variable = () => {
+  for (let i = 0; i < counter.flow_data.nodes.filter(item => item.type === 'start')[0].data.variable.length; i++) {
+    counter.flow_data.nodes.filter(item => item.type === 'start')[0].data.variable[i].value = ""
+  }
+}
 const seed_meg = () => {
   console.log(counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content)
   clear_variable_content()
@@ -29,17 +34,20 @@ const seed_meg = () => {
     credentials: "include"
   }).then((res) => {
     if (res.ok) {
-      counter.workflow_seed_load = false
       return res.json()
     }
   }).then((data) => {
     if (data["code"] == 1) {
       counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content = data["data"]
+      clear_start_variable()
+      counter.workflow_seed_load = false
       setTimeout(() => {
         Prism.highlightAll()
       }, 100)
     } else if (data["code"] == -1) {
       message.error("生成出现错误：输入内容不合法或key错误")
+      clear_start_variable()
+      counter.workflow_seed_load = false
     }
   })
 }

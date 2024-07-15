@@ -109,7 +109,7 @@ const handleOk = () => {
 
 
 const search_value = ref<string>('');
-const get_rec_data = (status: boolean=false) => {
+const get_rec_data = (status: boolean=true) => {
   const url = "/api/chat/get_rec_data"
   fetch(url).then((res) => {
     return res.json()

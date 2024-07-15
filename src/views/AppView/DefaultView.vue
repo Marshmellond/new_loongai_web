@@ -24,7 +24,7 @@ const get_rec_data = () => {
         setTimeout(() => {
           localStorage.setItem('chat_selected_item', counter.recording[0][0]);
           counter.selected_item = counter.recording[0][0];
-        }, 100)
+        }, 1000)
       } else {
         localStorage.setItem('chat_selected_item', "");
         counter.selected_item = "";
@@ -101,7 +101,7 @@ onMounted(get_data)
         </div>
 
         <div class="div-default">
-          <div class="app-title5">{{ item[5] }}</div>
+          <div class="app-title5">{{ item[4] }}</div>
         </div>
       </div>
     </div>

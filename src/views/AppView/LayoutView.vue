@@ -10,7 +10,7 @@ const counter = useCounterStore()
 
 localStorage.setItem('selectedKey', "3");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
-const activeKey = ref('2');
+const activeKey = ref('1');
 </script>
 
 <template>

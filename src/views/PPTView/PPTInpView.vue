@@ -41,6 +41,19 @@ const theme_on8 = () => {
 const notes_on1 = () => {
   counter.ppt_notes_select = !counter.ppt_notes_select
 }
+// ------------------------------------ppt链接赋值------------------------------------
+const set_ppt_path_data = () => {
+  if (counter.ppt_data_list.length !== 0) {
+    for (let i of counter.ppt_data_list) {
+      if (counter.ppt_data_select === i[0]) {
+        counter.ppt_path_url = i[1]
+        console.log(counter.ppt_path_url)
+      }
+    }
+  } else {
+    counter.ppt_path_url = ""
+  }
+}
 const get_data = () => {
   const url = "/api/ppt/get_data"
   fetch(url).then((res) => {
@@ -53,6 +66,8 @@ const get_data = () => {
       counter.ppt_data_list = data["data"]["ppt_dat_list"]
       if (counter.ppt_data_list.length !== 0) {
         counter.ppt_data_select = counter.ppt_data_list[0][0]
+        set_ppt_path_data()
+        counter.ppt_show_load_status = false
       }
     }
   })
@@ -82,8 +97,6 @@ const on_generate = () => {
           }
         }).then((data) => {
           if (data["code"] == 1) {
-            counter.ppt_show_load_status = false
-            counter.ppt_path_url = data["data"]["ppt_path_url"]
             get_data()
           } else {
             counter.ppt_show_load_status = false

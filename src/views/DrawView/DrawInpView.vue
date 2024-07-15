@@ -2,15 +2,25 @@
 import Dell3View from "@/views/DrawView/DrawInpView/Dell3View.vue";
 import Dell2View from "@/views/DrawView/DrawInpView/Dell2View.vue";
 import XunfeiView from "@/views/DrawView/DrawInpView/XunfeiView.vue";
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 
 import {message} from "ant-design-vue";
 import {PlusOutlined, DownloadOutlined} from "@ant-design/icons-vue";
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-counter.draw_mod_select = localStorage.getItem("draw_mod_select")
 
+const set_local_select = () => {
+  let temp_local_select = localStorage.getItem("draw_mod_select")
+  if (temp_local_select == null) {
+    counter.draw_mod_select = "1"
+  } else if (temp_local_select.length === 0) {
+    counter.draw_mod_select = "1"
+  } else {
+    counter.draw_mod_select = localStorage.getItem("draw_mod_select")
+  }
+}
+set_local_select()
 const on1 = () => {
   counter.draw_mod_select = "1"
 }

@@ -104,7 +104,7 @@ const get_flow_data_list = (flow_data_select_status: Boolean = false, get_flow_d
     }
   })
 }
-get_flow_data_list(false, true)
+get_flow_data_list(true, true)
 // ------------------------------------切换路由页面自动保存------------------------------------
 router.beforeEach((to, from, next) => {
   if (from.name === 'workflow') { // 替换为你的路由名称
@@ -535,7 +535,6 @@ const beforeUpload = (file) => {
 const handleChange = (info) => {
   const status = info.file.status;
   if (status === 'done') {
-    message.success(`文件 ${info.file.name} 上传成功`);
     readJSONFile(info.file.originFileObj);
   } else if (status === 'error') {
     message.error(`文件 ${info.file.name} 上传失败`);
