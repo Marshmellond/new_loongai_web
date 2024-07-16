@@ -5,7 +5,7 @@ import {marked} from 'marked';
 import Icon from '@ant-design/icons-vue';
 import {onMounted} from "vue";
 import CryptoJS from 'crypto-js';
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 
 
 import {
@@ -831,6 +831,77 @@ const uploadFileToServer2 = (fileContent, fileName, fileType) => {
 };
 
 
+// ------------------------------------上传音频文件------------------------------------
+const beforeUpload3 = (file) => {
+  const isAudio = /^audio\/(mp3|mp4|mpeg|mpga|m4a|wav|webm)$/.test(file.type);
+  if (!isAudio) {
+    message.error('只能上传音频文件 (mp3, mp4, mpeg, mpga, m4a, wav, webm)');
+    return Upload.LIST_IGNORE;
+  }
+  const isLt20M = file.size / 1024 / 1024 < 20;
+  if (!isLt20M) {
+    message.error('音频文件大小不能超过20MB');
+    return Upload.LIST_IGNORE;
+  }
+  return isAudio && isLt20M;
+};
+
+const handleChange3 = (info) => {
+  const status = info.file.status;
+  if (status === 'done') {
+    processUploadedAudio3(info.file.originFileObj, info.file.name);
+  } else if (status === 'error') {
+    message.error(`音频文件 ${info.file.name} 上传失败`);
+  }
+};
+
+const processUploadedAudio3 = (file, file_name) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const audioDataUrl = e.target.result;
+    uploadAudioToServer3(audioDataUrl, file_name);
+  };
+  reader.readAsDataURL(file);
+};
+
+const customRequest3 = ({file, onSuccess}) => {
+  setTimeout(() => {
+    onSuccess("ok", file);
+  }, 0);
+};
+
+const uploadAudioToServer3 = (audioDataUrl, file_name) => {
+  console.log(audioDataUrl);
+  console.log(file_name);
+  const url = "/api/chat/put_audio";
+  let body = {
+    audio_data: audioDataUrl,
+    file_name: file_name
+  };
+  fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+    credentials: "include"
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+  }).then((data) => {
+    if (data["code"] == 1) {
+      textarea_input.value = data["data"]["textarea_input"]
+      message.success("音频文件上传成功");
+    } else {
+      message.error("音频文件上传失败");
+    }
+  }).catch((error) => {
+    console.error('上传音频时发生错误:', error);
+    message.error("音频文件上传失败");
+  });
+};
+
+
+
 // ------------------------------------删除图片------------------------------------
 const delete_put_img_list = (id) => {
   counter.chat_put_img_list = counter.chat_put_img_list.filter(item => item.id !== id)
@@ -1012,6 +1083,26 @@ const delete_put_file_list = (id) => {
             <span style="color: white;font-size: 12px">{{ btnText }}</span>
           </div>
         </div>
+        <a-upload
+            :showUploadList="false"
+            :beforeUpload="beforeUpload3"
+            @change="handleChange3"
+            :customRequest="customRequest3"
+        >
+          <icon :style="{ color: '#000000'}" class="div4-mp3">
+            <template #component>
+              <svg t="1721139489234" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                   xmlns="http://www.w3.org/2000/svg" p-id="2827" width="26" height="26">
+                <path
+                    d="M587 0H160c-35.3 0-64 28.7-64 64v896c0 35.3 28.7 64 64 64h704c35.3 0 64-28.7 64-64V341c0-33.9-13.5-66.5-37.5-90.5l-213-213C653.5 13.5 620.9 0 587 0z m53 90.5L837.5 288H704c-35.3 0-64-28.7-64-64V90.5zM832 960H192c-17.7 0-32-14.3-32-32V96c0-17.7 14.3-32 32-32h384v160c0 70.7 57.3 128 128 128h160v576c0 17.7-14.3 32-32 32z"
+                    p-id="2828"></path>
+                <path
+                    d="M672 476.6v289.1c0 42.9-38.7 77.7-86.5 77.7S499 808.6 499 765.7c0-42.9 38.7-77.7 86.5-77.7 12.4 0 22.5-10.1 22.5-22.5V498.9c0-11-10.7-18.7-21.1-15.2l-143.8 48.5c-6.5 2.2-10.9 8.3-10.9 15.2l0.2 204.6h-0.4v65.6c0 43.4-39.4 78.6-88 78.6s-88-35.2-88-78.6c0-43.4 39.4-78.6 88-78.6h1.8c12.4 0 22.5-10.1 22.5-22.5l-0.2-180.6c0-27.5 17.5-51.9 43.6-60.7L587.6 416c41.4-14 84.4 16.8 84.4 60.6z"
+                    p-id="2829"></path>
+              </svg>
+            </template>
+          </icon>
+        </a-upload>
         <a-upload
             :showUploadList="false"
             :beforeUpload="beforeUpload"
@@ -1323,6 +1414,30 @@ const delete_put_file_list = (id) => {
       }
     }
 
+    .div4-mp3 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      left: 0.8vw;
+      top: 2vh;
+      padding: 0.77vh 1.3vh 0.77vh 1.3vh;
+      transition: background-color 0.3s ease;
+      border-radius: 5px;
+    }
+
+    .div4-mp3:hover {
+      background-color: #d0e4f4;
+    }
+
+    .div4-mp3:hover .icon path {
+      fill: #2664c5;
+    }
+
+    .div4-mp3 .icon path {
+      transition: fill 0.3s ease;
+    }
+
     .div4-gallery {
       display: flex;
       align-items: center;
@@ -1330,7 +1445,7 @@ const delete_put_file_list = (id) => {
       position: relative;
       left: 1vw;
       top: 2vh;
-      padding: 0.3vh 1vh 0.3vh 1vh;
+      padding: 0.6vh 1vh 0.6vh 1vh;
       transition: background-color 0.3s ease;
       border-radius: 5px;
     }
@@ -1354,7 +1469,7 @@ const delete_put_file_list = (id) => {
       position: relative;
       left: 1vw;
       top: 2vh;
-      padding: 0.3vh 1vh 0.3vh 1vh;
+      padding: 0.6vh 1vh 0.6vh 1vh;
       transition: background-color 0.3s ease;
       border-radius: 5px;
     }
@@ -1377,7 +1492,7 @@ const delete_put_file_list = (id) => {
       justify-content: center;
       position: relative;
       top: 2vh;
-      left: 54.5vw;
+      left: 51.5vw;
       padding: 0.3vh 1.2vh 0.3vh 1.2vh;
       transition: background-color 0.3s ease;
       border-radius: 5px;
@@ -1399,7 +1514,7 @@ const delete_put_file_list = (id) => {
 
     .div4-seed-desc {
       position: relative;
-      left: 55.5vw;
+      left: 52vw;
       top: 3vh;
       color: #b4b4b4;
     }
@@ -1409,7 +1524,7 @@ const delete_put_file_list = (id) => {
       align-items: center;
       justify-content: center;
       position: relative;
-      left: 56vw;
+      left: 53vw;
       top: 2vh;
       padding: 0.3vh 1.5vh 0.3vh 1.5vh;
       transition: background-color 0.3s ease;

@@ -39,14 +39,12 @@ const seed_meg = () => {
   }).then((data) => {
     if (data["code"] == 1) {
       counter.flow_data.nodes.filter(item => item.type === 'end')[0].data.variable_content = data["data"]
-      clear_start_variable()
       counter.workflow_seed_load = false
       setTimeout(() => {
         Prism.highlightAll()
       }, 100)
     } else if (data["code"] == -1) {
       message.error("生成出现错误：输入内容不合法或key错误")
-      clear_start_variable()
       counter.workflow_seed_load = false
     }
   })

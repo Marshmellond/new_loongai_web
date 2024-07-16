@@ -3,6 +3,7 @@ import PptXunfeiView from "@/views/KeyView/MoreKeyView/PptXunfeiView.vue";
 import SttXunfeiView from "@/views/KeyView/MoreKeyView/SttXunfeiView.vue";
 import EmotionQianfanView from "@/views/KeyView/MoreKeyView/EmotionQianfanView.vue";
 import OcrOpenaiView from "@/views/KeyView/MoreKeyView/OcrOpenaiView.vue";
+import SttOpenaiView from "@/views/KeyView/MoreKeyView/SttOpenaiView.vue";
 
 import {ref} from "vue";
 import {onMounted} from "vue";
@@ -36,13 +37,22 @@ const activeKey = ref("1");
     <a-tab-pane key="3">
       <template #tab>
         <span>
+          语音识别-openai
+        </span>
+      </template>
+      <SttOpenaiView></SttOpenaiView>
+    </a-tab-pane>
+
+    <a-tab-pane key="4">
+      <template #tab>
+        <span>
           情感分析-千帆
         </span>
       </template>
       <EmotionQianfanView></EmotionQianfanView>
     </a-tab-pane>
 
-    <a-tab-pane key="4">
+    <a-tab-pane key="5">
       <template #tab>
         <span>
           图像识别-ocr
