@@ -901,7 +901,6 @@ const uploadAudioToServer3 = (audioDataUrl, file_name) => {
 };
 
 
-
 // ------------------------------------删除图片------------------------------------
 const delete_put_img_list = (id) => {
   counter.chat_put_img_list = counter.chat_put_img_list.filter(item => item.id !== id)

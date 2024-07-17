@@ -140,24 +140,6 @@ const on_generate = () => {
             temp_draw_img_url.push(data["draw_img3"])
             temp_draw_img_url.push(data["draw_img4"])
           }
-          const url = "/api/draw/generate/save"
-          let body = {
-            temp_draw_img_url: temp_draw_img_url,
-          }
-          fetch(url, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(body),
-            credentials: "include"
-          }).then((res) => {
-            if (res.ok) {
-              return res.json()
-            }
-          }).then(() => {
-          }).catch(() => {
-            message.error("保存失败")
-          })
-
         } else {
           counter.draw_img_load1 = false
           message.error("生成出现错误：输入内容不合法或key错误")
@@ -213,24 +195,6 @@ const on_generate = () => {
             temp_draw_img_url.push(data["draw_img3"])
             temp_draw_img_url.push(data["draw_img4"])
           }
-          const url = "/api/draw/generate/save"
-          let body = {
-            temp_draw_img_url: temp_draw_img_url,
-          }
-          fetch(url, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(body),
-            credentials: "include"
-          }).then((res) => {
-            if (res.ok) {
-              return res.json()
-            }
-          }).then(() => {
-          }).catch(() => {
-            message.error("保存失败")
-          })
-
         } else {
           counter.draw_img_load1 = false
           message.error("生成出现错误：输入内容不合法或key错误")
