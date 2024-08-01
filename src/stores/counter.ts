@@ -62,6 +62,21 @@ export const useCounterStore = defineStore('counter', () => {
     const chat_put_file_list = ref([]) // 对话页面文件上传列表
     const app_alter_mod_open = ref(false) // 应用页面修改模型面板开关
     const app_alter_mod_data = ref([]) // 应用页面修改模型面板数据
+    const music_url_path1 = ref("1") // 音乐页面链接1
+    const music_url_path2 = ref("") // 音乐页面链接2
+    const music_show_load_status = ref(false) // 音乐页面生成中
+    const music_generate_type_select = ref("1") // 音乐页面生成模式选择
+    const music_inp = ref("") // 音乐页面输入内容
+    const music_ai_mod_select = ref("1") // 音乐页面模型选择
+    const music_type_select = ref("1") // 音乐页面生成类型选择
+    const music_name = ref("") // 音乐页面歌曲名称
+    const music_qf = ref("") // 音乐页面歌曲曲风
+    const music_ys = ref("") // 音乐页面歌曲音色
+    const music_xlfzd = ref("") // 音乐页面歌曲旋律复杂度
+    const music_yysc = ref("") // 音乐页面歌曲音乐时长
+    const music_dyts = ref("") // 音乐页面歌曲地域特色
+    const music_sdfg = ref("") // 音乐页面歌曲时代风格
+
 
     // ------------------工作流页面------------------
     const flow_data = ref() // 页面数据
@@ -115,7 +130,7 @@ export const useCounterStore = defineStore('counter', () => {
         {value: "长度小于等于", label: "长度小于等于"},
     ]) //判断器条件
     const workflow_seed_load = ref(false) // 工作流运行加载动画
-    const workflow_result_open = ref(false) // 放大查看结果
+    const workflow_result_open = ref(true) // 放大查看结果
     return {
         selectedKeys,
         recording,
@@ -213,5 +228,19 @@ export const useCounterStore = defineStore('counter', () => {
         chat_put_file_list,
         app_alter_mod_open,
         app_alter_mod_data,
+        music_generate_type_select,
+        music_inp,
+        music_ai_mod_select,
+        music_type_select,
+        music_url_path1,
+        music_url_path2,
+        music_show_load_status,
+        music_name,
+        music_qf,
+        music_ys,
+        music_xlfzd,
+        music_yysc,
+        music_dyts,
+        music_sdfg,
     }
 })

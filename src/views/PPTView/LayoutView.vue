@@ -264,8 +264,6 @@ const delete_record = (id: string) => {
     align-items: center;
     border: 1px dashed #b8b8b8;
     border-radius: 5px;
-
-
   }
 
   .div-show-load-con1 {

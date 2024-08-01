@@ -19,7 +19,7 @@ const get_about_data = () => {
   })
 }
 onMounted(get_about_data)
-localStorage.setItem('selectedKey', "8");
+localStorage.setItem('selectedKey', "9");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 </script>
 
