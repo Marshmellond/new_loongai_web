@@ -18,12 +18,12 @@ const indicator = h(LoadingOutlined, {
        v-if="counter.music_url_path1.length!==0"
   >
     <iframe
-        src="https://cdn1.suno.ai/c2f7d8f7-7307-4962-b05f-e3ec14b5659e.mp4"
+        :src="counter.music_url_path1"
         class="div-show1"
     >
     </iframe>
     <iframe
-        src="https://cdn1.suno.ai/3f86551c-1e24-4868-813f-a1203097a599.mp4"
+        :src="counter.music_url_path2"
         class="div-show2"
     >
     </iframe>

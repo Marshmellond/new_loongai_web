@@ -62,7 +62,7 @@ export const useCounterStore = defineStore('counter', () => {
     const chat_put_file_list = ref([]) // 对话页面文件上传列表
     const app_alter_mod_open = ref(false) // 应用页面修改模型面板开关
     const app_alter_mod_data = ref([]) // 应用页面修改模型面板数据
-    const music_url_path1 = ref("1") // 音乐页面链接1
+    const music_url_path1 = ref("") // 音乐页面链接1
     const music_url_path2 = ref("") // 音乐页面链接2
     const music_show_load_status = ref(false) // 音乐页面生成中
     const music_generate_type_select = ref("1") // 音乐页面生成模式选择
@@ -75,7 +75,8 @@ export const useCounterStore = defineStore('counter', () => {
     const music_xlfzd = ref("") // 音乐页面歌曲旋律复杂度
     const music_yysc = ref("") // 音乐页面歌曲音乐时长
     const music_dyts = ref("") // 音乐页面歌曲地域特色
-    const music_sdfg = ref("") // 音乐页面歌曲时代风格
+    const music_data_list = ref([]) // 音乐历史对话数据
+    const music_data_select = ref("") // 音乐对话选择
 
 
     // ------------------工作流页面------------------
@@ -241,6 +242,7 @@ export const useCounterStore = defineStore('counter', () => {
         music_xlfzd,
         music_yysc,
         music_dyts,
-        music_sdfg,
+        music_data_list,
+        music_data_select,
     }
 })
