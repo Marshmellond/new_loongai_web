@@ -948,6 +948,9 @@ const delete_put_file_list = (id) => {
       </a-modal>
     </div>
     <div class="div3" ref="scrollContainer">
+      <div v-if="counter.contents.length===0">
+
+      </div>
       <span class="div3_5_title"
             v-if="counter.contents.length===0">你好！我是AI助手，随时为您提供支持和解答，欢迎向我提问！</span>
       <div v-for="(item, index) in counter.contents" :key="item[0]">

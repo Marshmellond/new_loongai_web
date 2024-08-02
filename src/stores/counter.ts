@@ -3,7 +3,7 @@ import {defineStore} from 'pinia'
 
 
 export const useCounterStore = defineStore('counter', () => {
-    const selectedKeys = ref<string[]>(['1']); // 左侧导航栏选择
+    const selectedKeys = ref<string[]>(['0']); // 左侧导航栏选择
     const recording = ref([]); // 对话记录
     const search_recording = ref([]); // 搜索对话记录
     const contents = ref([]) // 内容记录
@@ -77,7 +77,15 @@ export const useCounterStore = defineStore('counter', () => {
     const music_dyts = ref("") // 音乐页面歌曲地域特色
     const music_data_list = ref([]) // 音乐历史对话数据
     const music_data_select = ref("") // 音乐对话选择
-
+    const pen_generate_type_select = ref("1") // 写作页面生成模式选择
+    const pen_theme_inp = ref("") // 写作页面主题输入
+    const pen_content_inp = ref("") // 写作页面工作内容输入
+    const pen_kpi_inp = ref("") // 写作页面工作业绩输入
+    const pen_type = ref("1") // 写作页面改写/扩写选择
+    const pen_ai_content = ref("") // 写作页面AI生成结果
+    const pen_ai_content_markdown = ref("") // 写作页面AI生成结果markdown格式
+    const pen_show_load_status = ref(false) // 写作页面AI生成封面加载
+    const pen_chat_status_bool = ref(false) // 写作页面AI生成加载
 
     // ------------------工作流页面------------------
     const flow_data = ref() // 页面数据
@@ -244,5 +252,14 @@ export const useCounterStore = defineStore('counter', () => {
         music_dyts,
         music_data_list,
         music_data_select,
+        pen_generate_type_select,
+        pen_theme_inp,
+        pen_content_inp,
+        pen_kpi_inp,
+        pen_type,
+        pen_ai_content,
+        pen_ai_content_markdown,
+        pen_show_load_status,
+        pen_chat_status_bool,
     }
 })

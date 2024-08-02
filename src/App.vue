@@ -3,6 +3,7 @@ import TheHeader from "@/components/HeaderView/TheHeader.vue";
 import TheLogin from "@/components/LoginView/TheLogin.vue";
 
 import {
+  HomeOutlined,
   UserOutlined,
   ShopOutlined,
   HighlightOutlined,
@@ -12,6 +13,7 @@ import {
   FilePptOutlined,
   ShareAltOutlined,
   CustomerServiceOutlined,
+  ClusterOutlined,
 } from '@ant-design/icons-vue';
 
 import {RouterLink, RouterView} from 'vue-router'
@@ -68,13 +70,29 @@ localStorage.setItem('selectedKey', "6");
           width="5.7vw"
       >
         <a-menu v-model:selectedKeys="counter.selectedKeys" theme="light" mode="inline" style="width: 100px;border: 0">
+          <a-menu-item key="0">
+            <HomeOutlined/>
+            <span class="nav-text"><RouterLink to="/">首页</RouterLink></span>
+          </a-menu-item>
           <a-menu-item key="1">
             <CommentOutlined/>
-            <span class="nav-text"><RouterLink to="/">对话</RouterLink></span>
+            <span class="nav-text"><RouterLink to="/chat">对话</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="12">
+            <CommentOutlined/>
+            <span class="nav-text"><RouterLink to="/pen">写作</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="13">
+            <CommentOutlined/>
+            <span class="nav-text"><RouterLink to="/mind">导图</RouterLink></span>
           </a-menu-item>
           <a-menu-item key="2">
             <ShareAltOutlined/>
             <span class="nav-text"><RouterLink to="/workflow">流程</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="11">
+            <ClusterOutlined/>
+            <span class="nav-text"><RouterLink to="/batch">批量</RouterLink></span>
           </a-menu-item>
           <a-menu-item key="3">
             <ShopOutlined/>
@@ -93,7 +111,7 @@ localStorage.setItem('selectedKey', "6");
             <span class="nav-text"><RouterLink to="/ppt">PPT</RouterLink></span>
           </a-menu-item>
           <a-menu-item key="8">
-            <CustomerServiceOutlined />
+            <CustomerServiceOutlined/>
             <span class="nav-text"><RouterLink to="/music">音乐</RouterLink></span>
           </a-menu-item>
           <a-menu-item key="9">

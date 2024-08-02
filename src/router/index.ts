@@ -5,13 +5,33 @@ const router = createRouter({
     routes: [
         {
             path: '/',
+            name: 'index',
+            component: () => import('@/views/IndexView/LayoutView.vue')
+        },
+        {
+            path: '/chat',
             name: 'chat',
             component: () => import('@/views/ChatView/LayoutView.vue')
+        },
+        {
+            path: '/pen',
+            name: 'pen',
+            component: () => import('@/views/PenView/LayoutView.vue')
+        },
+        {
+            path: '/mind',
+            name: 'mind',
+            component: () => import('@/views/MindView/LayoutView.vue')
         },
         {
             path: '/workflow',
             name: 'workflow',
             component: () => import('@/views/WorkflowView/LayoutView.vue')
+        },
+        {
+            path: '/batch',
+            name: 'batch',
+            component: () => import('@/views/BatchView/LayoutView.vue')
         },
         {
             path: '/app',

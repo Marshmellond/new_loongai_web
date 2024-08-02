@@ -24,7 +24,7 @@ const result_add = () => {
 
 <template>
   <div class="div1">
-    <span style="font-size: 20px;margin-top: 1vh;margin-bottom: 1vh">运行</span>
+    <span style="font-size: 20px;margin-top: 1vh;margin-bottom: 1vh">调试</span>
   </div>
   <a-tabs v-model:activeKey="counter.right_select_key"
           type="card"
