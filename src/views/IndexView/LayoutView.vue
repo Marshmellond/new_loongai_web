@@ -405,7 +405,6 @@ const click_music = () => {
   width: 90%;
   justify-content: center;
   margin-left: -5vw;
-  //background-color: #3086fd;
 
   .div2-div {
     display: flex;

@@ -59,6 +59,21 @@ const router = createRouter({
             component: () => import('@/views/MusicView/LayoutView.vue')
         },
         {
+            path: '/learn',
+            name: 'learn',
+            component: () => import('@/views/LearnView/LayoutView.vue')
+        },
+        {
+            path: '/plan',
+            name: 'plan',
+            component: () => import('@/views/PlanView/LayoutView.vue')
+        },
+        {
+            path: '/translate',
+            name: 'translate',
+            component: () => import('@/views/TranslateView/LayoutView.vue')
+        },
+        {
             path: '/about',
             name: 'about',
             component: () => import('@/views/AboutView/LayoutView.vue')

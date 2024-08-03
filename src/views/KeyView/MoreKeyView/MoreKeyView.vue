@@ -55,7 +55,7 @@ const activeKey = ref("1");
     <a-tab-pane key="5">
       <template #tab>
         <span>
-          图像识别-ocr
+          通用AI生成-openai
         </span>
       </template>
       <OcrOpenaiView></OcrOpenaiView>

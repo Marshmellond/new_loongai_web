@@ -142,6 +142,21 @@ export const useCounterStore = defineStore('counter', () => {
         "以上是项目规划管理的主要内容。") // 导图页面生成结果
     const mind_chat_status_bool = ref(false) // 导图页面AI生成加载
     const mind_svgRef = ref("") // 导图页面思维导图生成数据
+    const translate_inp = ref("") // 翻译页面翻译内容
+    const translate_select = ref("1") // 翻译页面翻译语言选择
+    const translate_diy = ref("") // 翻译页面翻译语言自定义
+    const translate_ai_content_markdown = ref("") // 翻译页面AI生成结果markdown格式
+    const translate_ai_content = ref("") // 翻译页面AI生成结果
+    const translate_show_load_status = ref(false) // 翻译页面AI生成封面加载
+    const translate_chat_status_bool = ref(false) // 翻译页面AI生成加载
+
+    const plan_inp = ref("") // 教案页面翻译内容
+    const plan_select = ref("") // 教案页面翻译语言选择
+    const plan_diy = ref("") // 教案页面翻译语言自定义
+    const plan_ai_content_markdown = ref("") // 教案页面AI生成结果markdown格式
+    const plan_ai_content = ref("") // 教案页面AI生成结果
+    const plan_show_load_status = ref(false) // 教案页面AI生成封面加载
+    const plan_chat_status_bool = ref(false) // 教案页面AI生成加载
 
     // ------------------工作流页面------------------
     const flow_data = ref() // 页面数据
@@ -321,5 +336,19 @@ export const useCounterStore = defineStore('counter', () => {
         mind_ai_content,
         mind_chat_status_bool,
         mind_svgRef,
+        translate_inp,
+        translate_select,
+        translate_diy,
+        translate_ai_content_markdown,
+        translate_ai_content,
+        translate_show_load_status,
+        translate_chat_status_bool,
+        plan_inp,
+        plan_select,
+        plan_diy,
+        plan_ai_content_markdown,
+        plan_ai_content,
+        plan_show_load_status,
+        plan_chat_status_bool,
     }
 })
