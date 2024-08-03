@@ -16,6 +16,10 @@ const click_translate = () => {
   counter.selectedKeys = ['16']
   router.push('/translate');
 }
+const click_ppt = () => {
+  counter.selectedKeys = ['7']
+  router.push('/ppt');
+}
 </script>
 
 <template>
@@ -122,6 +126,46 @@ const click_translate = () => {
           </template>
         </icon>
         <span class="div2-title">AI翻译助手</span>
+      </div>
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #DD7BFF 0%, #e15959 100%);"
+           @click="click_ppt">
+        <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
+          <template #component>
+            <svg t="1722600539641" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="22548" width="32" height="32">
+              <path
+                  d="M179 64h468.5l223 225.5V935c0 13.807-11.193 25-25 25H179c-13.807 0-25-11.193-25-25V89c0-13.807 11.193-25 25-25z"
+                  fill="#FF7861" p-id="22549"></path>
+              <path d="M647.5 64v200.5c0 13.807 11.193 25 25 25h198L647.5 64z" fill="#FFB0A4" p-id="22550"></path>
+              <path
+                  d="M670.098 478.093C677.884 486.056 682 497.51 682 514.5c0 16.989-4.116 28.444-11.902 36.407-8.313 8.504-22.397 14.822-43.202 18.093H318c-19.33 0-35 15.67-35 35v157c0 19.33 15.67 35 35 35s35-15.67 35-35V639h276.5a35 35 0 0 0 4.95-0.352C709.214 627.968 752 584.203 752 514.5s-42.786-113.468-117.55-124.148a35 35 0 0 0-4.95-0.352H318c-19.33 0-35 15.67-35 35s15.67 35 35 35h308.896c20.805 3.271 34.889 9.589 43.202 18.093z"
+                  fill="#FFFFFF" p-id="22551"></path>
+            </svg>
+          </template>
+        </icon>
+        <span class="div2-title">AI 课件助手</span>
+      </div>
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #DD7BFF 0%, #e15959 100%);"
+           @click="click_ppt">
+        <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
+          <template #component>
+            <svg t="1722697817121" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="4302" width="32" height="32">
+              <path
+                  d="M170.2 246.4h342.1s44.2-77.8 89.1-77.8h254.9c20.7 0 37.7 19.8 37.7 44l1.1 598.1c0 24.2-19.8 44-44 44h-681c-24.2 0-44-19.8-44-44V290.4c0.1-24.2 19.9-44 44.1-44z"
+                  fill="#694B4B" p-id="4303"></path>
+              <path d="M862.9 671.5l-688 38.3-22.2-406.4 688.1-59.3z" fill="#593F3F" p-id="4304"></path>
+              <path d="M870.8 671.8L242.2 707l-21.1-388 634.6-35.2z" fill="#593F3F" p-id="4305"></path>
+              <path d="M840.7 673.7L218.1 725l-21.9-383.4 623.4-55.9z" fill="#FFFFFF" p-id="4306"></path>
+              <path d="M807.9 715.1L178.6 750l-22.2-406.3 629.7-48.1z" fill="#F2F2F1" p-id="4307"></path>
+              <path d="M796 713.5l-619 36.3-22.1-406.3 618.8-40.1z" fill="#FFFFFF" p-id="4308"></path>
+              <path
+                  d="M895.2 425.1H509.1s-44.2-71.4-89.1-71.4H125.1c-20.7 0-38.9 16.3-38.9 36l40 429.2c0 19.7 19.8 35.8 44 35.8h685c24.2 0 44-16.1 44-35.8l40-358c0-19.7-19.8-35.8-44-35.8z"
+                  fill="#00B5FC" p-id="4309"></path>
+            </svg>
+          </template>
+        </icon>
+        <span class="div2-title">AI 文件助手</span>
       </div>
     </div>
   </div>

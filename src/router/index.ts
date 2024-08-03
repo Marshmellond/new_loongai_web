@@ -74,6 +74,11 @@ const router = createRouter({
             component: () => import('@/views/TranslateView/LayoutView.vue')
         },
         {
+            path: '/ass',
+            name: 'ass',
+            component: () => import('@/views/AssView/LayoutView.vue')
+        },
+        {
             path: '/about',
             name: 'about',
             component: () => import('@/views/AboutView/LayoutView.vue')

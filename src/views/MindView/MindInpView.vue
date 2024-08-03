@@ -62,7 +62,30 @@ const on_generate = () => {
   }
 }
 const on_download_png = () => {
+  const svg = svgRef.value
+  const width = svg.getBoundingClientRect().width
+  const height = svg.getBoundingClientRect().height
+  covertSVG2Image(svg, '思维导图', width, height)
 
+}
+const covertSVG2Image = (node, name, width, height, type = 'png') => {
+  let serializer = new XMLSerializer()
+  let source = '<?xml version="1.0" standalone="no"?>\r\n' + serializer.serializeToString(node)
+  let image = new Image()
+  image.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(source)
+  let canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
+  let context = canvas.getContext('2d')
+  context.fillStyle = '#fff'
+  context.fillRect(0, 0, 10000, 10000)
+  image.onload = function () {
+    context.drawImage(image, 0, 0)
+    let a = document.createElement('a')
+    a.download = `${name}.${type}`
+    a.href = canvas.toDataURL(`image/${type}`)
+    a.click()
+  }
 }
 const on_download_svg = () => {
 
