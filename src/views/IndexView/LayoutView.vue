@@ -68,7 +68,7 @@ const click_music = () => {
           class="div1-desc-title">融合人工智能技术，提供一站式办公解决方案，提升工作效率，简化流程，让办公更智能、更高效</span>
     </div>
     <div class="div2">
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #FFEAF6 0%, #FF9DE4 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #ee94c6 0%, #f120b7 100%);"
            @click="click_chat">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -106,7 +106,7 @@ const click_music = () => {
         </icon>
         <span class="div2-title">AI对话助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #97E8B5 0%, #5CB67F 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #03de53 0%, #027931 100%);"
            @click="click_pen">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -191,7 +191,7 @@ const click_music = () => {
         </icon>
         <span class="div2-title">AI写作助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #FFED46 0%, #FF7EC7 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #e5d541 0%, #da70ac 100%);"
            @click="click_mind">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -208,7 +208,7 @@ const click_music = () => {
         </icon>
         <span class="div2-title">AI导图助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #FF5EEF 0%, #456EFF 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #FF5EEF 0%, #3353c5 100%);"
            @click="click_workflow">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -234,7 +234,7 @@ const click_music = () => {
         </icon>
         <span class="div2-title">AI数据助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #EAEAEA 0%, #8B8B8B 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #c5bcbc 0%, #727070 100%);"
            @click="click_app">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -251,7 +251,7 @@ const click_music = () => {
         </icon>
         <span class="div2-title">AI应用助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #B7DCFF 0%, #FFA4F6 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #a8c4e0 0%, #c07fba 100%);"
            @click="click_draw">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -314,7 +314,7 @@ const click_music = () => {
         </icon>
         <span class="div2-title">AI绘画助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #DD7BFF 0%, #FF6C6C 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #DD7BFF 0%, #e15959 100%);"
            @click="click_ppt">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -332,7 +332,7 @@ const click_music = () => {
         </icon>
         <span class="div2-title">AI PPT助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #DDE4FF 0%, #8DA2EE 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #c5a7de 0%, #6579c5 100%);"
            @click="click_music">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -402,7 +402,9 @@ const click_music = () => {
 .div2 {
   display: flex;
   flex-wrap: wrap;
-  width: 70%;
+  width: 90%;
+  justify-content: center;
+  margin-left: -5vw;
   //background-color: #3086fd;
 
   .div2-div {
@@ -414,14 +416,15 @@ const click_music = () => {
     border: 1px solid #e3e3e3;
     width: 30vw;
     height: 12vh;
-    border-radius: 5px;
-    margin-left: 1vw;
-    margin-top: 2vh;
+    border-radius: 100px;
+    margin-left: 5vw;
+    margin-top: 4vh;
     overflow: hidden;
     cursor: pointer;
 
     .div2-title {
       font-size: 24px;
+      color: white;
       margin-left: 0.5vw;
     }
   }

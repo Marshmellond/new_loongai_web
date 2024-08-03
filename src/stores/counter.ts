@@ -86,6 +86,62 @@ export const useCounterStore = defineStore('counter', () => {
     const pen_ai_content_markdown = ref("") // 写作页面AI生成结果markdown格式
     const pen_show_load_status = ref(false) // 写作页面AI生成封面加载
     const pen_chat_status_bool = ref(false) // 写作页面AI生成加载
+    const mind_inp = ref("") // 导图页面主题输入
+    const mind_ai_content = ref("# 项目规划管理\n" +
+        "\n" +
+        "## 1. 项目范围规划\n" +
+        "- 界定项目的目标与范围\n" +
+        "- 制定项目的工作分解结构（WBS）\n" +
+        "- 确定项目的可交付成果\n" +
+        "\n" +
+        "## 2. 项目进度规划\n" +
+        "- 制定项目的时间计划\n" +
+        "- 确定项目的关键路径\n" +
+        "- 编制项目进度表\n" +
+        "\n" +
+        "## 3. 项目成本管理\n" +
+        "- 估算项目成本\n" +
+        "- 制定项目预算\n" +
+        "- 控制项目成本\n" +
+        "\n" +
+        "## 4. 风险管理\n" +
+        "- 识别项目风险\n" +
+        "- 评估和优先处理风险\n" +
+        "- 制定风险应对措施\n" +
+        "\n" +
+        "## 5. 质量管理\n" +
+        "- 确定项目的质量标准\n" +
+        "- 进行质量保证和控制\n" +
+        "- 反馈与改进\n" +
+        "\n" +
+        "## 6. 沟通管理\n" +
+        "- 制定沟通计划\n" +
+        "- 确定沟通频率和形式\n" +
+        "- 确保沟通高效顺畅\n" +
+        "\n" +
+        "## 7. 人力资源管理\n" +
+        "- 人员需求规划\n" +
+        "- 团队建设和发展\n" +
+        "- 岗位职责和权责明确\n" +
+        "\n" +
+        "## 8. 采购管理\n" +
+        "- 制定采购计划\n" +
+        "- 确定采购方式和供应商\n" +
+        "- 履行采购合同\n" +
+        "\n" +
+        "## 9. 变更管理\n" +
+        "- 处理项目变更请求\n" +
+        "- 评估变更影响\n" +
+        "- 控制变更范围\n" +
+        "\n" +
+        "## 10. 项目收尾\n" +
+        "- 完成项目验收\n" +
+        "- 总结项目经验教训\n" +
+        "- 归档相关文档\n" +
+        "\n" +
+        "以上是项目规划管理的主要内容。") // 导图页面生成结果
+    const mind_chat_status_bool = ref(false) // 导图页面AI生成加载
+    const mind_svgRef = ref("") // 导图页面思维导图生成数据
 
     // ------------------工作流页面------------------
     const flow_data = ref() // 页面数据
@@ -261,5 +317,9 @@ export const useCounterStore = defineStore('counter', () => {
         pen_ai_content_markdown,
         pen_show_load_status,
         pen_chat_status_bool,
+        mind_inp,
+        mind_ai_content,
+        mind_chat_status_bool,
+        mind_svgRef,
     }
 })

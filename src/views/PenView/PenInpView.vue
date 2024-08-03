@@ -10,6 +10,9 @@ import Prism from "prismjs"
 import "prismjs/themes/prism-okaidia.min.css"
 
 const counter = useCounterStore()
+
+let temp_meg = ref("")
+
 const generate_type_select_on1 = () => {
   counter.pen_generate_type_select = "1"
 }
@@ -26,7 +29,6 @@ const type_select_on1 = () => {
 const type_select_on2 = () => {
   counter.pen_type = "2"
 }
-let temp_meg = ref("")
 const push_func = () => {
   counter.pen_ai_content = ""
   counter.pen_ai_content_markdown = ""
@@ -142,7 +144,7 @@ const on_generate = () => {
     <a-textarea
         v-model:value="counter.pen_theme_inp"
         placeholder="比如：公司年会总结等"
-        :auto-size="{ minRows: 3, maxRows: 3 }"
+        :auto-size="{ minRows: 3, maxRows: 7 }"
         class="div-inp"
         v-if="counter.pen_generate_type_select==='1'"
     />
@@ -153,7 +155,7 @@ const on_generate = () => {
     <a-textarea
         v-model:value="counter.pen_content_inp"
         placeholder="比如：直播带货等"
-        :auto-size="{ minRows: 3, maxRows: 3 }"
+        :auto-size="{ minRows: 3, maxRows: 7 }"
         class="div-inp"
         v-if="counter.pen_generate_type_select==='1'"
     />
@@ -164,7 +166,7 @@ const on_generate = () => {
     <a-textarea
         v-model:value="counter.pen_kpi_inp"
         placeholder="比如：3季度销量冠军等"
-        :auto-size="{ minRows: 3, maxRows: 3 }"
+        :auto-size="{ minRows: 3, maxRows: 7 }"
         class="div-inp"
         v-if="counter.pen_generate_type_select==='1'"
     />
@@ -175,18 +177,18 @@ const on_generate = () => {
     <a-textarea
         v-model:value="counter.pen_theme_inp"
         placeholder="比如：公司年会总结等"
-        :auto-size="{ minRows: 3, maxRows: 3 }"
+        :auto-size="{ minRows: 3, maxRows: 28 }"
         class="div-inp"
         v-if="counter.pen_generate_type_select==='2'"
     />
     <div class="div-title2"
          v-if="counter.pen_generate_type_select==='3'"
-    >主题
+    >内容
     </div>
     <a-textarea
         v-model:value="counter.pen_theme_inp"
         placeholder="比如：公司年会总结等"
-        :auto-size="{ minRows: 3, maxRows: 3 }"
+        :auto-size="{ minRows: 8, maxRows: 23 }"
         class="div-inp"
         v-if="counter.pen_generate_type_select==='3'"
     />
