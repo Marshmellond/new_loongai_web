@@ -9,6 +9,11 @@ const router = createRouter({
             component: () => import('@/views/IndexView/LayoutView.vue')
         },
         {
+            path: '/learn',
+            name: 'learn',
+            component: () => import('@/views/LearnView/LayoutView.vue')
+        },
+        {
             path: '/chat',
             name: 'chat',
             component: () => import('@/views/ChatView/LayoutView.vue')
@@ -19,19 +24,14 @@ const router = createRouter({
             component: () => import('@/views/PenView/LayoutView.vue')
         },
         {
-            path: '/mind',
-            name: 'mind',
-            component: () => import('@/views/MindView/LayoutView.vue')
-        },
-        {
             path: '/workflow',
             name: 'workflow',
             component: () => import('@/views/WorkflowView/LayoutView.vue')
         },
         {
-            path: '/batch',
-            name: 'batch',
-            component: () => import('@/views/BatchView/LayoutView.vue')
+            path: '/ass',
+            name: 'ass',
+            component: () => import('@/views/AssView/LayoutView.vue')
         },
         {
             path: '/app',
@@ -59,9 +59,14 @@ const router = createRouter({
             component: () => import('@/views/MusicView/LayoutView.vue')
         },
         {
-            path: '/learn',
-            name: 'learn',
-            component: () => import('@/views/LearnView/LayoutView.vue')
+            path: '/file',
+            name: 'file',
+            component: () => import('@/views/FileView/LayoutView.vue')
+        },
+        {
+            path: '/mind',
+            name: 'mind',
+            component: () => import('@/views/MindView/LayoutView.vue')
         },
         {
             path: '/plan',
@@ -74,9 +79,9 @@ const router = createRouter({
             component: () => import('@/views/TranslateView/LayoutView.vue')
         },
         {
-            path: '/ass',
-            name: 'ass',
-            component: () => import('@/views/AssView/LayoutView.vue')
+            path: '/topic',
+            name: 'topic',
+            component: () => import('@/views/TopicView/LayoutView.vue')
         },
         {
             path: '/about',

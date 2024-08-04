@@ -6,7 +6,7 @@ import {useCounterStore} from '@/stores/counter'
 import Icon from "@ant-design/icons-vue";
 
 const counter = useCounterStore()
-localStorage.setItem('selectedKey', "5");
+localStorage.setItem('selectedKey', "7");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 const get_data = () => {
   const url = "/api/gallery/get_img"

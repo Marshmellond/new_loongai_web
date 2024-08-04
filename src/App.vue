@@ -70,69 +70,11 @@ localStorage.setItem('selectedKey', "6");
           width="5.7vw"
       >
         <a-menu v-model:selectedKeys="counter.selectedKeys" theme="light" mode="inline" style="width: 100px;border: 0">
-          <a-menu-item key="0">
+          <a-menu-item key="100">
             <HomeOutlined/>
             <span class="nav-text"><RouterLink to="/">首页</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="1">
-            <CommentOutlined/>
-            <span class="nav-text"><RouterLink to="/chat">对话</RouterLink></span>
-          </a-menu-item>
-          <a-menu-item key="12">
-            <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
-              <template #component>
-                <svg t="1722626620621" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                     xmlns="http://www.w3.org/2000/svg" p-id="4376" width="14" height="14">
-                  <path
-                      d="M930.6672 228.010394L796.091945 93.3328c-16.271837-16.271837-37.865281-25.175295-60.789127-25.175295-23.026184 0-44.619628 8.903458-60.789126 25.175295L110.8327 656.911453c-5.321607 5.321607-8.801119 12.280632-9.824505 19.751349L68.464521 916.646812c-1.43274 10.745553 2.149111 21.491105 9.824506 29.064161 6.54967 6.54967 15.35079 10.131521 24.458924 10.131522 1.535079 0 3.070158-0.102339 4.605237-0.307016l239.98401-32.543674c7.470718-1.023386 14.429742-4.502898 19.751349-9.824505l563.476314-563.476315c16.271837-16.271837 25.175295-37.865281 25.175295-60.789126 0.102339-23.026184-8.801119-44.619628-25.072956-60.891465zM326.460124 855.960024l-183.390766 24.868279 24.868279-183.390766 399.325205-399.325204 158.522487 158.522486L326.460124 855.960024z m555.289226-555.186888L774.703178 407.819308 616.28303 249.296822 723.226864 142.25065c4.298221-4.298221 9.312812-4.912253 11.973616-4.912253s7.675395 0.614032 11.973616 4.912253l134.575254 134.575254c4.298221 4.298221 4.912253 9.312812 4.912253 11.973616 0 2.660804-0.614032 7.675395-4.912253 11.973616z"
-                      fill="" p-id="4377"></path>
-                </svg>
-              </template>
-            </icon>
-            <span class="nav-text"><RouterLink to="/pen">写作</RouterLink></span>
-          </a-menu-item>
-          <a-menu-item key="13">
-            <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
-              <template #component>
-                <svg t="1722629945969" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                     xmlns="http://www.w3.org/2000/svg" p-id="5543" width="14" height="14">
-                  <path
-                      d="M659.4 311.8h225.2c10 0 18-8 18-18V181c0-10-8-18-18-18H659.4c-10 0-18 8-18 18v46.6h-50.2c-48.6 0-88 39.4-88 88V432c0 39.8-32.2 72-72 72h-49c-4-37.2-35.6-66.4-73.8-66.4H195.8c-41 0-74.4 33.4-74.4 74.4s33.4 74.4 74.4 74.4h112.4c38.2 0 69.8-29 73.8-66.4h49c39.8 0 72 32.2 72 72v116.4c0 48.6 39.4 88 88 88h50.2v50.4c0 10 8 18 18 18h225.2c10 0 18-8 18-18v-112.6c0-10-8-18-18-18H659.4c-10 0-18 8-18 18v46.2h-50.2c-39.8 0-72-32.2-72-72V592c0-29.8-14.8-56-37.4-72h159.6v48.4c0 10 8 18 18 18h225.2c10 0 18-8 18-18v-112.6c0-10-8-18-18-18H659.4c-10 0-18 8-18 18V504h-159.6c22.6-16 37.4-42.2 37.4-72v-116.4c0-39.8 32.2-72 72-72h50.2v50.2c0 9.8 8 18 18 18z"
-                      fill="#212930" p-id="5544"></path>
-                </svg>
-              </template>
-            </icon>
-            <span class="nav-text"><RouterLink to="/mind">导图</RouterLink></span>
-          </a-menu-item>
-          <a-menu-item key="2">
-            <ShareAltOutlined/>
-            <span class="nav-text"><RouterLink to="/workflow">流程</RouterLink></span>
-          </a-menu-item>
-          <a-menu-item key="11">
-            <ClusterOutlined/>
-            <span class="nav-text"><RouterLink to="/batch">批量</RouterLink></span>
-          </a-menu-item>
-          <a-menu-item key="3">
-            <ShopOutlined/>
-            <span class="nav-text"><RouterLink to="/app">应用</RouterLink></span>
-          </a-menu-item>
-          <a-menu-item key="4">
-            <HighlightOutlined/>
-            <span class="nav-text"><RouterLink to="/draw">绘画</RouterLink></span>
-          </a-menu-item>
-          <a-menu-item key="5">
-            <PictureOutlined/>
-            <span class="nav-text"><RouterLink to="/gallery">画廊</RouterLink></span>
-          </a-menu-item>
-          <a-menu-item key="7">
-            <FilePptOutlined/>
-            <span class="nav-text"><RouterLink to="/ppt">PPT</RouterLink></span>
-          </a-menu-item>
-          <a-menu-item key="8">
-            <CustomerServiceOutlined/>
-            <span class="nav-text"><RouterLink to="/music">音乐</RouterLink></span>
-          </a-menu-item>
-          <a-menu-item key="14">
+          <a-menu-item key="101">
             <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
               <template #component>
                 <svg t="1722670038921" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -145,7 +87,90 @@ localStorage.setItem('selectedKey', "6");
             </icon>
             <span class="nav-text"><RouterLink to="/learn">教学</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="15">
+          <a-menu-item key="1">
+            <CommentOutlined/>
+            <span class="nav-text"><RouterLink to="/chat">对话</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="2">
+            <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
+              <template #component>
+                <svg t="1722626620621" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" p-id="4376" width="14" height="14">
+                  <path
+                      d="M930.6672 228.010394L796.091945 93.3328c-16.271837-16.271837-37.865281-25.175295-60.789127-25.175295-23.026184 0-44.619628 8.903458-60.789126 25.175295L110.8327 656.911453c-5.321607 5.321607-8.801119 12.280632-9.824505 19.751349L68.464521 916.646812c-1.43274 10.745553 2.149111 21.491105 9.824506 29.064161 6.54967 6.54967 15.35079 10.131521 24.458924 10.131522 1.535079 0 3.070158-0.102339 4.605237-0.307016l239.98401-32.543674c7.470718-1.023386 14.429742-4.502898 19.751349-9.824505l563.476314-563.476315c16.271837-16.271837 25.175295-37.865281 25.175295-60.789126 0.102339-23.026184-8.801119-44.619628-25.072956-60.891465zM326.460124 855.960024l-183.390766 24.868279 24.868279-183.390766 399.325205-399.325204 158.522487 158.522486L326.460124 855.960024z m555.289226-555.186888L774.703178 407.819308 616.28303 249.296822 723.226864 142.25065c4.298221-4.298221 9.312812-4.912253 11.973616-4.912253s7.675395 0.614032 11.973616 4.912253l134.575254 134.575254c4.298221 4.298221 4.912253 9.312812 4.912253 11.973616 0 2.660804-0.614032 7.675395-4.912253 11.973616z"
+                      fill="" p-id="4377"></path>
+                </svg>
+              </template>
+            </icon>
+            <span class="nav-text"><RouterLink to="/pen">写作</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="3">
+            <ShareAltOutlined/>
+            <span class="nav-text"><RouterLink to="/workflow">流程</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="4">
+            <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
+              <template #component>
+                <svg t="1722701824430" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" p-id="4507" width="14" height="14">
+                  <path
+                      d="M863.685269 531.078521 491.748259 531.078521 491.748259 159.14151c0-9.904581-8.029884-17.935488-17.934464-17.935488l-3.118014 0c-0.075725 0-0.148379 0.010233-0.223081 0.011256C245.206166 142.179187 62.889841 325.078797 62.889841 550.570457c0 226.086202 183.278233 409.370575 409.365458 409.370575 225.489614 0 408.390247-182.320419 409.354202-407.582859 0.001023-0.074701 0.011256-0.148379 0.011256-0.224104l0-3.120061C881.619734 539.107381 873.587803 531.078521 863.685269 531.078521zM472.254276 920.953066c-204.554816 0-370.377492-165.8237-370.377492-370.382609 0-198.014866 155.392116-359.734084 350.884532-369.870955l0 371.435591c0 9.903557 8.02886 17.929348 17.934464 17.929348l371.431497 0C831.989383 765.56095 670.269142 920.953066 472.254276 920.953066zM959.490266 470.514143C958.359512 246.100024 776.724709 64.460104 552.30752 63.331397c-0.182149-0.005117-0.335644-0.105401-0.51984-0.105401l-3.120061 0c-9.905604 0-17.933441 8.03193-17.933441 17.941628l0 392.986419c0 9.903557 8.02886 17.935488 17.933441 17.935488L941.660178 492.089531c9.906627 0 17.933441-8.032954 17.933441-17.935488l0-3.120061C959.59362 470.846718 959.495382 470.695269 959.490266 470.514143zM569.723168 453.097472 569.723168 103.19429c188.937117 9.865695 340.065116 160.998811 349.928764 349.903182L569.723168 453.097472z"
+                      fill="#272636" p-id="4508"></path>
+                </svg>
+              </template>
+            </icon>
+            <span class="nav-text"><RouterLink to="/ass">分析</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="5">
+            <ShopOutlined/>
+            <span class="nav-text"><RouterLink to="/app">应用</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="6">
+            <HighlightOutlined/>
+            <span class="nav-text"><RouterLink to="/draw">绘画</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="7">
+            <PictureOutlined/>
+            <span class="nav-text"><RouterLink to="/gallery">画廊</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="8">
+            <FilePptOutlined/>
+            <span class="nav-text"><RouterLink to="/ppt">PPT</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="9">
+            <CustomerServiceOutlined/>
+            <span class="nav-text"><RouterLink to="/music">音乐</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="10">
+            <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
+              <template #component>
+                <svg t="1722703144342" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" p-id="5634" width="14" height="14">
+                  <path
+                      d="M191.4 765.1c0 22.6 18.3 41 41 41h158.1c22.6 0 41-18.3 41-41 0-22.6-18.3-41-41-41H232.3c-22.6 0-40.9 18.3-40.9 41zM889.3 855.1h-40.9 16.2c13.8-0.8 24.7-12.2 24.7-26.2v26.2zM141.3 855.2h40.9H166c-13.8-0.8-24.7-12.2-24.7-26.2v26.2zM889.3 549.6h-40.9 16.2c13.8 0.8 24.7 12.2 24.7 26.2v-26.2zM809.6 346.9h-40.9 16.2c13.8 0.8 24.7 12.2 24.7 26.2v-26.2zM141.6 244h40.9-16.2c-13.8 0.8-24.7 12.2-24.7 26.2V244z"
+                      fill="#242424" p-id="5635"></path>
+                  <path
+                      d="M906.1 468.1H232.3c-22.6 0-41 18.3-41 41 0 22.6 18.3 41 41 41h657v305.1h-748V244.1h287.3l52.7 81.4a40.98 40.98 0 0 0 36.1 21.5h291.9v63.4c0 22.6 18.3 41 41 41s41-18.3 41-41v-83.2c-3.2-34.7-32.3-61.8-67.8-61.8H769v-0.2H539.9L486 181.9l-0.6-0.9c-7.3-11.3-20-18.9-34.5-18.9H182.3v0.1h-54.5c-37.6 0-68.1 30.5-68.1 68.1v0.5h-0.1v643.6c2.4 32.8 28 59.1 60.5 62.6h787c33.1-1.5 60-26.6 64.3-58.9V529.7c-3.3-33.7-31.1-60.3-65.3-61.6z"
+                      fill="#242424" p-id="5636"></path>
+                </svg>
+              </template>
+            </icon>
+            <span class="nav-text"><RouterLink to="/file">文件</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="11">
+            <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
+              <template #component>
+                <svg t="1722629945969" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" p-id="5543" width="14" height="14">
+                  <path
+                      d="M659.4 311.8h225.2c10 0 18-8 18-18V181c0-10-8-18-18-18H659.4c-10 0-18 8-18 18v46.6h-50.2c-48.6 0-88 39.4-88 88V432c0 39.8-32.2 72-72 72h-49c-4-37.2-35.6-66.4-73.8-66.4H195.8c-41 0-74.4 33.4-74.4 74.4s33.4 74.4 74.4 74.4h112.4c38.2 0 69.8-29 73.8-66.4h49c39.8 0 72 32.2 72 72v116.4c0 48.6 39.4 88 88 88h50.2v50.4c0 10 8 18 18 18h225.2c10 0 18-8 18-18v-112.6c0-10-8-18-18-18H659.4c-10 0-18 8-18 18v46.2h-50.2c-39.8 0-72-32.2-72-72V592c0-29.8-14.8-56-37.4-72h159.6v48.4c0 10 8 18 18 18h225.2c10 0 18-8 18-18v-112.6c0-10-8-18-18-18H659.4c-10 0-18 8-18 18V504h-159.6c22.6-16 37.4-42.2 37.4-72v-116.4c0-39.8 32.2-72 72-72h50.2v50.2c0 9.8 8 18 18 18z"
+                      fill="#212930" p-id="5544"></path>
+                </svg>
+              </template>
+            </icon>
+            <span class="nav-text"><RouterLink to="/mind">导图</RouterLink></span>
+          </a-menu-item>
+          <a-menu-item key="31">
             <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
               <template #component>
                 <svg t="1722670125438" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -164,7 +189,7 @@ localStorage.setItem('selectedKey', "6");
             </icon>
             <span class="nav-text"><RouterLink to="/plan">教案</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="16">
+          <a-menu-item key="32">
             <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
               <template #component>
                 <svg t="1722670078945" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -177,24 +202,27 @@ localStorage.setItem('selectedKey', "6");
             </icon>
             <span class="nav-text"><RouterLink to="/translate">翻译</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="17">
+          <a-menu-item key="33">
             <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
               <template #component>
-                <svg t="1722701824430" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                     xmlns="http://www.w3.org/2000/svg" p-id="4507" width="14" height="14">
+                <svg t="1722718156366" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" p-id="14442" width="14" height="14">
                   <path
-                      d="M863.685269 531.078521 491.748259 531.078521 491.748259 159.14151c0-9.904581-8.029884-17.935488-17.934464-17.935488l-3.118014 0c-0.075725 0-0.148379 0.010233-0.223081 0.011256C245.206166 142.179187 62.889841 325.078797 62.889841 550.570457c0 226.086202 183.278233 409.370575 409.365458 409.370575 225.489614 0 408.390247-182.320419 409.354202-407.582859 0.001023-0.074701 0.011256-0.148379 0.011256-0.224104l0-3.120061C881.619734 539.107381 873.587803 531.078521 863.685269 531.078521zM472.254276 920.953066c-204.554816 0-370.377492-165.8237-370.377492-370.382609 0-198.014866 155.392116-359.734084 350.884532-369.870955l0 371.435591c0 9.903557 8.02886 17.929348 17.934464 17.929348l371.431497 0C831.989383 765.56095 670.269142 920.953066 472.254276 920.953066zM959.490266 470.514143C958.359512 246.100024 776.724709 64.460104 552.30752 63.331397c-0.182149-0.005117-0.335644-0.105401-0.51984-0.105401l-3.120061 0c-9.905604 0-17.933441 8.03193-17.933441 17.941628l0 392.986419c0 9.903557 8.02886 17.935488 17.933441 17.935488L941.660178 492.089531c9.906627 0 17.933441-8.032954 17.933441-17.935488l0-3.120061C959.59362 470.846718 959.495382 470.695269 959.490266 470.514143zM569.723168 453.097472 569.723168 103.19429c188.937117 9.865695 340.065116 160.998811 349.928764 349.903182L569.723168 453.097472z"
-                      fill="#272636" p-id="4508"></path>
+                      d="M939.008 42.496c-19.968-21.504-48.64-33.792-78.336-33.792H179.2c-60.416 0-109.568 49.152-109.568 109.568v774.656c0 60.416 49.152 109.568 109.568 109.568h567.808l220.16-242.688V118.784c1.536-28.672-8.704-55.808-28.16-76.288zM157.696 118.272c0-13.312 10.752-21.504 21.504-21.504h681.472c13.312 0 21.504 10.752 21.504 21.504v604.16h-162.816v182.784l-10.24 12.8-529.92-0.512c-13.312 0-21.504-10.752-21.504-21.504V118.272z"
+                      p-id="14443"></path>
+                  <path
+                      d="M255.488 291.84h474.112c26.112 0 41.984-21.504 41.984-41.984 0-26.112-22.016-41.984-41.984-41.984H255.488c-26.112 0-41.984 21.504-41.984 41.984 0 26.112 22.016 41.984 41.984 41.984zM729.6 402.944H255.488c-26.112 0-41.984 21.504-41.984 41.984 0 26.112 22.016 41.984 41.984 41.984h474.112c26.112 0 41.984-21.504 41.984-41.984 0-26.112-21.504-41.984-41.984-41.984zM531.456 597.504H255.488c-26.112 0-41.984 21.504-41.984 41.984 0 26.112 21.504 41.984 41.984 41.984h275.456c26.112 0 41.472-20.48 41.984-40.96 1.536-10.24-1.024-20.48-7.168-28.16-8.192-9.216-20.48-14.848-34.304-14.848z"
+                      p-id="14444"></path>
                 </svg>
               </template>
             </icon>
-            <span class="nav-text"><RouterLink to="/ass">分析</RouterLink></span>
+            <span class="nav-text"><RouterLink to="/topic">出题</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="9">
+          <a-menu-item key="200">
             <user-outlined/>
             <span class="nav-text"><RouterLink to="/about">我的</RouterLink></span>
           </a-menu-item>
-          <a-menu-item key="10">
+          <a-menu-item key="201">
             <KeyOutlined/>
             <span class="nav-text"><RouterLink to="/key">key</RouterLink></span>
           </a-menu-item>

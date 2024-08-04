@@ -158,6 +158,30 @@ export const useCounterStore = defineStore('counter', () => {
     const plan_show_load_status = ref(false) // 教案页面AI生成封面加载
     const plan_chat_status_bool = ref(false) // 教案页面AI生成加载
 
+    const file_inp_data = ref({"content": "", "name": "", "type": ""}) // 文件页面上传文件数据
+    const file_ai_content_markdown = ref("") // 文件页面AI生成结果markdown格式
+    const file_ai_content = ref("") // 文件页面AI生成结果
+    const file_show_load_status = ref(false) // 文件页面AI生成封面加载
+    const file_chat_status_bool = ref(false) // 文件页面AI生成加载
+
+    const topic_subject_inp = ref("") // 题目页面年级科目
+    const topic_theme_inp = ref("") // 题目页面题目主题
+    const topic_type_inp = ref("") // 题目页面题目类型
+    const topic_num_inp = ref("3") // 题目页面题目数量
+    const topic_ai_content_markdown = ref("") // 题目页面AI生成结果markdown格式
+    const topic_ai_content = ref("") // 题目页面AI生成结果
+    const topic_show_load_status = ref(false) // 题目页面AI生成封面加载
+    const topic_chat_status_bool = ref(false) // 题目页面AI生成加载
+
+    const ass_inp_data = ref({"content": "", "name": "", "type": ""}) // 分析页面上传文件数据
+    const ass_ai_clean = ref("") // 分析页面数据清洗
+    const ass_ai_ass = ref("") // 分析页面数据分析
+    const ass_ai_vis = ref("") // 分析页面数据可视化
+    const ass_ai_content = ref("");  // 分析页面AI生成结果
+    const ass_ai_echarts = ref() // 分析页面echarts图
+    const ass_show_load_status = ref(false) // 分析页面AI生成封面加载
+
+
     // ------------------工作流页面------------------
     const flow_data = ref() // 页面数据
     const flow_data_list = ref([]) // 历史记录
@@ -350,5 +374,25 @@ export const useCounterStore = defineStore('counter', () => {
         plan_ai_content,
         plan_show_load_status,
         plan_chat_status_bool,
+        file_inp_data,
+        file_ai_content_markdown,
+        file_ai_content,
+        file_show_load_status,
+        file_chat_status_bool,
+        topic_subject_inp,
+        topic_theme_inp,
+        topic_type_inp,
+        topic_num_inp,
+        topic_ai_content_markdown,
+        topic_ai_content,
+        topic_show_load_status,
+        topic_chat_status_bool,
+        ass_inp_data,
+        ass_ai_clean,
+        ass_ai_ass,
+        ass_ai_vis,
+        ass_ai_content,
+        ass_ai_echarts,
+        ass_show_load_status,
     }
 })

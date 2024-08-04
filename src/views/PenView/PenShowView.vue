@@ -23,8 +23,8 @@ const stop_chat = () => {
 
 <template>
   <div class="div1" v-if="counter.pen_ai_content_markdown.length!==0">
-    <div class="div-div-user2" @click="click_copy">
-      <div class="div-content-user">
+    <div class="div-div-user2">
+      <div class="div-content-user" @click="click_copy">
         <span v-html="counter.pen_ai_content_markdown" class="div-content-txt-user"></span>
       </div>
     </div>

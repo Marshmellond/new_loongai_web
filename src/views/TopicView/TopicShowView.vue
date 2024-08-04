@@ -13,24 +13,24 @@ const indicator = h(LoadingOutlined, {
   spin: true,
 });
 const click_copy = () => {
-  navigator.clipboard.writeText(counter.translate_ai_content);
+  navigator.clipboard.writeText(counter.topic_ai_content);
   message.success("复制成功")
 }
 const stop_chat = () => {
-  counter.translate_chat_status_bool = false
+  counter.topic_chat_status_bool = false
 }
 </script>
 
 <template>
-  <div class="div1" v-if="counter.translate_ai_content_markdown.length!==0">
+  <div class="div1" v-if="counter.topic_ai_content_markdown.length!==0">
     <div class="div-div-user2">
       <div class="div-content-user" @click="click_copy">
-        <span v-html="counter.translate_ai_content_markdown" class="div-content-txt-user"></span>
+        <span v-html="counter.topic_ai_content_markdown" class="div-content-txt-user"></span>
       </div>
     </div>
   </div>
 
-  <div class="div6" v-if="counter.translate_chat_status_bool">
+  <div class="div6" v-if="counter.topic_chat_status_bool">
     <div class="div6-content">
       <icon :style="{ color: '#000000'}" class="icon-div4-stop" @click="stop_chat">
         <template #component>
@@ -47,40 +47,40 @@ const stop_chat = () => {
     </div>
   </div>
 
-  <div class="div2" v-if="counter.translate_ai_content_markdown.length===0">
-    <div class="div-show-load" v-if="!counter.translate_show_load_status">
+  <div class="div2" v-if="counter.topic_ai_content_markdown.length===0">
+    <div class="div-show-load" v-if="!counter.topic_show_load_status">
       <div class="div-show-load-con1"
-           v-if="!counter.translate_show_load_status"
+           v-if="!counter.topic_show_load_status"
       >
         <icon :style="{ color: '#8994a6'}" class="div-show-load-ico">
           <template #component>
-            <svg t="1722670331521" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                 p-id="11064" width="32" height="32">
+            <svg t="1722717507383" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="9151" width="32" height="32">
               <path
-                  d="M175.941818 884.037818a46.545455 46.545455 0 0 1-44.776727-50.920727v-151.133091H64.930909A65.163636 65.163636 0 0 1 0 617.053091V111.476364a65.163636 65.163636 0 0 1 64.930909-65.163637H766.138182a65.163636 65.163636 0 0 1 64.930909 65.163637v505.530181a65.163636 65.163636 0 0 1-64.930909 64.93091H424.820364a52.642909 52.642909 0 0 0-26.670546 10.612363l-186.181818 175.569455a52.596364 52.596364 0 0 1-36.026182 15.918545z"
-                  fill="#1668F3" p-id="11065"></path>
+                  d="M204.8 150.4256a38.4 38.4 0 0 1 38.4-38.4h537.6a38.4 38.4 0 0 1 38.4 38.4v691.2a38.4 38.4 0 0 1-38.4 38.4H243.2a38.4 38.4 0 0 1-38.4-38.4v-691.2z"
+                  fill="#00B781" p-id="9152"></path>
               <path
-                  d="M70.842182 611.234909h66.048a65.163636 65.163636 0 0 1 64.930909 64.930909v104.448l147.735273-139.636363a121.018182 121.018182 0 0 1 75.310545-29.928728h335.36V117.387636H70.842182z"
-                  fill="#679CF7" p-id="11066"></path>
+                  d="M780.8 73.6256a76.8 76.8 0 0 1 76.8 76.8v691.2a76.8 76.8 0 0 1-76.8 76.8H243.2a76.8 76.8 0 0 1-76.8-76.8v-691.2a76.8 76.8 0 0 1 76.8-76.8h537.6z m0 76.8H243.2v691.2h537.6v-691.2z"
+                  fill="#00B781" p-id="9153"></path>
               <path
-                  d="M852.340364 1013.76a54.039273 54.039273 0 0 1-36.258909-15.499636l-144.896-133.585455a54.318545 54.318545 0 0 0-27.182546-10.612364h-150.714182a35.421091 35.421091 0 0 1 0-70.842181h150.714182a122.321455 122.321455 0 0 1 75.217455 29.370181l107.054545 98.816v-65.163636a65.163636 65.163636 0 0 1 64.930909-65.163636h61.905455V375.016727h-149.690182a35.421091 35.421091 0 1 1 0-70.842182h155.601454a65.163636 65.163636 0 0 1 65.163637 64.93091v417.88509a65.163636 65.163636 0 0 1-65.163637 65.163637h-61.905454v110.638545a49.152 49.152 0 0 1-27.601455 47.429818 42.821818 42.821818 0 0 1-17.175272 3.537455z m0 0"
-                  fill="#1668F3" p-id="11067"></path>
+                  d="M358.4 73.6256a38.4 38.4 0 0 1 38.4 38.4v768a38.4 38.4 0 1 1-76.8 0v-768a38.4 38.4 0 0 1 38.4-38.4zM665.6 227.2256a38.4 38.4 0 0 1 0 76.8h-153.6a38.4 38.4 0 0 1 0-76.8h153.6zM665.6 380.8256a38.4 38.4 0 0 1 0 76.8h-153.6a38.4 38.4 0 0 1 0-76.8h153.6z"
+                  fill="#FFFFFF" p-id="9154"></path>
               <path
-                  d="M569.204364 356.631273a268.008727 268.008727 0 0 1-104.168728-31.464728 517.771636 517.771636 0 0 1-106.123636 35.374546l-17.687273-31.464727a499.618909 499.618909 0 0 0 92.346182-27.508364 145.547636 145.547636 0 0 1-43.240727-64.837818h-25.553455V205.265455h186.693818v31.464727a166.865455 166.865455 0 0 1-53.061818 68.794182 315.159273 315.159273 0 0 0 82.525091 19.642181zM512 238.731636H423.563636a120.087273 120.087273 0 0 0 41.285819 47.150546A154.251636 154.251636 0 0 0 512 238.731636z m-259.397818-17.687272l25.553454-25.553455a433.477818 433.477818 0 0 1 62.882909 56.971636l-25.553454 25.553455a289.838545 289.838545 0 0 0-62.650182-56.971636z m60.928 243.665454c9.821091-9.821091 19.642182-21.597091 31.464727-33.419636l9.821091 39.284363a569.111273 569.111273 0 0 1-70.749091 66.792728l-13.963636-33.419637a31.557818 31.557818 0 0 0 9.821091-21.597091v-139.636363h-53.061819v-35.374546h86.481455v157.230546z m131.677091-51.2H376.645818v-33.419636H445.44V348.625455h35.374545v31.464727h74.472728v33.419636h-74.472728v37.236364h92.346182v35.374545h-92.392727v62.882909h-35.374545v-62.650181H360.913455v-35.374546h84.48z"
-                  fill="#FFFFFF" p-id="11068"></path>
+                  d="M473.6 73.6256a38.4 38.4 0 0 1 0 76.8h-230.4a38.4 38.4 0 0 1 0-76.8h230.4zM473.6 841.6256a38.4 38.4 0 1 1 0 76.8h-230.4a38.4 38.4 0 1 1 0-76.8h230.4z"
+                  fill="#00B781" p-id="9155"></path>
             </svg>
           </template>
         </icon>
-        <span class="div-show-load-title">在翻译领域</span>
-        <span class="div-show-load-title">让AI帮你完成各种各样繁杂的翻译工作</span>
+        <span class="div-show-load-title">在题目领域</span>
+        <span class="div-show-load-title">让AI帮你生成各式各样的题目吧</span>
       </div>
 
     </div>
-    <div class="div-show-load" v-if="counter.translate_show_load_status">
+    <div class="div-show-load" v-if="counter.topic_show_load_status">
       <div class="div-show-load-con2"
-           v-if="counter.translate_show_load_status">
+           v-if="counter.topic_show_load_status">
         <a-spin :indicator="indicator" class=""/>
-        <span>正在翻译中</span>
+        <span>正在出题中</span>
       </div>
     </div>
   </div>

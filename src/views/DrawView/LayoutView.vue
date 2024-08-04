@@ -5,7 +5,7 @@ import {useCounterStore} from '@/stores/counter'
 import {onMounted} from "vue";
 
 const counter = useCounterStore()
-localStorage.setItem('selectedKey', "4");
+localStorage.setItem('selectedKey', "6");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 </script>
 

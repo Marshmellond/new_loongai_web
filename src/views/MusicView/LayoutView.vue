@@ -6,7 +6,7 @@ import MusicHistoryView from "@/views/MusicView/MusicHistoryView.vue";
 
 const counter = useCounterStore()
 
-localStorage.setItem('selectedKey', "8");
+localStorage.setItem('selectedKey', "9");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 </script>
 

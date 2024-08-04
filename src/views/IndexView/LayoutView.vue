@@ -6,39 +6,47 @@ import {useRouter} from "vue-router";
 
 const router = useRouter();
 const counter = useCounterStore()
-localStorage.setItem('selectedKey', "0");
+localStorage.setItem('selectedKey', "100");
 
 const click_chat = () => {
   counter.selectedKeys = ['1']
   router.push('/chat');
 }
 const click_pen = () => {
-  counter.selectedKeys = ['12']
+  counter.selectedKeys = ['2']
   router.push('/pen');
 }
-const click_mind = () => {
-  counter.selectedKeys = ['13']
-  router.push('/mind');
-}
 const click_workflow = () => {
-  counter.selectedKeys = ['2']
+  counter.selectedKeys = ['3']
   router.push('/workflow');
 }
+const click_ass = () => {
+  counter.selectedKeys = ['4']
+  router.push('/ass');
+}
 const click_app = () => {
-  counter.selectedKeys = ['3']
+  counter.selectedKeys = ['5']
   router.push('/app');
 }
 const click_draw = () => {
-  counter.selectedKeys = ['4']
+  counter.selectedKeys = ['6']
   router.push('/draw');
 }
 const click_ppt = () => {
-  counter.selectedKeys = ['7']
+  counter.selectedKeys = ['8']
   router.push('/ppt');
 }
 const click_music = () => {
-  counter.selectedKeys = ['8']
+  counter.selectedKeys = ['9']
   router.push('/music');
+}
+const click_file = () => {
+  counter.selectedKeys = ['10']
+  router.push('/file');
+}
+const click_mind = () => {
+  counter.selectedKeys = ['11']
+  router.push('/mind');
 }
 </script>
 
@@ -191,23 +199,6 @@ const click_music = () => {
         </icon>
         <span class="div2-title">AI写作助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #e5d541 0%, #da70ac 100%);"
-           @click="click_mind">
-        <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
-          <template #component>
-            <svg t="1722600446095" class="icon" viewBox="0 0 1032 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                 p-id="21350" width="32" height="32">
-              <path
-                  d="M523.28 872V414.032c0-75.12-66.496-136.024-148.504-136.024H201.52v521.44h198c45.248 3.552 88.32 46.544 123.76 72.56zM910.528 278H737.28c-82.016 0-148.504 60.912-148.504 136.032V844.8c34.192-27.904 77.984-43.952 123.752-45.344h198v-521.44z"
-                  fill="#FFCB01" p-id="21351"></path>
-              <path
-                  d="M703.568 832.504v1.336c-4.496-0.272-8.8-1.336-13.36-1.336a173.232 173.232 0 0 0-145.96 80.152h-55.408a173.232 173.232 0 0 0-145.952-80.152c-4.576 0-8.88 1.064-13.36 1.336v-1.336H89.072v-721.36H356.24c73.768 0 160.304 59.84 160.304 133.584 0-73.736 86.536-133.584 160.304-133.584h267.168v721.36H703.568z m-213.736 0V324.88c0-88.528-71.776-160.304-160.304-160.304H142.504v614.496H356.24a247.416 247.416 0 0 1 133.592 53.44z m400.752-667.92H703.568c-88.536 0-160.304 71.76-160.304 160.296v507.624a211.376 211.376 0 0 1 133.584-53.44h213.736v-614.48z"
-                  p-id="21352"></path>
-            </svg>
-          </template>
-        </icon>
-        <span class="div2-title">AI导图助手</span>
-      </div>
       <div class="div2-div" style="background: linear-gradient(220.55deg, #FF5EEF 0%, #3353c5 100%);"
            @click="click_workflow">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
@@ -233,6 +224,23 @@ const click_music = () => {
           </template>
         </icon>
         <span class="div2-title">AI数据助手</span>
+      </div>
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #DD7BFF 0%, #e15959 100%);"
+           @click="click_ass">
+        <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
+          <template #component>
+            <svg t="1722724165689" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="6642" width="32" height="32">
+              <path
+                  d="M128 592c0 166.4 137.6 304 304 304 156.8 0 284.8-118.4 300.8-272H400V291.2C246.4 307.2 128 435.2 128 592z m336-32H800v32C800 796.8 636.8 960 432 960S64 796.8 64 592 227.2 224 432 224h32v336z"
+                  fill="#597EF7" p-id="6643"></path>
+              <path
+                  d="M608 416h252.8c-16-134.4-121.6-240-252.8-252.8V416zM576 96c195.2 0 352 156.8 352 352v32H544V96h32z"
+                  fill="#50E3C2" p-id="6644"></path>
+            </svg>
+          </template>
+        </icon>
+        <span class="div2-title">AI分析助手</span>
       </div>
       <div class="div2-div" style="background: linear-gradient(220.55deg, #c5bcbc 0%, #727070 100%);"
            @click="click_app">
@@ -385,13 +393,52 @@ const click_music = () => {
         </icon>
         <span class="div2-title">AI音乐助手</span>
       </div>
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #DD7BFF 0%, #e15959 100%);"
+           @click="click_file">
+        <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
+          <template #component>
+            <svg t="1722697817121" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="4302" width="32" height="32">
+              <path
+                  d="M170.2 246.4h342.1s44.2-77.8 89.1-77.8h254.9c20.7 0 37.7 19.8 37.7 44l1.1 598.1c0 24.2-19.8 44-44 44h-681c-24.2 0-44-19.8-44-44V290.4c0.1-24.2 19.9-44 44.1-44z"
+                  fill="#694B4B" p-id="4303"></path>
+              <path d="M862.9 671.5l-688 38.3-22.2-406.4 688.1-59.3z" fill="#593F3F" p-id="4304"></path>
+              <path d="M870.8 671.8L242.2 707l-21.1-388 634.6-35.2z" fill="#593F3F" p-id="4305"></path>
+              <path d="M840.7 673.7L218.1 725l-21.9-383.4 623.4-55.9z" fill="#FFFFFF" p-id="4306"></path>
+              <path d="M807.9 715.1L178.6 750l-22.2-406.3 629.7-48.1z" fill="#F2F2F1" p-id="4307"></path>
+              <path d="M796 713.5l-619 36.3-22.1-406.3 618.8-40.1z" fill="#FFFFFF" p-id="4308"></path>
+              <path
+                  d="M895.2 425.1H509.1s-44.2-71.4-89.1-71.4H125.1c-20.7 0-38.9 16.3-38.9 36l40 429.2c0 19.7 19.8 35.8 44 35.8h685c24.2 0 44-16.1 44-35.8l40-358c0-19.7-19.8-35.8-44-35.8z"
+                  fill="#00B5FC" p-id="4309"></path>
+            </svg>
+          </template>
+        </icon>
+        <span class="div2-title">AI文件助手</span>
+      </div>
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #e5d541 0%, #da70ac 100%);"
+           @click="click_mind">
+        <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
+          <template #component>
+            <svg t="1722600446095" class="icon" viewBox="0 0 1032 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="21350" width="32" height="32">
+              <path
+                  d="M523.28 872V414.032c0-75.12-66.496-136.024-148.504-136.024H201.52v521.44h198c45.248 3.552 88.32 46.544 123.76 72.56zM910.528 278H737.28c-82.016 0-148.504 60.912-148.504 136.032V844.8c34.192-27.904 77.984-43.952 123.752-45.344h198v-521.44z"
+                  fill="#FFCB01" p-id="21351"></path>
+              <path
+                  d="M703.568 832.504v1.336c-4.496-0.272-8.8-1.336-13.36-1.336a173.232 173.232 0 0 0-145.96 80.152h-55.408a173.232 173.232 0 0 0-145.952-80.152c-4.576 0-8.88 1.064-13.36 1.336v-1.336H89.072v-721.36H356.24c73.768 0 160.304 59.84 160.304 133.584 0-73.736 86.536-133.584 160.304-133.584h267.168v721.36H703.568z m-213.736 0V324.88c0-88.528-71.776-160.304-160.304-160.304H142.504v614.496H356.24a247.416 247.416 0 0 1 133.592 53.44z m400.752-667.92H703.568c-88.536 0-160.304 71.76-160.304 160.296v507.624a211.376 211.376 0 0 1 133.584-53.44h213.736v-614.48z"
+                  p-id="21352"></path>
+            </svg>
+          </template>
+        </icon>
+        <span class="div2-title">AI导图助手</span>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="less">
 .div1-desc {
-  margin-bottom: 5vh;
+  margin-bottom: 3vh;
 
   .div1-desc-title {
     font-size: 18px;
@@ -417,7 +464,7 @@ const click_music = () => {
     height: 12vh;
     border-radius: 100px;
     margin-left: 5vw;
-    margin-top: 4vh;
+    margin-top: 3vh;
     overflow: hidden;
     cursor: pointer;
 

@@ -4,7 +4,7 @@ import PlanInpView from "@/views/PlanView/PlanInpView.vue";
 import PlanShowView from "@/views/PlanView/PlanShowView.vue";
 
 const counter = useCounterStore()
-localStorage.setItem('selectedKey', "15");
+localStorage.setItem('selectedKey', "31");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 </script>
 

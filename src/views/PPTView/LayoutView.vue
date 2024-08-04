@@ -9,7 +9,7 @@ import {useCounterStore} from '@/stores/counter'
 import {message} from "ant-design-vue";
 
 const counter = useCounterStore()
-localStorage.setItem('selectedKey', "7");
+localStorage.setItem('selectedKey', "8");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 const indicator = h(LoadingOutlined, {
   style: {

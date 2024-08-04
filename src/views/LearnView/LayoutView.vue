@@ -6,19 +6,23 @@ import {useRouter} from "vue-router";
 
 const router = useRouter();
 const counter = useCounterStore()
-localStorage.setItem('selectedKey', "14");
+localStorage.setItem('selectedKey', "101");
 
 const click_plan = () => {
-  counter.selectedKeys = ['15']
+  counter.selectedKeys = ['31']
   router.push('/plan');
 }
 const click_translate = () => {
-  counter.selectedKeys = ['16']
+  counter.selectedKeys = ['32']
   router.push('/translate');
 }
 const click_ppt = () => {
-  counter.selectedKeys = ['7']
+  counter.selectedKeys = ['8']
   router.push('/ppt');
+}
+const click_topic = () => {
+  counter.selectedKeys = ['33']
+  router.push('/topic');
 }
 </script>
 
@@ -143,29 +147,30 @@ const click_ppt = () => {
             </svg>
           </template>
         </icon>
-        <span class="div2-title">AI 课件助手</span>
+        <span class="div2-title">AI课件助手</span>
       </div>
       <div class="div2-div" style="background: linear-gradient(220.55deg, #DD7BFF 0%, #e15959 100%);"
-           @click="click_ppt">
+           @click="click_topic">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
-            <svg t="1722697817121" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                 p-id="4302" width="32" height="32">
+            <svg t="1722717507383" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="9151" width="32" height="32">
               <path
-                  d="M170.2 246.4h342.1s44.2-77.8 89.1-77.8h254.9c20.7 0 37.7 19.8 37.7 44l1.1 598.1c0 24.2-19.8 44-44 44h-681c-24.2 0-44-19.8-44-44V290.4c0.1-24.2 19.9-44 44.1-44z"
-                  fill="#694B4B" p-id="4303"></path>
-              <path d="M862.9 671.5l-688 38.3-22.2-406.4 688.1-59.3z" fill="#593F3F" p-id="4304"></path>
-              <path d="M870.8 671.8L242.2 707l-21.1-388 634.6-35.2z" fill="#593F3F" p-id="4305"></path>
-              <path d="M840.7 673.7L218.1 725l-21.9-383.4 623.4-55.9z" fill="#FFFFFF" p-id="4306"></path>
-              <path d="M807.9 715.1L178.6 750l-22.2-406.3 629.7-48.1z" fill="#F2F2F1" p-id="4307"></path>
-              <path d="M796 713.5l-619 36.3-22.1-406.3 618.8-40.1z" fill="#FFFFFF" p-id="4308"></path>
+                  d="M204.8 150.4256a38.4 38.4 0 0 1 38.4-38.4h537.6a38.4 38.4 0 0 1 38.4 38.4v691.2a38.4 38.4 0 0 1-38.4 38.4H243.2a38.4 38.4 0 0 1-38.4-38.4v-691.2z"
+                  fill="#00B781" p-id="9152"></path>
               <path
-                  d="M895.2 425.1H509.1s-44.2-71.4-89.1-71.4H125.1c-20.7 0-38.9 16.3-38.9 36l40 429.2c0 19.7 19.8 35.8 44 35.8h685c24.2 0 44-16.1 44-35.8l40-358c0-19.7-19.8-35.8-44-35.8z"
-                  fill="#00B5FC" p-id="4309"></path>
+                  d="M780.8 73.6256a76.8 76.8 0 0 1 76.8 76.8v691.2a76.8 76.8 0 0 1-76.8 76.8H243.2a76.8 76.8 0 0 1-76.8-76.8v-691.2a76.8 76.8 0 0 1 76.8-76.8h537.6z m0 76.8H243.2v691.2h537.6v-691.2z"
+                  fill="#00B781" p-id="9153"></path>
+              <path
+                  d="M358.4 73.6256a38.4 38.4 0 0 1 38.4 38.4v768a38.4 38.4 0 1 1-76.8 0v-768a38.4 38.4 0 0 1 38.4-38.4zM665.6 227.2256a38.4 38.4 0 0 1 0 76.8h-153.6a38.4 38.4 0 0 1 0-76.8h153.6zM665.6 380.8256a38.4 38.4 0 0 1 0 76.8h-153.6a38.4 38.4 0 0 1 0-76.8h153.6z"
+                  fill="#FFFFFF" p-id="9154"></path>
+              <path
+                  d="M473.6 73.6256a38.4 38.4 0 0 1 0 76.8h-230.4a38.4 38.4 0 0 1 0-76.8h230.4zM473.6 841.6256a38.4 38.4 0 1 1 0 76.8h-230.4a38.4 38.4 0 1 1 0-76.8h230.4z"
+                  fill="#00B781" p-id="9155"></path>
             </svg>
           </template>
         </icon>
-        <span class="div2-title">AI 文件助手</span>
+        <span class="div2-title">AI出题助手</span>
       </div>
     </div>
   </div>
@@ -186,7 +191,7 @@ const click_ppt = () => {
   flex-wrap: wrap;
   width: 90%;
   justify-content: center;
-  margin-left: -5vw;
+  margin-left: -3vw;
 
   .div2-div {
     display: flex;
@@ -199,7 +204,7 @@ const click_ppt = () => {
     height: 12vh;
     border-radius: 100px;
     margin-left: 5vw;
-    margin-top: 4vh;
+    margin-top: 3vh;
     overflow: hidden;
     cursor: pointer;
 

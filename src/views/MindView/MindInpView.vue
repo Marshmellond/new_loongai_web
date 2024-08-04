@@ -62,7 +62,7 @@ const on_generate = () => {
   }
 }
 const on_download_png = () => {
-  const svg = svgRef.value
+  const svg = counter.mind_svgRef
   const width = svg.getBoundingClientRect().width
   const height = svg.getBoundingClientRect().height
   covertSVG2Image(svg, '思维导图', width, height)
@@ -87,8 +87,25 @@ const covertSVG2Image = (node, name, width, height, type = 'png') => {
     a.click()
   }
 }
-const on_download_svg = () => {
+// ${counter.mind_svgRef.outerHTML}
+const on_download_html = () => {
+  console.log(counter.mind_svgRef)
 
+  const svgClone = counter.mind_svgRef.cloneNode(true) as SVGElement;
+
+  svgClone.setAttribute('width', counter.mind_svgRef.clientWidth.toString());
+  svgClone.setAttribute('height', counter.mind_svgRef.clientHeight.toString());
+
+  const svgString = new XMLSerializer().serializeToString(svgClone);
+
+  const blob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = '思维导图.svg';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 </script>;
 
@@ -134,13 +151,13 @@ const on_download_svg = () => {
         <template #icon>
           <DownloadOutlined style="color: black"/>
         </template>
-        <span style="color: black">下载PNG</span>
+        <span style="color: black">导出PNG</span>
       </a-button>
-      <a-button type="primary" size="large" class="ant-button2" @click="on_download_svg">
+      <a-button type="primary" size="large" class="ant-button2" @click="on_download_html">
         <template #icon>
           <DownloadOutlined style="color: black"/>
         </template>
-        <span style="color: black">下载SVG</span>
+        <span style="color: black">导出HTML</span>
       </a-button>
     </a-space>
   </div>
@@ -280,7 +297,7 @@ const on_download_svg = () => {
     .ant-button2 {
       width: 130%;
       position: relative;
-      left: 2.5vw;
+      left: 2vw;
       background: #fdfdfd;
       border: 1px solid #e4e4e4;
 

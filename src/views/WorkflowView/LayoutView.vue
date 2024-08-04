@@ -3,7 +3,7 @@ import {ref, onMounted, onUnmounted, watch, nextTick, reactive} from 'vue'
 import {useCounterStore} from '@/stores/counter'
 
 const counter = useCounterStore()
-localStorage.setItem('selectedKey', "2");
+localStorage.setItem('selectedKey', "3");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 
 import LeftView from "@/views/WorkflowView/PanelView/LeftView/LeftView.vue";

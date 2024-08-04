@@ -4,7 +4,7 @@ import TranslateInpView from "@/views/TranslateView/TranslateInpView.vue";
 import TranslateShowView from "@/views/TranslateView/TranslateShowView.vue";
 
 const counter = useCounterStore()
-localStorage.setItem('selectedKey', "16");
+localStorage.setItem('selectedKey', "32");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 </script>
 

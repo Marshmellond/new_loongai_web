@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import {useCounterStore} from '@/stores/counter'
-import MindInpView from "@/views/MindView/MindInpView.vue";
-import MindShowView from "@/views/MindView/MindShowView.vue";
+import FileInpView from "@/views/FileView/FileInpView.vue";
+import FileShowView from "@/views/FileView/FileShowView.vue";
 
 const counter = useCounterStore()
-localStorage.setItem('selectedKey', "11");
+localStorage.setItem('selectedKey', "10");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
-
 </script>
 
 <template>
   <div class="div-overflow">
     <div class="div-inp">
-      <MindInpView></MindInpView>
+      <FileInpView></FileInpView>
     </div>
     <div class="div-show">
-      <MindShowView></MindShowView>
+      <FileShowView></FileShowView>
     </div>
   </div>
 </template>
@@ -41,4 +40,3 @@ counter.selectedKeys = [localStorage.getItem("selectedKey")]
   }
 }
 </style>
-

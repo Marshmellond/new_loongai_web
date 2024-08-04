@@ -4,7 +4,7 @@ import PenInpView from "@/views/PenView/PenInpView.vue";
 import PenShowView from "@/views/PenView/PenShowView.vue";
 
 const counter = useCounterStore()
-localStorage.setItem('selectedKey', "12");
+localStorage.setItem('selectedKey', "2");
 counter.selectedKeys = [localStorage.getItem("selectedKey")]
 </script>
 
