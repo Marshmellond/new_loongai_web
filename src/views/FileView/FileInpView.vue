@@ -324,11 +324,11 @@ const delete_put_file = () => {
   .ant-space {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
 
     .ant-button1 {
-      width: 390%;
+      width: 18vw;
       position: relative;
       background: #fdfdfd;
       border: 1px solid #e4e4e4;

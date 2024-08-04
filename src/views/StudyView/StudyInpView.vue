@@ -12,16 +12,17 @@ import "prismjs/themes/prism-okaidia.min.css"
 const counter = useCounterStore()
 
 let temp_meg = ref("")
+
 const push_func = () => {
-  counter.topic_ai_content = ""
-  counter.topic_ai_content_markdown = ""
-  counter.topic_show_load_status = true
-  const url = "/api/topic/generate/openai"
+  counter.study_ai_content = ""
+  counter.study_ai_content_markdown = ""
+  counter.study_show_load_status = true
+  const url = "/api/study/generate/openai"
   let body = {
-    topic_subject_inp: counter.topic_subject_inp,
-    topic_theme_inp: counter.topic_theme_inp,
-    topic_type_inp: counter.topic_type_inp,
-    topic_num_inp: counter.topic_num_inp,
+    study_grade_inp: counter.study_grade_inp,
+    study_sub_inp: counter.study_sub_inp,
+    study_score_inp: counter.study_score_inp,
+    study_desc_inp: counter.study_desc_inp,
   }
   fetch(url, {
     method: "POST",
@@ -30,8 +31,8 @@ const push_func = () => {
   }).then((res) => {
     if (res.ok) {
       temp_meg.value = ""
-      counter.topic_chat_status_bool = true
-      counter.topic_show_load_status = false
+      counter.study_chat_status_bool = true
+      counter.study_show_load_status = false
       setTimeout(() => {
         Prism.highlightAll()
       }, 100)
@@ -43,24 +44,24 @@ const push_func = () => {
 
     function process({done, value}) {
       if (done) {
-        counter.topic_chat_status_bool = false
+        counter.study_chat_status_bool = false
         setTimeout(() => {
           Prism.highlightAll()
         }, 100)
         return;
       }
-      if (counter.topic_chat_status_bool === false) {
+      if (counter.study_chat_status_bool === false) {
         return;
       }
       temp_meg.value += decoder.decode(value);
       if (temp_meg.value.startsWith("ERROR")) {
         // 处理错误情况
-        counter.topic_chat_status_bool = false;
+        counter.study_chat_status_bool = false;
         message.error("生成出现错误：输入内容不合法或key错误")
         return;
       }
-      counter.topic_ai_content_markdown = marked(temp_meg.value)
-      counter.topic_ai_content = temp_meg.value
+      counter.study_ai_content_markdown = marked(temp_meg.value)
+      counter.study_ai_content = temp_meg.value
       reader?.read().then(process);
     }
 
@@ -70,14 +71,14 @@ const push_func = () => {
 }
 
 const on_generate = () => {
-  if (counter.topic_subject_inp.length === 0) {
-    message.error("年级科目为空")
-  } else if (counter.topic_theme_inp.length === 0) {
-    message.error("出题主题为空")
-  } else if (counter.topic_type_inp.length === 0) {
-    message.error("出题类型为空")
-  } else if (counter.topic_num_inp.length === 0) {
-    message.error("出题数量为空")
+  if (counter.study_grade_inp.length === 0) {
+    message.error("年级为空")
+  } else if (counter.study_sub_inp.length === 0) {
+    message.error("学科为空")
+  } else if (counter.study_score_inp.length === 0) {
+    message.error("成绩情况为空")
+  } else if (counter.study_desc_inp.length === 0) {
+    message.error("其他描述为空")
   } else {
     push_func()
   }
@@ -86,30 +87,36 @@ const on_generate = () => {
 
 <template>
   <div class="div1">
-    <div class="div-title">年级科目</div>
+    <div class="div-title"
+    >年级
+    </div>
     <a-textarea
-        v-model:value="counter.topic_subject_inp"
-        placeholder="比如：初三数学等"
-        :auto-size="{ minRows: 1.2, maxRows: 1.2 }"
+        v-model:value="counter.study_grade_inp"
+        placeholder="比如：初一等"
+        :auto-size="{ minRows: 1.2, maxRows: 5 }"
         class="div-inp"
     />
-    <div class="div-title2">出题主题</div>
+    <div class="div-title2">学科</div>
     <a-textarea
-        v-model:value="counter.topic_theme_inp"
-        placeholder="比如：一元二次方程等"
-        :auto-size="{ minRows: 1.2, maxRows: 1.2 }"
+        v-model:value="counter.study_sub_inp"
+        placeholder="比如：数学等"
+        :auto-size="{ minRows: 1.2, maxRows: 5 }"
         class="div-inp"
     />
-    <div class="div-title2">出题类型</div>
+    <div class="div-title2">成绩情况</div>
     <a-textarea
-        v-model:value="counter.topic_type_inp"
-        placeholder="比如：选择题等"
-        :auto-size="{ minRows: 1.2, maxRows: 1.2 }"
+        v-model:value="counter.study_score_inp"
+        placeholder="比如：期末考试45分等"
+        :auto-size="{ minRows: 1.2, maxRows: 5 }"
         class="div-inp"
     />
-    <div class="div-title2">出题数量</div>
-    <a-input-number v-model:value="counter.topic_num_inp" size="large" :min="1" :max="20" class="div-inp"
-                    style="width: 17.7vw"/>
+    <div class="div-title2">其他描述</div>
+    <a-textarea
+        v-model:value="counter.study_desc_inp"
+        placeholder="比如：每天学习半小时，数学公式不会灵活运用等"
+        :auto-size="{ minRows: 5, maxRows: 10 }"
+        class="div-inp"
+    />
   </div>
 
 
@@ -119,7 +126,7 @@ const on_generate = () => {
         <template #icon>
           <PlusOutlined style="color: black"/>
         </template>
-        <span style="color: black">生成</span>
+        <span style="color: black">分析</span>
       </a-button>
     </a-space>
   </div>

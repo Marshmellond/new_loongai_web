@@ -181,6 +181,15 @@ export const useCounterStore = defineStore('counter', () => {
     const ass_ai_echarts = ref() // 分析页面echarts图
     const ass_show_load_status = ref(false) // 分析页面AI生成封面加载
 
+    const study_grade_inp = ref("") // 学情页面年级
+    const study_sub_inp = ref("") // 学情页面学科
+    const study_score_inp = ref("") // 学情页面成绩情况
+    const study_desc_inp = ref("") // 学情页面其他描述
+    const study_ai_content_markdown = ref("") // 学情页面AI生成结果markdown格式
+    const study_ai_content = ref("") // 学情页面AI生成结果
+    const study_show_load_status = ref(false) // 学情页面AI生成封面加载
+    const study_chat_status_bool = ref(false) // 学情页面AI生成加载
+
 
     // ------------------工作流页面------------------
     const flow_data = ref() // 页面数据
@@ -394,5 +403,13 @@ export const useCounterStore = defineStore('counter', () => {
         ass_ai_content,
         ass_ai_echarts,
         ass_show_load_status,
+        study_grade_inp,
+        study_sub_inp,
+        study_score_inp,
+        study_desc_inp,
+        study_ai_content_markdown,
+        study_ai_content,
+        study_show_load_status,
+        study_chat_status_bool,
     }
 })

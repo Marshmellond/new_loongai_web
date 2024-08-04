@@ -14,6 +14,11 @@ const router = createRouter({
             component: () => import('@/views/LearnView/LayoutView.vue')
         },
         {
+            path: '/data',
+            name: 'data',
+            component: () => import('@/views/DataView/LayoutView.vue')
+        },
+        {
             path: '/chat',
             name: 'chat',
             component: () => import('@/views/ChatView/LayoutView.vue')
@@ -82,6 +87,11 @@ const router = createRouter({
             path: '/topic',
             name: 'topic',
             component: () => import('@/views/TopicView/LayoutView.vue')
+        },
+        {
+            path: '/study',
+            name: 'study',
+            component: () => import('@/views/StudyView/LayoutView.vue')
         },
         {
             path: '/about',

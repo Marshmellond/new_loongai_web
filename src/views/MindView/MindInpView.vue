@@ -280,11 +280,11 @@ const on_download_html = () => {
   .ant-space {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
 
     .ant-button1 {
-      width: 130%;
+      width: 8vw;
       position: relative;
       background: #fdfdfd;
       border: 1px solid #e4e4e4;
@@ -295,9 +295,8 @@ const on_download_html = () => {
     }
 
     .ant-button2 {
-      width: 130%;
+      width: 8vw;
       position: relative;
-      left: 2vw;
       background: #fdfdfd;
       border: 1px solid #e4e4e4;
 
