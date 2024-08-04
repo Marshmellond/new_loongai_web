@@ -57,8 +57,10 @@ const click_study = () => {
       <span
           class="div1-desc-title">利用人工智能技术，提供一站式教案设计解决方案，提升教学效率，简化备课流程，让教学更智能、更生动</span>
     </div>
+
+
     <div class="div2">
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #4169E1 0%, #8A2BE2 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #0D3B6F 0%, #4A94F3 100%);"
            @click="click_plan">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -114,7 +116,7 @@ const click_study = () => {
         </icon>
         <span class="div2-title">AI教案助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #1E90FF 0%, #9932CC 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #1C4E8F 0%, #6AB2FF 100%);"
            @click="click_translate">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -137,7 +139,7 @@ const click_study = () => {
         </icon>
         <span class="div2-title">AI翻译助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #6495ED 0%, #BA55D3 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #0F3366 0%, #3D8BF5 100%);"
            @click="click_topic">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -160,7 +162,7 @@ const click_study = () => {
         </icon>
         <span class="div2-title">AI出题助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #7B68EE 0%, #DDA0DD 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #1A457D 0%, #5CA5FF 100%);"
            @click="click_study">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>

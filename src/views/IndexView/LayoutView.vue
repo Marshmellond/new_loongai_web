@@ -93,7 +93,7 @@ const click_mind = () => {
           class="div1-desc-title">融合人工智能技术，提供一站式办公解决方案，提升工作效率，简化流程，让办公更智能、更高效</span>
     </div>
     <div class="div2">
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #4B0082 0%, #8A2BE2 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #1A4B8C 0%, #3086FD 100%);"
            @click="click_chat">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -131,7 +131,7 @@ const click_mind = () => {
         </icon>
         <span class="div2-title">AI对话助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #483D8B 0%, #9370DB 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #0A3D7F 0%, #4B9EFF 100%);"
            @click="click_pen">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -216,7 +216,7 @@ const click_mind = () => {
         </icon>
         <span class="div2-title">AI写作助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #6A5ACD 0%, #7B68EE 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #15407A 0%, #5EADFF 100%);"
            @click="click_app">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -233,7 +233,7 @@ const click_mind = () => {
         </icon>
         <span class="div2-title">AI应用助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #8A2BE2 0%, #9932CC 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #0C2D5E 0%, #2C82F9 100%);"
            @click="click_draw">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -296,7 +296,7 @@ const click_mind = () => {
         </icon>
         <span class="div2-title">AI绘画助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #9370DB 0%, #BA55D3 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #1E5098 0%, #72BAFF 100%);"
            @click="click_ppt">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -314,7 +314,7 @@ const click_mind = () => {
         </icon>
         <span class="div2-title">AI PPT助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #8B008B 0%, #6579c5 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #113569 0%, #3890FF 100%);"
            @click="click_music">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -367,7 +367,7 @@ const click_mind = () => {
         </icon>
         <span class="div2-title">AI音乐助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #9400D3 0%, #9400D3 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #0E2F64 0%, #4399FF 100%);"
            @click="click_file">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -389,7 +389,7 @@ const click_mind = () => {
         </icon>
         <span class="div2-title">AI文件助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #800080 0%, #EE82EE 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #194785 0%, #5AA9FF 100%);"
            @click="click_mind">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>

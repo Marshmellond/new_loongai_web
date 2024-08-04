@@ -76,7 +76,7 @@ const click_ass = () => {
           class="div1-desc-title">引入人工智能技术，打造自动化数据分析系统，加速数据洞察，简化复杂分析流程，实现数据分析的智能化和高效化</span>
     </div>
     <div class="div2">
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #5D3FD3 0%, #A569BD 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #0E2E5C 0%, #3679E3 100%);"
            @click="click_workflow">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
@@ -102,7 +102,7 @@ const click_ass = () => {
         </icon>
         <span class="div2-title">AI数据助手</span>
       </div>
-      <div class="div2-div" style="background: linear-gradient(220.55deg, #3498DB 0%, #9B59B6 100%);"
+      <div class="div2-div" style="background: linear-gradient(220.55deg, #133C75 0%, #4F9BFF 100%);"
            @click="click_ass">
         <icon :style="{ color: '#8994a6'}" class="icon-ai-blue">
           <template #component>
